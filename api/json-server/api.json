@@ -1,0 +1,58 @@
+{
+  "cursos": [
+    {
+      "id": 1,
+      "caminhoImg": "imagem-padrao.png",
+      "descricao": "Matemática",
+      "professor": {
+        "nome": "Juvenal"
+      },
+      "assuntos": [
+        {
+          "id": 1,
+          "descricao": "Soma"
+        },
+        {
+          "id": 2,
+          "descricao": "Divisão"
+        },
+        {
+          "id": 3,
+          "descricao": "Multiplicação"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "caminhoImg": "imagem-padrao.png",
+      "descricao": "História",
+      "professor": {
+        "nome": "Amaurício"
+      },
+      "assuntos": [
+        {
+          "id": 4,
+          "descricao": "Império Brasileiro"
+        },
+        {
+          "id": 5,
+          "descricao": "Primeira Guerra"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "caminhoImg": "imagem-padrao.png",
+      "descricao": "Geografia",
+      "professor": {
+        "nome": "Selverson"
+      },
+      "assuntos": [
+        {
+          "id": 6,
+          "descricao": "Brasil"
+        }
+      ]
+    }
+  ]
+}

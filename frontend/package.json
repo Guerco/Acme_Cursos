@@ -1,0 +1,23 @@
+{
+  "name": "frontend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start":    "vite",
+    "test":     "vitest run --dir test/unitario",
+    "e2e":      "playwright test test/e2e --headed",
+    "e2e-ui":   "playwright test test/e2e --ui",
+    "api":      "json-server  ../api/json-server/api.json"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.17.1",
+  "devDependencies": {
+    "json-server": "1.0.0-beta.3",
+    "playwright": "^1.55.1",
+    "vite": "^6.3.6",
+    "vitest": "^3.2.4"
+  }
+}

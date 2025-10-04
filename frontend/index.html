@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz - Cursos</title>
+
+    <script type="module" src="./src/index.ts"></script>
+
+    <style>
+        /* ========================================================== */
+        /* Estilo dos Cards */
+        body {
+        background-color: white;
+        color: black;
+        font-family: Arial, Helvetica, sans-serif;
+        }
+
+        .secao-cursos {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        width: 80%;
+        max-width: 100%;
+        margin: 0 auto;
+        }
+
+        .card-curso {
+        border-color: gray;
+        border-style: solid;
+        border-radius: 20px;
+        padding: 20px;
+        display: flex;
+        flex-direction: column; 
+        gap: 10px; 
+        }
+        
+        .secao-curso {
+        display: flex;
+        }
+
+        .secao-curso figure {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0;
+        }
+
+        .secao-curso figure img {
+        width: 120px;
+        height: 100px;
+        border-radius: 10px;
+        }
+
+        .secao-curso-lateral {
+        flex: 4; 
+        padding-left: 15px;
+        display: flex;
+        flex-direction: column;
+        }
+
+        /* ========================================================== */
+        /* Estilo dos Assuntos */
+        .secao-assuntos .tabela-assuntos {
+        width: 100%;
+        border-collapse: collapse;
+        }
+
+        .secao-assuntos .tabela-assuntos td {
+        padding: 4px 8px;
+        }
+
+        .secao-assuntos .tabela-assuntos tr.tr-assunto {
+        border-top: 1px solid #e0e0e0;
+        }
+        /* ========================================================== */
+
+    </style>
+
+</head>
+<body>
+    <form id="form-busca">
+        <label for="input-busca">
+            Busque por nome do curso ou professor:
+        </label>
+        <input type="search" id="input-busca">
+        <button>🔍</button>
+    </form>
+
+    <h1>Listagem de Cursos</h1>
+
+    <section id="sec-cursos" class="secao-cursos">
+    </section>
+</body>
+</html>
