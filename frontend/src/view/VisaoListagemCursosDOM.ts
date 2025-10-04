@@ -45,6 +45,7 @@ export class VisaoListagemCursosDom implements VisaoListagemCursos{
     private cursoParaCard(curso: Curso) : HTMLDivElement {
         const card = UtilDOM.criaComClasses('div', ['card-curso']);
         card.dataset.id = curso.id.toString();
+        card.addEventListener('click', this.alternarVisibilidadeAssuntos);
 
         const secaoCurso = UtilDOM.criaComClasses('div', ['secao-curso']);
 
@@ -58,13 +59,19 @@ export class VisaoListagemCursosDom implements VisaoListagemCursos{
         secaoCursoLateral.appendChild(infoCurso);
     
         secaoCurso.append(elementoFigura, secaoCursoLateral);
-    
+
         const secaoAssuntos = UtilDOM.criaComClasses('div', ['secao-assuntos']);
+        secaoAssuntos.hidden = true;
         const tabelaAssuntos = this.assuntosParaTabela(curso.assuntos);
         secaoAssuntos.appendChild(tabelaAssuntos);
-
-        card.append(secaoCurso, secaoAssuntos);
     
+        const cursoAcoes = UtilDOM.criaComClasses('div', ['curso-acoes']);
+        const botaoExibirAssuntos = UtilDOM.criaComTextoEClasses('button', 'exibir assuntos', ['botao-exibir-assuntos']);
+        botaoExibirAssuntos.addEventListener('click', this.alternarVisibilidadeAssuntos);
+        cursoAcoes.appendChild(botaoExibirAssuntos);
+    
+        card.append(secaoCurso, secaoAssuntos, cursoAcoes);
+
         return card as HTMLDivElement;
     }
 
@@ -96,5 +103,17 @@ export class VisaoListagemCursosDom implements VisaoListagemCursos{
         trAssunto.appendChild(tdDescricao);
         
         return trAssunto;
+    }
+
+    private  alternarVisibilidadeAssuntos (event: Event) {
+        event.stopPropagation();
+
+        const card = (event.target as HTMLElement).closest('.card-curso');
+        
+        const botao = card!.querySelector('.botao-exibir-assuntos');
+        const secaoAssuntos = card?.querySelector('.secao-assuntos');
+        secaoAssuntos!.toggleAttribute('hidden');
+
+        botao!.textContent = (botao!.textContent == 'exibir assuntos') ? 'recolher assuntos' : 'exibir assuntos';
     }
 }
