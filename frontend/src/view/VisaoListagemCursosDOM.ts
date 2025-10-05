@@ -1,6 +1,7 @@
 import { Assunto } from "../model/Assunto.ts";
 import { Curso } from "../model/Curso.ts";
 import { ControladoraListagemCursos } from "../presenter/ControladoraListagemCursos.ts";
+import { classes, ids } from "../ui/listagem-cursos-ui.ts";
 import { UtilDOM } from "../util/UtilDOM.ts";
 import { VisaoListagemCursos } from "./VisaoListagemCursos.ts";
 
@@ -20,7 +21,7 @@ export class VisaoListagemCursosDom implements VisaoListagemCursos{
 
     // Métodos de Saída
     exibirCursos (cursos: Curso[]): void {
-        const secaoCursos = document.getElementById('sec-cursos');
+        const secaoCursos = document.getElementById(ids.secaoCursos.slice(1));
 
         const cursosOrdenados = this.ordenarCursos(cursos); 
 
@@ -39,34 +40,39 @@ export class VisaoListagemCursosDom implements VisaoListagemCursos{
     }
 
     private cursosParaCards(cursos: Curso[]): HTMLDivElement[] {
+        if (!cursos || cursos.length === 0) {
+            return [UtilDOM.criaComTexto('h3', 'Não há cursos para se listar.') as HTMLDivElement];
+        }
+
+        
         return cursos.map(a => this.cursoParaCard(a));
     }
 
     private cursoParaCard(curso: Curso) : HTMLDivElement {
-        const card = UtilDOM.criaComClasses('div', ['card-curso']);
+        const card = UtilDOM.criaComClasses('div', [classes.curso]);
         card.dataset.id = curso.id.toString();
         card.addEventListener('click', this.alternarVisibilidadeAssuntos);
 
-        const secaoCurso = UtilDOM.criaComClasses('div', ['secao-curso']);
+        const secaoCurso = UtilDOM.criaComClasses('div', [classes.secaoCurso]);
 
         const elementoFigura = UtilDOM.cria('figure');
         elementoFigura.appendChild(UtilDOM.criaImg(DIRETORIO_IMAGENS+curso.caminhoImg));
     
-        const secaoCursoLateral = UtilDOM.criaComClasses('div', ['secao-curso-lateral']);
-        const infoCurso = UtilDOM.criaComClasses('div', ['info-curso']);
-        infoCurso.appendChild(UtilDOM.criaComTextoEClasses('h2', curso.descricao, ['descricao-curso']));
-        infoCurso.appendChild(UtilDOM.criaComTextoEClasses('p', curso.professor.nome, ['nome-professor']));
+        const secaoCursoLateral = UtilDOM.criaComClasses('div', [classes.secaoCursoLat]);
+        const infoCurso = UtilDOM.criaComClasses('div', [classes.infoCurso]);
+        infoCurso.appendChild(UtilDOM.criaComTextoEClasses('h2', curso.descricao, [classes.descricaoCurso]));
+        infoCurso.appendChild(UtilDOM.criaComTextoEClasses('p', curso.professor.nome, [classes.nomeProfessor]));
         secaoCursoLateral.appendChild(infoCurso);
     
         secaoCurso.append(elementoFigura, secaoCursoLateral);
 
-        const secaoAssuntos = UtilDOM.criaComClasses('div', ['secao-assuntos']);
+        const secaoAssuntos = UtilDOM.criaComClasses('div', [classes.assuntos]);
         secaoAssuntos.hidden = true;
         const tabelaAssuntos = this.assuntosParaTabela(curso.assuntos);
         secaoAssuntos.appendChild(tabelaAssuntos);
     
-        const cursoAcoes = UtilDOM.criaComClasses('div', ['curso-acoes']);
-        const botaoExibirAssuntos = UtilDOM.criaComTextoEClasses('button', 'exibir assuntos', ['botao-exibir-assuntos']);
+        const cursoAcoes = UtilDOM.criaComClasses('div', [classes.acoesCurso]);
+        const botaoExibirAssuntos = UtilDOM.criaComTextoEClasses('button', 'exibir assuntos', [classes.botaoAssuntos]);
         botaoExibirAssuntos.addEventListener('click', this.alternarVisibilidadeAssuntos);
         cursoAcoes.appendChild(botaoExibirAssuntos);
     
@@ -76,7 +82,7 @@ export class VisaoListagemCursosDom implements VisaoListagemCursos{
     }
 
     private assuntosParaTabela(assuntos: Assunto[]): HTMLTableElement {
-        const tabelaAssuntos = UtilDOM.criaComClasses('table', ['tabela-assuntos']);
+        const tabelaAssuntos = UtilDOM.criaComClasses('table', [classes.tabelaAssuntos]);
         const tbody = UtilDOM.cria('tbody');
     
         if (!assuntos || assuntos.length === 0) {
@@ -95,7 +101,7 @@ export class VisaoListagemCursosDom implements VisaoListagemCursos{
     }
 
     private assuntoParaTR(assunto: Assunto){
-        const trAssunto = UtilDOM.criaComClasses('tr', ['tr-assunto']);
+        const trAssunto = UtilDOM.criaComClasses('tr', [classes.linhaAssunto]);
         trAssunto.dataset.id = assunto.id.toString();
 
         const tdDescricao = UtilDOM.criaComTexto('td', assunto.descricao);
@@ -108,10 +114,10 @@ export class VisaoListagemCursosDom implements VisaoListagemCursos{
     private  alternarVisibilidadeAssuntos (event: Event) {
         event.stopPropagation();
 
-        const card = (event.target as HTMLElement).closest('.card-curso');
+        const card = (event.target as HTMLElement).closest(classes.curso);
         
-        const botao = card!.querySelector('.botao-exibir-assuntos');
-        const secaoAssuntos = card?.querySelector('.secao-assuntos');
+        const botao = card!.querySelector(classes.botaoAssuntos);
+        const secaoAssuntos = card?.querySelector(classes.assuntos);
         secaoAssuntos!.toggleAttribute('hidden');
 
         botao!.textContent = (botao!.textContent == 'exibir assuntos') ? 'recolher assuntos' : 'exibir assuntos';

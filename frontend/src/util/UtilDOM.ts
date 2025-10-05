@@ -6,7 +6,7 @@ export class UtilDOM {
     static criaComClasses(nomeElemento: string, classes: Array<string>){
         const elemento = this.cria(nomeElemento);
         for (const c of classes) {
-            elemento.classList.add(c);
+            elemento.classList.add(c.replace('.', ''));
         }
         return elemento;
     }

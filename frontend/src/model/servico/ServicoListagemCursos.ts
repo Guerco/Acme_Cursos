@@ -1,6 +1,7 @@
+import { rotasApi } from "../../rotas";
 import { Curso } from "../Curso";
 
-const URL_API = 'http://localhost:3000/cursos';
+const URL_API = rotasApi.cursos;
 
 export class ServicoCurso {
     async buscarTodos() : Promise<Curso[]> {

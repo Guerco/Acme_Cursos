@@ -1,6 +1,8 @@
 import { Page, expect, Locator } from 'playwright/test';
+import { classes } from '../../../src/ui/listagem-cursos-ui';
+import { rotasPaginas } from '../../../src/rotas';
 
-const URL = 'http://localhost:5173';
+const URL = rotasPaginas.listagemCursos;
 
 export class TelaListagemCursos { 
     constructor(
@@ -12,7 +14,7 @@ export class TelaListagemCursos {
     }
 
     private async buscarCursos(): Promise<Locator>{
-        return await this.page.locator('.card-curso');
+        return await this.page.locator(classes.curso);
     }
 
     async clicaPimeiroCard(){
@@ -29,7 +31,7 @@ export class TelaListagemCursos {
     }
 
     async deveExibirAssuntosCurso(curso: Locator){
-        const assuntos =  curso.locator('.secao-assuntos');
+        const assuntos =  curso.locator(classes.assuntos);
         expect(await assuntos.isVisible()).toBe(true);
     }
 }

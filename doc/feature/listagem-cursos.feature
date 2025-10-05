@@ -17,7 +17,7 @@ Funcionalidade: Listagem de Cursos
     Cenário: Listagem apresenta os assuntos de um curso ao clicar em seu card
         Dado que acesso a tela de listagem de cursos
         Quando clico no card de um curso
-        Então o carde se expande e lista os assuntos do curso em questão.
+        Então o card se expande e lista os assuntos do curso em questão.
 
     Cenário: Listagem não apresenta cursos ao buscar por um texto inexistente no nome de nenhum curso ou professor
         Dado que acesso a tela de listagem de cursos
