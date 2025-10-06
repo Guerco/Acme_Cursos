@@ -1,3 +1,4 @@
+import { RepositorioCursosJsonServer } from "../model/repositorio/RepositorioCursosJsonServer";
 import { ServicoCurso } from "../model/servico/ServicoListagemCursos";
 import { VisaoListagemCursos } from "../view/VisaoListagemCursos";
 
@@ -7,7 +8,8 @@ export class ControladoraListagemCursos {
     constructor(
         private visao: VisaoListagemCursos
     ){
-        this.servico = new ServicoCurso();
+        const repositorio = new RepositorioCursosJsonServer();
+        this.servico = new ServicoCurso(repositorio);
     }
     
     listarCursos() {
@@ -15,8 +17,8 @@ export class ControladoraListagemCursos {
                 try {
                     const cursos = await this.servico.buscarTodos(); 
                     this.visao.exibirCursos(cursos);
-                } catch(err) {
-                    this.visao.exibirMensagem((err as Error).message);
+                } catch(err : any) {
+                    this.visao.exibirMensagem(err.message);
                 }
             }
         )();
@@ -29,8 +31,8 @@ export class ControladoraListagemCursos {
                     const filtro = this.visao.obterFiltroBusca();
                     const cursosFiltrados = await this.servico.buscarFiltrados(filtro);
                     this.visao.exibirCursos(cursosFiltrados);
-                } catch(err) {
-                    this.visao.exibirMensagem((err as Error).message);
+                } catch(err : any) {
+                    this.visao.exibirMensagem(err.message);
                 }
             }
         )
