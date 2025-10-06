@@ -22,7 +22,36 @@ test.describe( 'Listagem de Cursos', () => {
         // Quando clico no card de um curso
         const primeiroCurso = await tela.clicaPimeiroCard();
         // Então o card se expande e lista os assuntos do curso em questão.
-        tela.deveExibirAssuntosCurso(primeiroCurso);
+        await tela.deveExibirAssuntosCurso(primeiroCurso);
     });
 
+    // Cenário: Listagem apresenta um curso ao buscar por parte de seu nome
+    test( 'Apresenta um curso ao buscar seu nome', async ({page} : {page: Page}) => {
+        // Quando digito parte do nome de um curso na caixa de pesquisa 
+        await tela.preencheTextoBusca('Geografia');
+        //      e aperto o botão enter
+        await tela.apertaEnter();
+        // Então apenas cursos que satisfaçam aquele filtro são listados. 
+        await tela.deveExibirCursosFiltrados('Geografia');
+    });
+
+    // Cenário: Listagem apresenta um curso ao buscar pelo nome de seu professor
+    test( 'Apresenta um curso ao buscar o nome de seu professor', async ({page} : {page: Page}) => {
+        // Quando digito parte do nome de um professor na caixa de pesquisa 
+        await tela.preencheTextoBusca('Amaurício');
+        //      e aperto o botão enter
+        await tela.apertaEnter();
+        // Então apenas cursos que satisfaçam aquele filtro são listados. 
+        await tela.deveExibirCursosFiltrados('Amaurício');
+    });
+    
+    // Cenário: Listagem não apresenta cursos ao buscar por um texto inexistente no nome de nenhum curso ou professor
+    test( 'Não apresenta cursos ao buscar um texto inexistente', async ({page} : {page: Page}) => {
+        // Quando digito um texto inexistente na caixa de pesquisa 
+        await tela.preencheTextoBusca('INEXISTENTE');
+        //      e aperto o botão enter
+        await tela.apertaEnter();
+        // Então uma mensagem de que não há cursos para se listar será exibida. 
+        await tela.deveExibirMensagem('Não há cursos');
+    });
 });

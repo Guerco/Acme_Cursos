@@ -1,5 +1,8 @@
 export const ids = {
-    secaoCursos : '#secao-cursos'
+    secaoCursos : '#secao-cursos',
+    formBusca: '#form-busca',
+    busca: '#input-busca',
+    mensagem: '#mensagem'
 };
 
 export const classes = {

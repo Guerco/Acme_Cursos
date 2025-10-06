@@ -16,23 +16,63 @@ export class VisaoListagemCursosDom implements VisaoListagemCursos{
 
     iniciar() {
         this.controladora.listarCursos();
+
+        document.getElementById(ids.formBusca.slice(1))!.addEventListener('submit', (event) => {
+            event.preventDefault();
+            this.controladora.buscarCursos();
+        });
     }
+
     // Métodos de Entrada
+    obterFiltroBusca() : string {
+        return (document.getElementById(ids.busca.slice(1))! as HTMLInputElement).value;
+    }
 
     // Métodos de Saída
-    exibirCursos (cursos: Curso[]): void {
-        const secaoCursos = document.getElementById(ids.secaoCursos.slice(1));
-
-        const cursosOrdenados = this.ordenarCursos(cursos); 
-
-        const cardsCursos = this.cursosParaCards(cursosOrdenados);
-
-        const frag = UtilDOM.criaFragmentoComElementos(cardsCursos);
-
-        secaoCursos?.appendChild(frag);
+    exibirMensagem (mensagem : string) : void {
+        this.limparCorpo();
+        const outMensagem = document.getElementById(ids.mensagem.slice(1));
+        outMensagem!.innerText = mensagem;
     }
 
+    exibirCursos (cursos: Curso[]): void {
+        this.limparCorpo();
+        
+        if (!cursos || cursos.length === 0) {
+            this.exibirMensagem('Não há cursos para se listar.');
+        } else {
+            const secaoCursos = this.buscarSecaoCursos();
+            
+            const cursosOrdenados = this.ordenarCursos(cursos); 
+            
+            const cardsCursos = this.cursosParaCards(cursosOrdenados);
+    
+            const frag = UtilDOM.criaFragmentoComElementos(cardsCursos);
+    
+            secaoCursos?.appendChild(frag);
+        }
+    }
+    
     // Métodos Auxiliares
+    private limparCursos() : void{
+        const secaoCursos = this.buscarSecaoCursos();
+        secaoCursos!.innerHTML = '';
+    }
+
+    private limparMensagem() : void{
+        const outMensagem = document.getElementById(ids.mensagem.slice(1));
+        outMensagem!.innerText = '';
+    }
+
+    private limparCorpo() : void {
+        this.limparCursos();
+        this.limparMensagem();
+    }
+
+    private buscarSecaoCursos() : HTMLElement {
+        return document.getElementById(ids.secaoCursos.slice(1))!;
+    }
+
     private ordenarCursos (cursos : Curso[]) {
         return cursos.sort((c1 : Curso, c2: Curso) => {
             return (c1.descricao > c2.descricao) ? 1 : -1;

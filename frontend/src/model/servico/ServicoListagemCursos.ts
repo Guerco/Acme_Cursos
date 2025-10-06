@@ -5,12 +5,29 @@ const URL_API = rotasApi.cursos;
 
 export class ServicoCurso {
     async buscarTodos() : Promise<Curso[]> {
-        const response = await fetch(URL_API);
+        try {
+            const response = await fetch(URL_API);
         
-        if (!response.ok){
-            throw new Error('Erro ao buscar os cursos.');
+            if (!response.ok){
+                throw new Error();
+            }
+            const cursos = await response.json();
+            return cursos;
+        } catch(err) {
+            throw new Error('Não foi possível buscar os cursos.');
         }
-        const cursos = await response.json();
-        return cursos;
+    }
+
+    async buscarFiltrados(filtro : string) : Promise<Curso[]>{
+        try {
+            // Filtrando localmente
+            const cursos = await this.buscarTodos();
+            return cursos.filter(c => (
+                c.descricao.toLowerCase().includes(filtro.toLowerCase()) || 
+                c.professor.nome.toLowerCase().includes(filtro.toLowerCase())
+            ));  
+        } catch(err) {
+            throw new Error('Não foi possível buscar os cursos filtrados.');
+        }
     }
 }

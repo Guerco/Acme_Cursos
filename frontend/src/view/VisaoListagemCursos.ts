@@ -4,6 +4,10 @@ export interface VisaoListagemCursos {
     
     iniciar() : void;
 
-    exibirCursos (cursos: Array<Curso>): void;
+    // Entrada
+    obterFiltroBusca() : string 
 
+    // Saída
+    exibirMensagem (mensagem : string) : void;
+    exibirCursos (cursos: Array<Curso>): void;
 }   

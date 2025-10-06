@@ -8,13 +8,66 @@
     <script type="module" src="./src/index.ts"></script>
 
     <style>
-        /* ========================================================== */
-        /* Estilo dos Cards */
         body {
             background-color: white;
             color: black;
             font-family: Arial, Helvetica, sans-serif;
+            width: 95%;
+            margin: 0 auto;
         }
+        /* ========================================================== */
+        /* Estilo da mensagem */
+        #mensagem {
+            display: block;
+            box-sizing: border-box; 
+            border: 2px solid #f0e221;
+            background-color: #faf38e;
+            border-radius: 5px;
+            width: 80%;
+            margin: 0 auto;
+            padding: 5px;
+        }
+
+        #mensagem:empty{
+            display: none;
+        }
+
+        /* ========================================================== */
+        /* Estilo da busca */
+        #form-busca {
+            background-color: #820EC0;
+            border: 3px solid #2f0744;
+            border-radius: 5px;
+            width: 80%;
+            margin: 0 auto 20px;
+            padding: 20px;
+            box-sizing: border-box; 
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        #form-busca label{
+            color: white;
+            font-weight: bold;
+        }
+
+        #input-busca {
+            font-size: small;
+            border: 1px solid rgb(214, 214, 214);
+            border-radius: 5px;
+            width: 300px;
+            padding: 3px;
+        }
+
+        #form-busca button {
+            background-color: #ffffff;
+            border-radius: 5px;
+            padding: 4px 8px;
+            cursor: pointer;
+        }
+        /* ========================================================== */
+        /* Estilo dos Cards */
 
         #secao-cursos {
             display: flex;
@@ -27,9 +80,8 @@
 
         
         .card-curso {
-            border-color: rgb(214, 214, 214);
-            border-style: solid;
-            border-radius: 20px;
+            border: 2px solid rgb(214, 214, 214);
+            border-radius: 5px;
             padding: 20px;
             display: flex;
             flex-direction: column; 
@@ -72,8 +124,8 @@
 
         .botao-exibir-assuntos {
             background: none;
-            border: 1px solid #35bfe9;
-            color: #35bfe9;
+            border: 1px solid #820EC0;
+            color: #820EC0;
             border-radius: 8px;
             padding: 4px 8px;
             cursor: pointer;
@@ -107,6 +159,8 @@
 
 </head>
 <body>
+    <h1>Listagem de Cursos</h1>
+
     <form id="form-busca">
         <label for="input-busca">
             Busque por nome do curso ou professor:
@@ -115,7 +169,7 @@
         <button>🔍</button>
     </form>
 
-    <h1>Listagem de Cursos</h1>
+    <output id="mensagem"></output>
 
     <section id="secao-cursos">
     </section>

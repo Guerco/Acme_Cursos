@@ -8,9 +8,15 @@ Funcionalidade: Listagem de Cursos
         Quando visualizo a tela
         Então há pelo menos um curso sendo listado.
 
-    Cenário: Listagem apresenta um curso ao buscar por parte de seu nome
+    Cenário: Listagem apresenta um curso ao buscar por seu nome
         Dado que acesso a tela de listagem de cursos
         Quando digito parte do nome de um curso na caixa de pesquisa 
+             e aperto o botão enter
+        Então apenas cursos que satisfaçam aquele filtro são listados. 
+
+    Cenário: Listagem apresenta um curso ao buscar pelo nome de seu professor
+        Dado que acesso a tela de listagem de cursos
+        Quando digito parte do nome de um professor na caixa de pesquisa 
              e aperto o botão enter
         Então apenas cursos que satisfaçam aquele filtro são listados. 
 
