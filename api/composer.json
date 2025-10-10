@@ -1,0 +1,34 @@
+{
+    "name": "quiz/api",
+    "description": "API para quiz",
+    "type": "project",
+    "license": "MIT",
+    "scripts": {
+        "api": "php -S localhost:8080",
+        "test": "kahlan",
+        "check": "phpstan analyze src --level=6"
+    },
+    "autoload": {
+        "psr-4": {
+            "": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Guerco",
+            "email": "gabrielszgrco@gmail.com"
+        },
+        {
+            "name": "MychelleSatyn",
+            "email": "mychellesatyn@gmail.com"
+        }
+    ],
+    "require": {
+        "phputil/router": "^0.3.6",
+        "phputil/cors": "^0.5.3"
+    },
+    "require-dev": {
+        "kahlan/kahlan": "^6.0",
+        "phpstan/phpstan": "^2.1"
+    }
+}
