@@ -4,9 +4,7 @@
       "id": 1,
       "caminhoImg": "imagem-padrao.png",
       "descricao": "Matemática",
-      "professor": {
-        "nome": "Juvenal"
-      },
+      "nomeProfessor": "Juvenal",
       "assuntos": [
         {
           "id": 1,
@@ -26,9 +24,7 @@
       "id": 2,
       "caminhoImg": "imagem-padrao.png",
       "descricao": "História",
-      "professor": {
-        "nome": "Amaurício"
-      },
+      "nomeProfessor": "Amaurício",
       "assuntos": [
         {
           "id": 4,
@@ -44,9 +40,7 @@
       "id": 3,
       "caminhoImg": "imagem-padrao.png",
       "descricao": "Geografia",
-      "professor": {
-        "nome": "Selverson"
-      },
+      "nomeProfessor": "Selverson",
       "assuntos": [
         {
           "id": 6,

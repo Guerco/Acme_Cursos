@@ -1,5 +1,5 @@
-import { Assunto } from "../model/Assunto.ts";
-import { Curso } from "../model/Curso.ts";
+import { AssuntoListagem } from "../model/dto/AssuntoListagem.ts";
+import { CursoListagem } from "../model/dto/CursoListagem.ts";
 import { ControladoraListagemCursos } from "../presenter/ControladoraListagemCursos.ts";
 import { classes, ids } from "../ui/listagem-cursos-ui.ts";
 import { UtilDOM } from "../util/UtilDOM.ts";
@@ -35,7 +35,7 @@ export class VisaoListagemCursosDom implements VisaoListagemCursos{
         outMensagem!.innerText = mensagem;
     }
 
-    exibirCursos (cursos: Curso[]): void {
+    exibirCursos (cursos: CursoListagem[]): void {
         this.limparCorpo();
         
         if (!cursos || cursos.length === 0) {
@@ -73,13 +73,13 @@ export class VisaoListagemCursosDom implements VisaoListagemCursos{
         return document.getElementById(ids.secaoCursos.slice(1))!;
     }
 
-    private ordenarCursos (cursos : Curso[]) {
-        return cursos.sort((c1 : Curso, c2: Curso) => {
+    private ordenarCursos (cursos : CursoListagem[]) {
+        return cursos.sort((c1 : CursoListagem, c2: CursoListagem) => {
             return (c1.descricao > c2.descricao) ? 1 : -1;
         });
     }
 
-    private cursosParaCards(cursos: Curso[]): HTMLDivElement[] {
+    private cursosParaCards(cursos: CursoListagem[]): HTMLDivElement[] {
         if (!cursos || cursos.length === 0) {
             return [UtilDOM.criaComTexto('h3', 'Não há cursos para se listar.') as HTMLDivElement];
         }
@@ -88,7 +88,7 @@ export class VisaoListagemCursosDom implements VisaoListagemCursos{
         return cursos.map(a => this.cursoParaCard(a));
     }
 
-    private cursoParaCard(curso: Curso) : HTMLDivElement {
+    private cursoParaCard(curso: CursoListagem) : HTMLDivElement {
         const card = UtilDOM.criaComClasses('div', [classes.curso]);
         card.dataset.id = curso.id.toString();
         card.addEventListener('click', this.alternarVisibilidadeAssuntos);
@@ -101,7 +101,7 @@ export class VisaoListagemCursosDom implements VisaoListagemCursos{
         const secaoCursoLateral = UtilDOM.criaComClasses('div', [classes.secaoCursoLat]);
         const infoCurso = UtilDOM.criaComClasses('div', [classes.infoCurso]);
         infoCurso.appendChild(UtilDOM.criaComTextoEClasses('h2', curso.descricao, [classes.descricaoCurso]));
-        infoCurso.appendChild(UtilDOM.criaComTextoEClasses('p', curso.professor.nome, [classes.nomeProfessor]));
+        infoCurso.appendChild(UtilDOM.criaComTextoEClasses('p', curso.nomeProfessor, [classes.nomeProfessor]));
         secaoCursoLateral.appendChild(infoCurso);
     
         secaoCurso.append(elementoFigura, secaoCursoLateral);
@@ -121,7 +121,7 @@ export class VisaoListagemCursosDom implements VisaoListagemCursos{
         return card as HTMLDivElement;
     }
 
-    private assuntosParaTabela(assuntos: Assunto[]): HTMLTableElement {
+    private assuntosParaTabela(assuntos: AssuntoListagem[]): HTMLTableElement {
         const tabelaAssuntos = UtilDOM.criaComClasses('table', [classes.tabelaAssuntos]);
         const tbody = UtilDOM.cria('tbody');
     
@@ -140,7 +140,7 @@ export class VisaoListagemCursosDom implements VisaoListagemCursos{
         return tabelaAssuntos as HTMLTableElement;
     }
 
-    private assuntoParaTR(assunto: Assunto){
+    private assuntoParaTR(assunto: AssuntoListagem){
         const trAssunto = UtilDOM.criaComClasses('tr', [classes.linhaAssunto]);
         trAssunto.dataset.id = assunto.id.toString();
 

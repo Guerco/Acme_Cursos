@@ -1,5 +1,5 @@
 import { rotasApi } from "../../rotas";
-import { Curso } from "../Curso";
+import { CursoListagem } from "../dto/CursoListagem";
 import { RepositorioCursos } from "../repositorio/RepositorioCursos";
 
 const URL_API = rotasApi.cursos;
@@ -7,7 +7,7 @@ const URL_API = rotasApi.cursos;
 export class ServicoCurso {
     constructor(private repositorio : RepositorioCursos){}
 
-    async buscarTodos() : Promise<Curso[]> {
+    async buscarTodos() : Promise<CursoListagem[]> {
         try {
             return await this.repositorio.buscarTodos();
         } catch(err : any) {
@@ -15,7 +15,7 @@ export class ServicoCurso {
         }
     }
 
-    async buscarFiltrados(filtro : string) : Promise<Curso[]>{
+    async buscarFiltrados(filtro : string) : Promise<CursoListagem[]>{
         try {
             return await this.repositorio.buscarPorDescricaoOuProfessor(filtro);  
         } catch(err: any) {

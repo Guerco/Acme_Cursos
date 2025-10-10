@@ -1,7 +1,7 @@
-import { Curso } from '../Curso.ts';
+import { CursoListagem } from "../dto/CursoListagem";
 
 export interface RepositorioCursos {
-    buscarTodos() : Promise<Curso[]>;
-    buscarPorDescricaoOuProfessor(filtro : string) : Promise<Curso[]>;
+    buscarTodos() : Promise<CursoListagem[]>;
+    buscarPorDescricaoOuProfessor(filtro : string) : Promise<CursoListagem[]>;
 }
 

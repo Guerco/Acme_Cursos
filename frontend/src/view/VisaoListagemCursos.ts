@@ -1,4 +1,4 @@
-import { Curso } from "../model/Curso";
+import { CursoListagem } from "../model/dto/CursoListagem.ts";
 
 export interface VisaoListagemCursos {
     
@@ -9,5 +9,5 @@ export interface VisaoListagemCursos {
 
     // Saída
     exibirMensagem (mensagem : string) : void;
-    exibirCursos (cursos: Array<Curso>): void;
+    exibirCursos (cursos: Array<CursoListagem>): void;
 }   
