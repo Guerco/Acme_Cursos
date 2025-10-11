@@ -1,0 +1,74 @@
+USE g2;
+
+-- Usuários
+INSERT INTO credenciais (id, email, senha) VALUES
+    (1, 'aluno@email.com', '123'),
+    (2, 'maria.aluno@cefet.com', '123'),
+    (3, 'bob.aluno@cefet.com', '123'),
+    (4, 'ana.aluno@cefet.com', '123'),
+    (5, 'cerginho.professor@cefet.com', '123'),
+    (6, 'rosa.professor@cefet.com', '123'),
+    (7, 'cleber.professor@cefet.com', '123'),
+    (8, 'amauricio.professor@cefet.com', '123');
+
+-- Alunos
+INSERT INTO aluno (id, id_credenciais, nome) VALUES
+    (1, 1, 'Aluno'),
+    (2, 2, 'Maria de Souza Alvez'),
+    (3, 3, 'Bob Ernesto Pereira'),
+    (4, 4, 'Ana Clara de Oliveira');
+
+-- Professores
+INSERT INTO professor (id, id_credenciais, nome) VALUES
+    (1, 5, 'Rosa Maria da Silva'),
+    (2, 6, 'Cerginho da Pereira Nunes'),
+    (3, 7, 'Cleber Breno Souza'),
+    (4, 8, 'Amaurício');
+
+-- Cursos
+INSERT INTO curso (id, id_professor, descricao, caminho_img) VALUES
+(1, 1, 'Microsoft Excel Intermediário', '1.jpg'),
+(2, 1, 'Matemática Básica', '2.jpg'),
+(3, 2, 'Modelagem de dados', '3.jpg'),
+(4, 2, 'Modelando dados no Power BI', '4.jpg'),
+(5, 3, 'Geografia', 'imagem-padrao.png'),
+(6, 4, 'Fundamentos de TI: Hardaware e Software', '5.jpg');
+
+-- Assuntos
+INSERT INTO assunto (id, id_curso, descricao) VALUES
+(1, 1, 'Gráficos'),
+(2, 1, 'Automatização de Planilhas'),
+(3, 2, 'Soma'),
+(4, 2, 'Frações'),
+(5, 3, 'Diagrama de Classes'),
+(6, 5, 'Relevo'),
+(7, 5, 'Bacias Hidrográficas'),
+(8, 5, 'Regiões do Brasil');
+
+-- Perguntas
+INSERT INTO pergunta (id, id_assunto, descricao, caminho_img, tempo_seg, dificuldade) VALUES
+(1, 3, 'Quanto é 1 + 1?', 'imagem-padrao.png', 60, 'facil'),
+(2, 3, 'Qual é o resultado de 5 + (-3)?', NULL, 60, 'facil'),
+(3, 3, '10 + 10 é igual a:', NULL, 60, 'facil'),
+(4, 4, 'Quanto é 2/3 + 1/6?', NULL, 60, 'medio');
+
+-- Respostas das perguntas
+INSERT INTO resposta_pergunta (id, id_pergunta, descricao, correta) VALUES
+-- Questão 1
+(1, 1, '1', false),
+(2, 1, '2', true),
+(3, 1, '3', false),
+(4, 1, '4', false),
+-- Questão 2
+(5, 2, '8', false),
+(6, 2, '-8', false),
+(7, 2, '2', true),
+(8, 2, '1000', false),
+-- Questão 3
+(9, 3, '1000 (mil)', false),
+(10, 3, '1 (um)', false),
+(11, 3, '20 (vinte)', true),
+-- Questão 4
+(12, 3, '3/9', false),
+(13, 3, '5/6', true);
+
