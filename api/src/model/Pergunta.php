@@ -53,14 +53,14 @@ class Pergunta{
         $this->dificuldade = $dificuldade;
     }
 
-    public function getResposta(): array{
-        return $this->resposta;
+    public function getRespostas(): array{
+        return $this->respostas;
     }
-    public function setResposta(array $resposta): void{
-        $this->resposta = $resposta;
+    public function setRespostas(array $respostas): void{
+        $this->respostas = $respostas;
     }
 
     public function addResposta(RespostaPergunta $resposta): void{
-        $this->resposta []= $resposta;
+        $this->respostas []= $resposta;
     }
 }

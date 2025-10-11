@@ -5,7 +5,7 @@ class Professor{
     public function __construct(
         private int $id = 0,
         private string $nome = '',
-        private ?Usuario $usuario = null
+        private ?Credenciais $credenciais = null
     ){}
 
     public function getId(): int{
@@ -15,11 +15,11 @@ class Professor{
         $this->id = $id;
     }
 
-    public function getUsuario(): Usuario{
-        return $this->usuario;
+    public function getCredenciais(): Credenciais{
+        return $this->credenciais;
     }
-    public function setUsuario(Usuario $usuario): void{
-        $this->usuario = $usuario;
+    public function setCredenciais(Credenciais $credenciais): void{
+        $this->credenciais = $credenciais;
     }
 
     public function getNome(): string{
