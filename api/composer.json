@@ -10,7 +10,14 @@
     },
     "autoload": {
         "psr-4": {
-            "": "src/"
+            "": [
+                "src/config/",
+                "src/model/",
+                "src/model/dto/",
+                "src/model/exception/",
+                "src/model/repositorio/",
+                "src/model/servico/"
+            ]
         }
     },
     "authors": [
