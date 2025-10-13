@@ -16,4 +16,19 @@ interface RepositorioAlunos {
      * @return int
      */
     function existeComCredenciais(Credenciais $credenciais): int;
+
+    /**
+     * Cadastra uma resposta de uma pergunta para determinado aluno.
+     * @param RespostaAluno $respostaAluno
+     * @return bool
+     */
+    public function cadastrarResposta(RespostaAluno $respostaAluno): void;
+
+    /**
+     * Verifica se um aluno já possui resposta cadastrada para uma determinada pergunta.
+     * 
+     * @param RespostaAluno $respostaAluno
+     * @return int
+     */
+    public function existeResposta(int $idAluno, int $idPergunta): int;
 }

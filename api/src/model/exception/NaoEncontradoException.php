@@ -1,5 +1,5 @@
 <?php
 
-class NaoEncontradoException extends RuntimeException{
+class NaoEncontradoException extends DominioException{
     
 }

@@ -18,16 +18,19 @@ $app->use( cors() );
 
 // Repositórios
 $repositorioAlunos = new RepositorioAlunosEmBDR($pdo);
+$repositorioPerguntas = new RepositorioPerguntasBDR($pdo);
+
 
 // Servicos
 $gestorCursos = new GestorCursos(
     new RepositorioCursosEmBDR($pdo)
 );
 $gestorAlunos = new GestorAlunos(
-    $repositorioAlunos
+    $repositorioAlunos,
+    $repositorioPerguntas
 );
 $gestorPerguntas = new GestorPerguntas(
-    new RepositorioPerguntasBDR($pdo),
+    $repositorioPerguntas,
     $repositorioAlunos
 );
 
@@ -59,6 +62,20 @@ $app->route('/alunos')
         } catch ( RepositorioException $e ) {
             $res->status( 500 )->json( $e->getMessage());
         }
+    } )
+
+    ->post( '/:id/respostas', function(HttpRequest $req, HttpResponse $res) use ( $gestorAlunos ) { 
+        try {
+            $idAluno = $req->param('id') ?? null;
+            $gestorAlunos->salvarResposta(['idAluno' => $idAluno, ...(array) $req->body()]);
+            $res->status( 204 )->end();
+        } catch ( NaoEncontradoException $e ) {
+            $res->status( 404 )->json( $e->getProblemas());
+        } catch ( DominioException $e ) {
+            $res->status( 400 )->json( $e->getProblemas());
+        } catch ( RepositorioException $e ) {
+            $res->status( 500 )->json( $e->getMessage());
+        }
     } );
 
 // Rotas de assuntos
@@ -72,7 +89,7 @@ $app->route('/assuntos')
             
             $res->status( 200 )->json( $perguntas );
         } catch ( NaoEncontradoException $e ) {
-            $res->status( 404 )->json( $e->getMessage());
+            $res->status( 404 )->json( $e->getProblemas());
         } catch ( DominioException $e ) {
             $res->status( 400 )->json( $e->getProblemas());
         } catch ( RepositorioException $e ) {

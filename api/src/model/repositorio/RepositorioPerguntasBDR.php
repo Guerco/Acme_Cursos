@@ -5,6 +5,26 @@ class RepositorioPerguntasBDR implements RepositorioPerguntas {
         private PDO $pdo
     ){}
     
+   public function existeComId(int $id): bool {
+        try {
+            $sql = <<<'SQL'
+                SELECT 1
+                FROM pergunta p
+                WHERE
+                    p.id = :id
+            SQL;
+
+            $ps = $this->pdo->prepare($sql);
+            $ps->execute( [
+                'id' => $id
+            ] );
+
+            return (bool) $ps->fetchColumn();
+        } catch (PDOException $e) {
+            throw new RepositorioException('Não foi possível verificar o id.'); 
+        }
+    }
+
     public function buscarPorAssuntoEAluno(int $idAssunto, int $idAluno): array {
         $sql = <<<'SQL'
             SELECT
