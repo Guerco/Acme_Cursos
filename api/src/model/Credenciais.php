@@ -4,7 +4,7 @@
 class Credenciais{
 
     public function __construct(
-        private int $id = 0,
+        private ?int $id = 0,
         private string $email = '',
         private string $senha = ''
     ){}

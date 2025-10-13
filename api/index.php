@@ -19,6 +19,11 @@ $gestorCursos = new GestorCursos(
     new RepositorioCursosEmBDR($pdo)
 );
 
+$gestorAlunos = new GestorAlunos(
+    new RepositorioAlunosEmBDR($pdo)
+);
+
+// Rotas de Cursos
 $app->route('/cursos')
 
     ->get( '/', function( HttpRequest $req, HttpResponse $res ) use ( $gestorCursos ) {
@@ -30,5 +35,21 @@ $app->route('/cursos')
         $res->status( 500 )->json( $e->getMessage());
     }
 } );
+
+// Rotas de Alunos
+$app->route('/alunos')
+
+    ->post( '/verificarCredenciais', function( HttpRequest $req, HttpResponse $res ) use ( $gestorAlunos ) {
+        try {
+            $idAluno = $gestorAlunos->verificarCredenciais((array) $req->body());
+            $res->status( 200 )->json(['idAluno' => $idAluno]);
+        } catch ( NaoEncontradoException $e ) {
+            $res->status( 404 )->json( $e->getMessage());
+        } catch ( DominioException $e ) {
+            $res->status( 400 )->json( ['erros' => $e->getProblemas()]);
+        } catch ( RepositorioException $e ) {
+            $res->status( 500 )->json( $e->getMessage());
+        }
+    } );
 
 $app->listen(); 
