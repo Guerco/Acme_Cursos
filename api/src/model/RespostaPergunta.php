@@ -3,8 +3,8 @@
 class RespostaPergunta{
 
     public function __construct(
-        private Pergunta $pergunta,
         private int $id = 0,
+        private ?Pergunta $pergunta,
         private string $descricao = '',
         private bool $correta = false
     ){}

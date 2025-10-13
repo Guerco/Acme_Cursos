@@ -1,14 +1,12 @@
 <?php
 
-require_once __DIR__ . 'Dificuldade.php';
-
 class Pergunta{
 
     public function __construct(
-        private Assunto $assunto,
         private int $id = 0,
+        private ?Assunto $assunto,
         private string $descricao = '',
-        private string $caminhoImg = '',
+        private ?string $caminhoImg = '',
         private int $tempoSeg = 60,
         private Dificuldade $dificuldade = Dificuldade::FACIL,
         private array $respostas = []
@@ -32,7 +30,7 @@ class Pergunta{
         $this->descricao = $descricao;
     }
 
-    public function getCaminhoImg(): string{
+    public function getCaminhoImg(): ?string{
         return $this->caminhoImg;
     }
     public function setCaminhoImg(string $caminhoImg): void{

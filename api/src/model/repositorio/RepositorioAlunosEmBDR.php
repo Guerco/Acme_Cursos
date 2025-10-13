@@ -6,6 +6,26 @@ class RepositorioAlunosEmBDR implements RepositorioAlunos{
         private PDO $pdo
     ){}
 
+    public function existeComId(int $id): bool {
+        try {
+            $sql = <<<'SQL'
+                SELECT 1
+                FROM aluno a
+                WHERE
+                    a.id = :id
+            SQL;
+
+            $ps = $this->pdo->prepare($sql);
+            $ps->execute( [
+                'id' => $id
+            ] );
+
+            return (bool) $ps->fetchColumn();
+        } catch (PDOException $e) {
+            throw new RepositorioException('Não foi possível verificar o id.'); 
+        }
+    }
+    
     public function existeComCredenciais(Credenciais $credenciais): int {
         try {
             $sql = <<<'SQL'
