@@ -43,9 +43,7 @@ export class VisaoListagemCursosDom implements VisaoListagemCursos{
         } else {
             const secaoCursos = this.buscarSecaoCursos();
             
-            const cursosOrdenados = this.ordenarCursos(cursos); 
-            
-            const cardsCursos = this.cursosParaCards(cursosOrdenados);
+            const cardsCursos = this.cursosParaCards(cursos);
     
             const frag = UtilDOM.criaFragmentoComElementos(cardsCursos);
     
@@ -71,12 +69,6 @@ export class VisaoListagemCursosDom implements VisaoListagemCursos{
 
     private buscarSecaoCursos() : HTMLElement {
         return document.getElementById(ids.secaoCursos.slice(1))!;
-    }
-
-    private ordenarCursos (cursos : CursoListagem[]) {
-        return cursos.sort((c1 : CursoListagem, c2: CursoListagem) => {
-            return (c1.descricao > c2.descricao) ? 1 : -1;
-        });
     }
 
     private cursosParaCards(cursos: CursoListagem[]): HTMLDivElement[] {

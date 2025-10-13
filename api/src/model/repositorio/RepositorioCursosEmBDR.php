@@ -12,7 +12,8 @@ class RepositorioCursosEmBDR implements RepositorioCursos{
                 'select c.id, c.descricao, c.caminho_img as caminhoImg, p.id as idProfessor, p.nome, a.id as idAssunto, a.descricao as descricaoAssunto from curso c
                     JOIN assunto a ON (c.id=a.id_curso)
                     JOIN professor p ON (c.id_professor=p.id)
-                    WHERE c.descricao LIKE :nomeCurso OR p.nome LIKE :nomeProfessor');
+                    WHERE c.descricao LIKE :nomeCurso OR p.nome LIKE :nomeProfessor
+                    ORDER BY c.descricao');
             $ps->execute([
                 'nomeCurso' => "%$nome%",
                 'nomeProfessor' => "%$nome%"

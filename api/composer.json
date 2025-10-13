@@ -4,7 +4,10 @@
     "type": "project",
     "license": "MIT",
     "scripts": {
-        "api": "php -S localhost:8080",
+        "api":  [
+                    "Composer\\Config::disableProcessTimeout",
+                    "php -S localhost:8080"
+                ], 
         "test": "kahlan",
         "check": "phpstan analyze src --level=6"
     },

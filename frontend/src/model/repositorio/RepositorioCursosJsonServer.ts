@@ -12,7 +12,8 @@ export class RepositorioCursosJsonServer implements RepositorioCursos  {
             if (!response.ok){
                 throw new Error();
             }
-            const cursos = await response.json();
+            let cursos = await response.json();
+            cursos = this.ordenarCursos(cursos);
             return cursos;
         } catch(err) {
             throw new Error('Não foi possível buscar os cursos.');
@@ -21,7 +22,8 @@ export class RepositorioCursosJsonServer implements RepositorioCursos  {
     
     async buscarPorDescricaoOuProfessor(filtro : string) : Promise<CursoListagem[]>{
         try {
-            const cursos = await this.buscarTodos();
+            let cursos = await this.buscarTodos();
+            cursos = this.ordenarCursos(cursos);
             return cursos.filter(c => (
                 c.descricao.toLowerCase().includes(filtro.toLowerCase()) || 
                 c.nomeProfessor.toLowerCase().includes(filtro.toLowerCase())
@@ -29,5 +31,11 @@ export class RepositorioCursosJsonServer implements RepositorioCursos  {
         } catch(err) {
             throw new Error('Não foi possível buscar os cursos filtrados.');
         }
+    }
+
+    private ordenarCursos (cursos : CursoListagem[]) {
+        return cursos.sort((c1 : CursoListagem, c2: CursoListagem) => {
+            return (c1.descricao > c2.descricao) ? 1 : -1;
+        });
     }
 }

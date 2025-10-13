@@ -1,4 +1,4 @@
-import { RepositorioCursosJsonServer } from "../model/repositorio/RepositorioCursosJsonServer";
+import { RepositorioCursosApi } from "../model/repositorio/RepositorioCursosApi";
 import { ServicoCurso } from "../model/servico/ServicoListagemCursos";
 import { VisaoListagemCursos } from "../view/VisaoListagemCursos";
 
@@ -8,7 +8,7 @@ export class ControladoraListagemCursos {
     constructor(
         private visao: VisaoListagemCursos
     ){
-        const repositorio = new RepositorioCursosJsonServer();
+        const repositorio = new RepositorioCursosApi();
         this.servico = new ServicoCurso(repositorio);
     }
     

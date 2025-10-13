@@ -12,27 +12,39 @@
 
 ---
 
-
-## Tecnologias utilizadas
+## 🌐 Tecnologias utilizadas
 
 ### Frontend 🎨
 
-**Linguagens e Ferramentas:**
+**🔧 Linguagens e Ferramentas:**
 - HTML  
 - CSS  
 - TypeScript  
 - PNPM v10.17.1  
 
-**Bibliotecas e Frameworks JavaScript:**
+**📚 Bibliotecas e Frameworks JavaScript:**
 - json-server v1.0.0-beta.3  
 - playwright v1.55.1  
 - vite v6.3.6  
 - vitest v3.2.4  
 
+--- 
+
+### Backend 🛠️
+
+**🔧 Linguagens e Ferramentas:**
+- PHP v8.2.4  
+- Composer v2.7.6  
+
+**📚 Bibliotecas e Frameworks PHP:**
+- phputil/router v0.3.6
+- phputil/cors v0.5.3
+- kahlan/kahlan v6.0
+- phpstan/phpstan v2.1
 
 ---
 
-## Estrutura de Diretórios
+## Estrutura de Diretórios arqui
 | **📂**                     | **Descrição**                                                                                  |
 |-----------------------------|------------------------------------------------------------------------------------------------|
 | [/doc](./doc/)               | Documentação do projeto                                                                       |
@@ -53,7 +65,14 @@
 
 ---
 
-## Estrutura de Dados
+## Estrutura de Dados 🎲
 ![Diagrama Essencial UML](./doc/diagramas/quiz-essencial.png)
+
+---
+
+## Referências de Conteúdo
+
+Todas as referências a imagens, conteúdos e estilos **externos** utilizados neste projeto encontram-se na [Documentação de Referências](./doc/referencias.md).
+
 
 ---
