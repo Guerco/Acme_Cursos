@@ -1,6 +1,13 @@
 <?php
 
 interface RepositorioCursos{
+    /**
+     * Verifica se existe um curso com determinado id.
+     * 
+     * @param int $id
+     * @return bool
+     */
+    public function existeComId(int $id): bool;
 
     /**
      * Retorna todos os cursos e pelo nome do curso ou professor informado.

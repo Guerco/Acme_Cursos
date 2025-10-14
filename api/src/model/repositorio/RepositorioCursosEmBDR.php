@@ -6,6 +6,26 @@ class RepositorioCursosEmBDR implements RepositorioCursos{
     public function __construct( private ?PDO $pdo){
     }
 
+    public function existeComId(int $id): bool {
+        try {
+            $sql = <<<'SQL'
+                SELECT 1
+                FROM curso c
+                WHERE
+                    c.id = :id
+            SQL;
+
+            $ps = $this->pdo->prepare($sql);
+            $ps->execute( [
+                'id' => $id
+            ] );
+
+            return (bool) $ps->fetchColumn();
+        } catch (PDOException $e) {
+            throw new RepositorioException('Não foi possível verificar o id.'); 
+        }
+    }
+    
     public function listarCursos(string $nome):array{
         try{
             $ps = $this->pdo->prepare(

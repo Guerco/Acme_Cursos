@@ -95,4 +95,28 @@ class RepositorioAlunosEmBDR implements RepositorioAlunos{
             throw new PDOException('Não foi possível verificar a resposta.'.$e->getMessage()); 
         }
     }
+
+    public function buscarPontuacaoPorCurso($idAluno, $idCurso): float|bool {
+        try {
+            $sql = <<<'SQL'
+                SELECT p.pontuacao
+                FROM pontuacao p
+                WHERE
+                    p.id_aluno = :id_aluno
+                    AND p.id_curso = :id_curso
+            SQL;
+
+            $ps = $this->pdo->prepare($sql);
+            $ps->execute( [
+                'id_aluno' => $idAluno,
+                'id_curso'=> $idCurso
+            ] );
+
+            $pontuacao = $ps->fetchColumn();
+
+            return ($pontuacao === false) ? false : (float) $pontuacao;
+        } catch (PDOException $e) {
+            throw new RepositorioException('Não foi possível buscar a pontuação.'); 
+        }
+    }
 }

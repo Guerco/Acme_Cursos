@@ -31,4 +31,12 @@ interface RepositorioAlunos {
      * @return int
      */
     public function existeResposta(int $idAluno, int $idPergunta): int;
+
+    /**
+     * Busca a pontuação de um aluno em um determinado curso.
+     * @param mixed $idAluno
+     * @param mixed $idCurso
+     * @return float|bool
+     */
+    public function buscarPontuacaoPorCurso($idAluno, $idCurso): float|bool;
 }

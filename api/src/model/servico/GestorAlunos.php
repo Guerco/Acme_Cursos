@@ -3,7 +3,8 @@
 class GestorAlunos {
     public function __construct(
         private RepositorioAlunos $repositorioAlunos,
-        private RepositorioPerguntas $repositorioPerguntas
+        private RepositorioPerguntas $repositorioPerguntas,
+        private RepositorioCursos $repositorioCursos
     ){}
 
     public function verificarCredenciais(array $dados) : AlunoListagemDTO {
@@ -72,5 +73,33 @@ class GestorAlunos {
         } else {
             throw DominioException::comProblemas($problemas);
         }
+    }
+
+    public function buscarPontuacaoCurso($idAluno, $idCurso): float {
+        $this->validarBuscarPontuacaoCurso($idAluno, $idCurso);
+        return (float) $this->repositorioAlunos->buscarPontuacaoPorCurso($idAluno, $idCurso);
+    }
+
+    private function validarBuscarPontuacaoCurso($idAluno, $idCurso) {
+        $idAluno = $idAluno ?? null;
+        $idCurso = $idCurso ?? null;
+
+        if ($idAluno === null || $idCurso === null ) {
+            throw new DominioException('Informe aluno e curso.'); 
+        } else if (
+            !filter_var($idAluno, FILTER_VALIDATE_INT) ||
+            !filter_var($idCurso, FILTER_VALIDATE_INT)
+        ) {
+            throw new DominioException('Os ids devem ser inteiros.');     
+        }
+        
+        $problemas = [];
+        if (! $this->repositorioAlunos->existeComId($idAluno)){
+            $problemas [] = 'Aluno inexistente.';
+        }  
+        if (! $this->repositorioCursos->existeComId($idCurso)){
+            $problemas [] = 'Curso inexistente.';
+        }    
+        if(! empty($problemas)) throw NaoEncontradoException::comProblemas($problemas);
     }
 }
