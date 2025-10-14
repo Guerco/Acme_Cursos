@@ -10,12 +10,12 @@ interface RepositorioAlunos {
     public function existeComId(int $id): bool;
     
     /**
-     * Verifica se existe um usuário com determinadas credenciais e retorna seu id.
+     * Verifica se existe um usuário com determinadas credenciais e retorna suas informações caso encotnre.
      * 
      * @param Credenciais $credenciais
-     * @return int
+     * @return Aluno
      */
-    function existeComCredenciais(Credenciais $credenciais): int;
+    function existeComCredenciais(Credenciais $credenciais): Aluno|bool;
 
     /**
      * Cadastra uma resposta de uma pergunta para determinado aluno.

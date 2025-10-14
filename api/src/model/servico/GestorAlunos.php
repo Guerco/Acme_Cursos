@@ -6,9 +6,9 @@ class GestorAlunos {
         private RepositorioPerguntas $repositorioPerguntas
     ){}
 
-    public function verificarCredenciais(array $dados) : int {
+    public function verificarCredenciais(array $dados) : AlunoListagemDTO {
         if (! $dados['email'] || ! $dados['senha']) {
-            throw new DominioException('Email e senhaa devem ser informados.'); 
+            throw new DominioException('Informe email e senha.'); 
         }
 
         $credenciais = new Credenciais(null, $dados['email'], $dados['senha']);
@@ -18,11 +18,11 @@ class GestorAlunos {
             throw DominioException::comProblemas($problemas);
         }
 
-        $id = $this->repositorioAlunos->existeComCredenciais($credenciais);
+        $aluno = $this->repositorioAlunos->existeComCredenciais($credenciais);
 
-        if(!$id){
+        if(!$aluno){
             throw new NaoEncontradoException('Credenciais inválidas.'); 
-        } else return $id;
+        } else return AlunoListagemDTO::deObjeto($aluno);
     }
 
     public function salvarResposta(array $dados){

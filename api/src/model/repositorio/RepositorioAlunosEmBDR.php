@@ -26,10 +26,13 @@ class RepositorioAlunosEmBDR implements RepositorioAlunos{
         }
     }
     
-    public function existeComCredenciais(Credenciais $credenciais): int {
+    public function existeComCredenciais(Credenciais $credenciais): Aluno|bool {
         try {
             $sql = <<<'SQL'
-                SELECT u.id
+                SELECT 
+                    a.id, 
+                    a.nome, 
+                    a.pontuacao_geral
                 FROM credenciais  u
                 INNER JOIN aluno a ON u.id = a.id_usuario
                 WHERE
@@ -43,7 +46,15 @@ class RepositorioAlunosEmBDR implements RepositorioAlunos{
                 'senha'=> $credenciais->getSenha()
             ] );
 
-            return (int) $ps->fetchColumn();
+            $dados = $ps->fetch();
+            if (! $dados)
+                return false;
+            
+            return new Aluno(
+                (int) $dados['id'],
+                $dados['nome'],
+                (float) $dados['pontuacao_geral']
+            );
         } catch (PDOException $e) {
             throw new RepositorioException('Não foi possível verificar as credenciais.'); 
         }

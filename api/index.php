@@ -53,8 +53,8 @@ $app->route('/alunos')
 
     ->post( '/verificarCredenciais', function( HttpRequest $req, HttpResponse $res ) use ( $gestorAlunos ) {
         try {
-            $idAluno = $gestorAlunos->verificarCredenciais((array) $req->body());
-            $res->status( 200 )->json(['idAluno' => $idAluno]);
+            $aluno = $gestorAlunos->verificarCredenciais((array) $req->body());
+            $res->status( 200 )->json($aluno);
         } catch ( NaoEncontradoException $e ) {
             $res->status( 404 )->json( $e->getMessage());
         } catch ( DominioException $e ) {
