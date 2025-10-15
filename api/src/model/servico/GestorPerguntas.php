@@ -9,6 +9,7 @@ class GestorPerguntas {
     public function buscarPerguntasAluno (string|int $idAssunto, string|int $idAluno) {
         $this->validarBuscarPerguntasAluno($idAssunto, $idAluno);
         $perguntas = $this->repositorioPerguntas->buscarPorAssuntoEAluno($idAssunto, $idAluno);
+        shuffle($perguntas);
         return PerguntaListagemDTO::deObjetos($perguntas);
     }
 
