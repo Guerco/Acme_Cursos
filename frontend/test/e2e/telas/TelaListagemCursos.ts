@@ -46,9 +46,10 @@ export class TelaListagemCursos {
     }
 
     async deveExibirCursosFiltrados(filtro : string) {
-        await this.deveExibirCurso();
-        const cursos = await this.buscarCursos().all();
-        for(const c of cursos){
+        const cursos = this.buscarCursos();
+        await expect(cursos.first()).toBeVisible();
+
+        for (const c of await cursos.all()) {
             const informacoes = c.locator(classes.infoCurso);
             await expect(informacoes).toContainText(filtro);
         }

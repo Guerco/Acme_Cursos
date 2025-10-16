@@ -20,7 +20,7 @@ export class RepositorioCursosApi implements RepositorioCursos  {
     
     async buscarPorDescricaoOuProfessor(filtro : string) : Promise<CursoListagem[]>{
         try {
-            const response = await fetch(rotasApi.cusosBusca+filtro);
+            const response = await fetch(rotasApi.cursosBusca+filtro);
 
             if (!response.ok){
                 throw new Error();

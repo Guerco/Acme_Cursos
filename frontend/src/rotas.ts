@@ -5,7 +5,7 @@ const BASE_URL_WEB = 'http://localhost:5173/'
 export const rotasApi = {
     index: BASE_URL_API,
     cursos: BASE_URL_API+'cursos/',
-    cusosBusca: BASE_URL_API+'cursos/?busca=',
+    cursosBusca: BASE_URL_API+'cursos/?busca=',
 };
 
 export const rotasPaginas = {
