@@ -5,11 +5,7 @@ INSERT INTO credenciais (id, email, senha) VALUES
     (1, 'aluno@email.com', '123'),
     (2, 'maria.aluno@cefet.com', '123'),
     (3, 'bob.aluno@cefet.com', '123'),
-    (4, 'ana.aluno@cefet.com', '123'),
-    (5, 'cerginho.professor@cefet.com', '123'),
-    (6, 'rosa.professor@cefet.com', '123'),
-    (7, 'cleber.professor@cefet.com', '123'),
-    (8, 'amauricio.professor@cefet.com', '123');
+    (4, 'ana.aluno@cefet.com', '123');
 
 -- Alunos
 INSERT INTO aluno (id, id_credenciais, nome) VALUES
@@ -19,11 +15,11 @@ INSERT INTO aluno (id, id_credenciais, nome) VALUES
     (4, 4, 'Ana Clara de Oliveira');
 
 -- Professores
-INSERT INTO professor (id, id_credenciais, nome) VALUES
-    (1, 5, 'Rosa Maria da Silva'),
-    (2, 6, 'Cerginho da Pereira Nunes'),
-    (3, 7, 'Cleber Breno Souza'),
-    (4, 8, 'Amaurício');
+INSERT INTO professor (id, nome) VALUES
+    (1, 'Rosa Maria da Silva'),
+    (2, 'Cerginho da Pereira Nunes'),
+    (3, 'Cleber Breno Souza'),
+    (4, 'Amaurício');
 
 -- Cursos
 INSERT INTO curso (id, id_professor, descricao, caminho_img) VALUES
@@ -43,12 +39,13 @@ INSERT INTO assunto (id, id_curso, descricao) VALUES
 (5, 3, 'Diagrama de Classes'),
 (6, 5, 'Relevo'),
 (7, 5, 'Bacias Hidrográficas'),
-(8, 5, 'Regiões do Brasil');
+(8, 5, 'Regiões do Brasil'),
+(9, 6, 'Introdução a Hardware');
 
 -- Perguntas
 INSERT INTO pergunta (id, id_assunto, descricao, caminho_img, tempo_seg, dificuldade) VALUES
-(1, 3, 'Quanto é 1 + 1?', 'imagem-padrao.png', 60, 'facil'),
-(2, 3, 'Qual é o resultado de 5 + (-3)?', NULL, 60, 'facil'),
+(1, 3, 'Quanto é 1 + 1?', 'imagem-padrao.png', 60, 'dificil'),
+(2, 3, 'Qual é o resultado de 5 + (-3)?', NULL, 60, 'medio'),
 (3, 3, '10 + 10 é igual a:', NULL, 60, 'facil'),
 (4, 4, 'Quanto é 2/3 + 1/6?', NULL, 60, 'medio');
 
@@ -69,6 +66,6 @@ INSERT INTO resposta_pergunta (id, id_pergunta, descricao, correta) VALUES
 (10, 3, '1 (um)', false),
 (11, 3, '20 (vinte)', true),
 -- Questão 4
-(12, 3, '3/9', false),
-(13, 3, '5/6', true);
+(12, 4, '3/9', false),
+(13, 4, '5/6', true);
 

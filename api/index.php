@@ -15,12 +15,10 @@ try {
 $app = new Router();
 $app->use( cors() );
 
-
 // Repositórios
 $repositorioAlunos = new RepositorioAlunosEmBDR($pdo);
-$repositorioPerguntas = new RepositorioPerguntasBDR($pdo);
+$repositorioPerguntas = new RepositorioPerguntasEmBDR($pdo);
 $repositorioCursos = new RepositorioCursosEmBDR($pdo);
-
 
 // Servicos
 $gestorCursos = new GestorCursos(
@@ -66,21 +64,7 @@ $app->route('/alunos')
         }
     } )
 
-    ->post( '/:id/respostas', function(HttpRequest $req, HttpResponse $res) use ( $gestorAlunos ) { 
-        try {
-            $idAluno = $req->param('id') ?? null;
-            $gestorAlunos->salvarResposta(['idAluno' => $idAluno, ...(array) $req->body()]);
-            $res->status( 204 )->end();
-        } catch ( NaoEncontradoException $e ) {
-            $res->status( 404 )->json( $e->getProblemas());
-        } catch ( DominioException $e ) {
-            $res->status( 400 )->json( $e->getProblemas());
-        } catch ( RepositorioException $e ) {
-            $res->status( 500 )->json( $e->getMessage());
-        }
-    } )
-
-    ->get( '/:id/pontuacao', function(HttpRequest $req, HttpResponse $res) use ( $gestorAlunos ) { 
+    ->get( '/:id/pontuacaoCurso', function(HttpRequest $req, HttpResponse $res) use ( $gestorAlunos ) { 
         try {
             $idAluno = $req->param('id') ?? null;
             $idCurso = $_GET['id_curso'] ?? '';
@@ -113,5 +97,22 @@ $app->route('/assuntos')
             $res->status( 500 )->json( $e->getMessage());
         }
     } );
+    
+// Rotas de RespostasAluno
+$app->route('/respostasAluno')
+    ->post('/', function(HttpRequest $req, HttpResponse $res) use ($gestorAlunos){
+        
+        try {
+            $body = (array) $req->body();
+            $resultado = $gestorAlunos->salvarResposta(RespostaAlunoCadastroDTO::deArray($body));
+            $res->status(200)->json(['respostaCorreta' => $resultado]);
+        } catch ( NaoEncontradoException $e ) {
+            $res->status( 404 )->json( ['erros' => $e->getProblemas()]);
+        } catch ( DominioException $e ) {
+            $res->status( 400 )->json( ['erros' => $e->getProblemas()]);
+        } catch ( RepositorioException $e ) {
+            $res->status( 500 )->json( $e->getMessage());
+        }
+    });
 
 $app->listen(); 

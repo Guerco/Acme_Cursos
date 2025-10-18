@@ -8,16 +8,7 @@ class GestorAlunos {
     ){}
 
     public function verificarCredenciais(array $dados) : AlunoListagemDTO {
-        if (! $dados['email'] || ! $dados['senha']) {
-            throw new DominioException('Informe email e senha.'); 
-        }
-
-        $credenciais = new Credenciais(null, $dados['email'], $dados['senha']);
-
-        $problemas = $credenciais->validar();
-        if (!empty($problemas)){
-            throw DominioException::comProblemas($problemas);
-        }
+        $credenciais = $this->validarCredenciais($dados);
 
         $aluno = $this->repositorioAlunos->existeComCredenciais($credenciais);
 
@@ -26,53 +17,85 @@ class GestorAlunos {
         } else return AlunoListagemDTO::deObjeto($aluno);
     }
 
-    public function salvarResposta(array $dados){
-        $this->validarSalvarResposta($dados);
-
-        $respostaAluno = new RespostaAluno(
-            new Aluno($dados['idAluno']),
-            new Pergunta($dados['idPergunta'], null),
-            (bool) $dados['respostaCorreta']
-        );
-
-        $this->repositorioAlunos->cadastrarResposta($respostaAluno);
-    }
-    private function validarSalvarResposta(array $dados){
-        $idAluno = $dados['idAluno'] ?? null;
-        $idPergunta = $dados['idPergunta'] ?? null;
-        $respostaCorreta = isset($dados['respostaCorreta']) ? $dados['respostaCorreta'] : null;
+    public function salvarResposta(RespostaAlunoCadastroDTO $resposta): bool{ 
+        $this->validarSalvarResposta($resposta);
         
-        $problemas = [];
-        if ($idAluno === null || $idPergunta === null) {
-            $problemas [] ='Informe aluno e pergunta.'; 
-        } else if (
-            !filter_var($idAluno, FILTER_VALIDATE_INT) ||
-            !filter_var($idPergunta, FILTER_VALIDATE_INT)
-        ) {
-            $problemas [] ='Os ids devem ser inteiros.';     
-        } 
+        $credenciais = $this->validarCredenciais($resposta->credenciais);
+        $aluno = $this->repositorioAlunos->existeComCredenciais($credenciais);
 
-        if ($respostaCorreta === null) {
-            $problemas [] ='Informe se a resposta foi correta.';     
-        } else if (!is_bool($respostaCorreta)) {
-            $problemas [] ='Resposta Correta deve ser boolean.';     
+        if(!$aluno) throw new NaoEncontradoException('Credenciais inválidas.'); 
+
+        $pergunta = new Pergunta($resposta->idPergunta, null);
+
+        $acertou = empty($resposta->idsRespostas) ? false : $this->verificarRespostasCorretas($resposta->idPergunta, $resposta->idsRespostas); 
+
+        $respostaObj = new RespostaAluno($aluno, $pergunta, 0, $acertou);
+
+        if ($this->repositorioAlunos->existeResposta($aluno->getId(), $pergunta->getId()))
+                throw new DominioException('Resposta já cadastrada para o aluno.');
+            
+        $this->repositorioAlunos->cadastrarResposta($respostaObj);
+        if ($acertou) $this->atualizarPontuacoes($aluno, $pergunta);
+        
+        return $respostaObj->isRespostaCorreta();
+    }
+
+    private function validarSalvarResposta(RespostaAlunoCadastroDTO $resposta): void{
+        $idPergunta = $resposta->idPergunta ?? null;
+
+        $problemas = [];
+        if ($idPergunta === null) {
+            $problemas [] ='Informe a pergunta.'; 
         }
 
         if(empty($problemas)) {
-            if (!$this->repositorioAlunos->existeComId($idAluno)) {
-                $problemas [] ='Aluno inexistente.';
-            } 
-            if (!$this->repositorioPerguntas->existeComId($idPergunta)) {
-                $problemas [] ='Pergunta inexistente.';
-            } 
-            if(! empty($problemas)) throw NaoEncontradoException::comProblemas($problemas);
-            else {
-                if ($this->repositorioAlunos->existeResposta($idAluno, $idPergunta))
-                throw new DominioException('Resposta já cadastrada para o aluno.');
-            }
+            if (!$this->repositorioPerguntas->existeComId($idPergunta)) 
+                throw new NaoEncontradoException ('Pergunta inexistente.');
         } else {
             throw DominioException::comProblemas($problemas);
         }
+    }
+
+    private function atualizarPontuacoes(Aluno $aluno, Pergunta $pergunta){
+        $infoPergunta = $this->repositorioPerguntas->buscarCursoEDificuldadePeloID($pergunta->getId());
+        $valorPergunta = Dificuldade::deString($infoPergunta['dificuldade'])->getValor();
+
+        $idAluno = $aluno->getId();
+        $idCurso = (int) $infoPergunta['idCurso'];
+
+        if ($valorPergunta <= 0) {
+            throw new DominioException('Valor inválido para pontuação.');
+        }
+
+        $this->repositorioAlunos->incrementarPontuacaoGeral($idAluno, $valorPergunta);
+        $this->repositorioAlunos->incrementarPontuacaoCurso($idAluno, $idCurso, $valorPergunta);
+    }
+
+    private function verificarRespostasCorretas(int $idPergunta, array $idsRespostas):bool{
+        $idsRespostasCorretas = $this->repositorioPerguntas->buscarIdsRespostasCorretas($idPergunta);
+
+        sort(($idsRespostas));
+        sort($idsRespostasCorretas);
+
+        return array_unique($idsRespostas) == $idsRespostasCorretas;
+    }
+
+    private function validarCredenciais(array $dados): Credenciais {
+        $email = $dados['email'] ?? null;
+        $senha = $dados['senha'] ?? null;
+
+        if ($email === null || $senha === null) {
+            throw new DominioException('Informe email e senha.'); 
+        }
+
+        $credenciais = new Credenciais(null, $email, $senha);
+
+        $problemas = $credenciais->validar();
+        if (!empty($problemas)){
+            throw DominioException::comProblemas($problemas);
+        }
+        
+        return $credenciais;
     }
 
     public function buscarPontuacaoCurso($idAluno, $idCurso): float {
@@ -101,5 +124,5 @@ class GestorAlunos {
             $problemas [] = 'Curso inexistente.';
         }    
         if(! empty($problemas)) throw NaoEncontradoException::comProblemas($problemas);
-    }
+    }  
 }

@@ -4,15 +4,13 @@ class RespostaPerguntaListagemDTO{
 
     public function __construct(
         public int $id,
-        public string $descricao,
-        public bool $correta
+        public string $descricao
     ){}
     
     public static function deObjeto(RespostaPergunta $resposta) {
         return new Self(
             $resposta->getId(),
-            $resposta->getDescricao(),
-            $resposta->isCorreta()
+            $resposta->getDescricao()
         );
     }
 

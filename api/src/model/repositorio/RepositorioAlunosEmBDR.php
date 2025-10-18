@@ -34,7 +34,7 @@ class RepositorioAlunosEmBDR implements RepositorioAlunos{
                     a.nome, 
                     a.pontuacao_geral
                 FROM credenciais  u
-                INNER JOIN aluno a ON u.id = a.id_usuario
+                INNER JOIN aluno a ON u.id = a.id_credenciais
                 WHERE
                     u.email = :email
                     AND u.senha = :senha
@@ -119,4 +119,43 @@ class RepositorioAlunosEmBDR implements RepositorioAlunos{
             throw new RepositorioException('Não foi possível buscar a pontuação.'); 
         }
     }
+
+    public function incrementarPontuacaoGeral(int $idAluno, float $valor) : void{
+        try {
+            $sql = <<<'SQL'
+                UPDATE aluno a
+                SET a.pontuacao_geral = a.pontuacao_geral + :valor
+                where a.id = :idAluno;
+            SQL;
+
+            $ps = $this->pdo->prepare($sql);
+            $ps->execute( [
+                'idAluno' => $idAluno,
+                'valor' => $valor
+            ] );
+        } catch (PDOException $e) {
+            throw new RepositorioException('Não foi possível incrementar a pontuação geral do aluno.'); 
+        }    
+    }
+
+    public function incrementarPontuacaoCurso(int $idAluno, int $idCurso, float $valor) : void{
+        try {
+            $sql = <<<'SQL'
+                INSERT INTO pontuacao (id_aluno, id_curso, pontuacao)
+                VALUES (:idAluno, :idCurso, :valor)
+                ON DUPLICATE KEY UPDATE
+                pontuacao = pontuacao + :valor;
+            SQL;
+
+            $ps = $this->pdo->prepare($sql);
+            $ps->execute( [
+                'idAluno' => $idAluno,
+                'idCurso' => $idCurso,
+                'valor' => $valor
+            ] );
+        } catch (PDOException $e) {
+            throw new RepositorioException('Não foi possível incrementar a pontuação geral do aluno.'); 
+        }    
+    }
+
 }

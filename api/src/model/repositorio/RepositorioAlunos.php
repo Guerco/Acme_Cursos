@@ -39,4 +39,23 @@ interface RepositorioAlunos {
      * @return float|bool
      */
     public function buscarPontuacaoPorCurso($idAluno, $idCurso): float|bool;
+
+    /**
+     * Incrementa a pontuação geral de um aluno em um valor.
+     * 
+     * @param int $idAluno
+     * @param float $valor
+     * @return void
+     */
+    public function incrementarPontuacaoGeral(int $idAluno, float $valor) : void;
+
+    /**
+     * Incrementa a pontuação de um aluno para um curso em um valor.
+     * 
+     * @param int $idAluno
+     * @param int $idCurso
+     * @param float $valor
+     * @return void
+     */
+    public function incrementarPontuacaoCurso(int $idAluno, int $idCurso, float $valor) : void;
 }

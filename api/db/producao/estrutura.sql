@@ -23,9 +23,7 @@ CREATE TABLE IF NOT EXISTS aluno(
 
 CREATE TABLE IF NOT EXISTS professor(
   id INT AUTO_INCREMENT PRIMARY KEY,
-  id_credenciais INT,
-  nome VARCHAR(100) NOT NULL,
-  FOREIGN KEY (id_credenciais) REFERENCES credenciais(id)
+  nome VARCHAR(100) NOT NULL
 ) ENGINE=INNODB;
 
 CREATE TABLE IF NOT EXISTS curso(
@@ -78,3 +76,9 @@ CREATE TABLE IF NOT EXISTS resposta_aluno(
   FOREIGN KEY (id_aluno) REFERENCES aluno(id),
   FOREIGN KEY (id_pergunta) REFERENCES pergunta(id)
 ) ENGINE=INNODB;
+
+ALTER TABLE pontuacao
+ADD UNIQUE KEY unica_aluno_curso (id_aluno, id_curso);
+
+ALTER TABLE resposta_aluno
+ADD UNIQUE KEY unica_aluno_curso (id_aluno, id_pergunta);
