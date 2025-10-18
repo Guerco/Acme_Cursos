@@ -13,4 +13,12 @@ enum Dificuldade: string{
             default => null,
         };
     }
+
+    public function getValor(): float {
+        return match($this) {
+            self::FACIL => 1.0,
+            self::MEDIO => 1.5,
+            self::DIFICIL => 2.0,
+        };
+    }
 }

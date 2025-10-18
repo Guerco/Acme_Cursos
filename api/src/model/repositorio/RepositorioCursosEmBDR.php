@@ -81,7 +81,7 @@ class RepositorioCursosEmBDR implements RepositorioCursos{
                 $cursosCriados[$cursoId]->addAssunto($assuntos);
         }
 
-        return $cursosCriados;
+        return array_values($cursosCriados);
     }
 
 }
