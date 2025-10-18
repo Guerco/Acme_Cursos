@@ -1,177 +1,31 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Quiz - Cursos</title>
 
     <script type="module" src="./src/index.ts"></script>
+    <link rel="stylesheet" href="./style/index.css" />
+    <link rel="icon" href="./img/favicon.png">
+  </head>
+  <body>
+    <header>
+      <img src="./img/logotipo.png" alt="Logotipo do Site" class="logotipo" />
 
-    <style>
-        body {
-            background-color: white;
-            color: black;
-            font-family: Arial, Helvetica, sans-serif;
-            width: 95%;
-            margin: 0 auto;
-        }
-        /* ========================================================== */
-        /* Estilo da mensagem */
-        #mensagem {
-            display: block;
-            box-sizing: border-box; 
-            border: 2px solid #f0e221;
-            background-color: #faf38e;
-            border-radius: 5px;
-            width: 80%;
-            margin: 0 auto;
-            padding: 5px;
-        }
-
-        #mensagem:empty{
-            display: none;
-        }
-
-        /* ========================================================== */
-        /* Estilo da busca */
-        #form-busca {
-            background-color: #820EC0;
-            border: 3px solid #2f0744;
-            border-radius: 5px;
-            width: 80%;
-            margin: 0 auto 20px;
-            padding: 20px;
-            box-sizing: border-box; 
-            display: flex;
-            gap: 10px;
-            align-items: center;
-        }
-
-        #form-busca label{
-            color: white;
-            font-weight: bold;
-        }
-
-        #input-busca {
-            font-size: small;
-            border: 1px solid rgb(214, 214, 214);
-            border-radius: 5px;
-            width: 300px;
-            padding: 3px;
-        }
-
-        #form-busca button {
-            background-color: #ffffff;
-            border-radius: 5px;
-            padding: 4px 8px;
-            cursor: pointer;
-        }
-        /* ========================================================== */
-        /* Estilo dos Cards */
-
-        #secao-cursos {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-            width: 80%;
-            max-width: 100%;
-            margin: 0 auto;
-        }
-
-        
-        .card-curso {
-            border: 2px solid rgb(214, 214, 214);
-            border-radius: 5px;
-            padding: 20px;
-            display: flex;
-            flex-direction: column; 
-            gap: 10px; 
-        }
-        
-        .card-curso:hover {
-            cursor: pointer;
-        }
-        
-        .secao-curso {
-            display: flex;
-        }
-
-        .secao-curso figure {
-            flex: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0;
-        }
-
-        .secao-curso figure img {
-            width: 220px;
-            height: 180px;
-            border-radius: 10px;
-        }
-
-        .secao-curso-lateral {
-            flex: 4; 
-            padding-left: 15px;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .curso-acoes {
-            display: flex;
-            justify-content: flex-end; 
-        }
-
-        .botao-exibir-assuntos {
-            background: none;
-            border: 1px solid #820EC0;
-            color: #820EC0;
-            border-radius: 8px;
-            padding: 4px 8px;
-            cursor: pointer;
-        }
-
-        .botao-exibir-assuntos:hover {
-            background-color: rgba(0, 86, 179, 0.1);
-        }
-
-        .botao-exibir-assuntos:active {
-            transform: scale(0.97);
-        }
-        /* ========================================================== */
-        /* Estilo dos Assuntos */
-        .secao-assuntos .tabela-assuntos {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        .secao-assuntos .tabela-assuntos td {
-            padding: 4px 8px;
-        }
-
-        .secao-assuntos .tabela-assuntos tr.tr-assunto {
-            border-top: 1px solid #e0e0e0;
-            border-bottom: 1px solid #e0e0e0;
-        }
-        /* ========================================================== */
-
-    </style>
-
-</head>
-<body>
-    <h1>Listagem de Cursos</h1>
-
-    <form id="form-busca">
-        <label for="input-busca">
-            Busque por nome do curso ou professor:
-        </label>
-        <input type="search" id="input-busca">
+      <form id="form-busca">
+        <label for="input-busca"> </label>
+        <input
+          type="search"
+          id="input-busca"
+          placeholder="Busque por nome do curso ou professor"
+        />
         <button>🔍</button>
-    </form>
+      </form>
+    </header>
 
     <output id="mensagem"></output>
 
-    <section id="secao-cursos">
-    </section>
-</body>
+    <section id="secao-cursos"></section>
+  </body>
 </html>

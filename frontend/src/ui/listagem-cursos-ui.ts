@@ -7,14 +7,15 @@ export const ids = {
 
 export const classes = {
     curso : '.card-curso',
-    secaoCurso: '.secao-curso',
+    containerCurso: '.container-curso',
     secaoCursoLat: '.secao-curso-lateral',
     infoCurso: '.info-curso',
     descricaoCurso: '.descricao-curso',
-    assuntos : '.secao-assuntos',
+    assuntos : '.container-assuntos',
     nomeProfessor: '.nome-professor',
     acoesCurso: '.curso-acoes',
     botaoAssuntos: '.botao-exibir-assuntos',
     tabelaAssuntos: '.tabela-assuntos',
-    linhaAssunto: 'tr-assunto'
+    linhaAssunto: 'tr-assunto',
+    descricaoAssunto: 'descricao-assunto'
 };
