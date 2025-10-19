@@ -20,14 +20,14 @@ interface RepositorioAlunos {
     /**
      * Cadastra uma resposta de uma pergunta para determinado aluno.
      * @param RespostaAluno $respostaAluno
-     * @return bool
+     * @return void
      */
     public function cadastrarResposta(RespostaAluno $respostaAluno): void;
 
     /**
      * Verifica se um aluno já possui resposta cadastrada para uma determinada pergunta.
-     * 
-     * @param RespostaAluno $respostaAluno
+     * @param int $idAluno
+     * @param int $idPergunta
      * @return int
      */
     public function existeResposta(int $idAluno, int $idPergunta): int;

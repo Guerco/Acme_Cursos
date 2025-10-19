@@ -7,14 +7,18 @@ class RespostaPerguntaListagemDTO{
         public string $descricao
     ){}
     
-    public static function deObjeto(RespostaPergunta $resposta) {
+    public static function deObjeto(RespostaPergunta $resposta): RespostaPerguntaListagemDTO {
         return new Self(
             $resposta->getId(),
             $resposta->getDescricao()
         );
     }
 
-    public static function deObjetos(array $respostas) {
+    /**
+     * @param RespostaPergunta[] $respostas
+     * @return RespostaPerguntaListagemDTO[]
+     */
+    public static function deObjetos(array $respostas): array {
         $dtos = [];
 
         foreach($respostas as $r) {

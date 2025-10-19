@@ -16,6 +16,11 @@ class AlunoListagemDTO{
         );
     }
 
+
+    /**
+     * @param Aluno[] $alunos
+     * @return AlunoListagemDTO[]
+     */
     public static function deObjetos(array $alunos): array {
         $dtos = [];
 

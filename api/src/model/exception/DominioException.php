@@ -4,6 +4,9 @@ const SEPARADOR_MENSAGENS = '|';
 
 class DominioException extends RuntimeException {
 
+    /**
+     * @param string[] $problemas
+     */
     public static function comProblemas( array $problemas ): DominioException {
         return new DominioException(
             implode( SEPARADOR_MENSAGENS, $problemas )

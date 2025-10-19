@@ -1,8 +1,6 @@
 <?php
 
 class RepositorioCursosEmBDR implements RepositorioCursos{
-    private $cursos = [];
-
     public function __construct( private ?PDO $pdo){
     }
 
@@ -26,6 +24,9 @@ class RepositorioCursosEmBDR implements RepositorioCursos{
         }
     }
     
+    /**
+     * @return Curso[]
+     */
     public function listarCursos(string $nome):array{
         try{
             $ps = $this->pdo->prepare(
@@ -50,7 +51,11 @@ class RepositorioCursosEmBDR implements RepositorioCursos{
         }
     }
 
-    private function criarCursoEAssuntos($cursos):array{
+    /**
+     * @param mixed[] $cursos
+     * @return Curso[]
+     */
+    private function criarCursoEAssuntos(array $cursos):array{
         $cursosCriados = [];
         $professor = null;
         $curso = null;

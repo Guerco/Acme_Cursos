@@ -25,6 +25,10 @@ class RepositorioPerguntasEmBDR implements RepositorioPerguntas {
         }
     }
 
+    /**
+     * Summary of buscarCursoEDificuldadePeloID
+     * @return null|string[] 
+     */
     public function buscarCursoEDificuldadePeloID(int $id): ?array{
         $sql = <<<'SQL'
             SELECT 
@@ -47,6 +51,9 @@ class RepositorioPerguntasEmBDR implements RepositorioPerguntas {
         }
     }
 
+    /**
+     * @return Pergunta[]
+     */
     public function buscarPorAssuntoEAluno(int $idAssunto, int $idAluno): array {
         $sql = <<<'SQL'
             SELECT
@@ -105,7 +112,10 @@ class RepositorioPerguntasEmBDR implements RepositorioPerguntas {
         }
     }
 
-    function buscarIdsRespostasCorretas($idPergunta):array{
+    /**
+     * @return array<int|string>
+     */
+    function buscarIdsRespostasCorretas(int|string $idPergunta):array{
         try{
             $ps = $this->pdo->prepare(
                 'select rp.id from resposta_pergunta rp 

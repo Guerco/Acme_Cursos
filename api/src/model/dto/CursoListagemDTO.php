@@ -2,6 +2,9 @@
 
 class CursoListagemDTO{
 
+    /**
+     * @param null|AssuntoListagemDTO[] $assuntos
+     */
     public function __construct(
         public ?int $id,
         public ?string $descricao,
@@ -20,6 +23,10 @@ class CursoListagemDTO{
         );
     }
 
+    /**
+     * @param Curso[] $cursos
+     * @return CursoListagemDTO[]
+     */
     public static function deObjetosParaDTO(array $cursos): array{
         $cursosDTO = [];
 

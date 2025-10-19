@@ -6,14 +6,17 @@ class GestorPerguntas {
         private RepositorioAlunos $repositorioAlunos
     ){}
 
-    public function buscarPerguntasAluno (string|int $idAssunto, string|int $idAluno) {
+    /**
+     * @return PerguntaListagemDTO[]
+     */
+    public function buscarPerguntasAluno (string|int $idAssunto, string|int $idAluno): array {
         $this->validarBuscarPerguntasAluno($idAssunto, $idAluno);
         $perguntas = $this->repositorioPerguntas->buscarPorAssuntoEAluno($idAssunto, $idAluno);
         shuffle($perguntas);
         return PerguntaListagemDTO::deObjetos($perguntas);
     }
 
-    private function validarBuscarPerguntasAluno(string|int $idAssunto, string|int $idAluno){
+    private function validarBuscarPerguntasAluno(string|int|null $idAssunto, string|int|null $idAluno): void{
         $idAssunto = $idAssunto ?? null;
         $idAluno = $idAluno ?? null;
 

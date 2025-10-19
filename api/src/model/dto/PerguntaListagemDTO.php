@@ -2,6 +2,9 @@
 
 class PerguntaListagemDTO{
 
+    /**
+     * @param null|RespostaPerguntaListagemDTO[] $respostas
+     */
     public function __construct(
         public ?int $id,
         public ?string $descricao,
@@ -11,7 +14,7 @@ class PerguntaListagemDTO{
         public ?array $respostas
     ){}
 
-    public static function deObjeto(Pergunta $pergunta) {
+    public static function deObjeto(Pergunta $pergunta): PerguntaListagemDTO {
         return new Self(
             $pergunta->getId(),
             $pergunta->getDescricao(),
@@ -22,7 +25,11 @@ class PerguntaListagemDTO{
         );
     }
 
-    public static function deObjetos(array $perguntas) {
+    /**
+     * @param Pergunta[] $perguntas
+     * @return PerguntaListagemDTO[]
+     */
+    public static function deObjetos(array $perguntas): array {
         $dtos = [];
 
         foreach($perguntas as $p) {

@@ -14,6 +14,10 @@ class AssuntoListagemDTO{
         );    
     }
 
+    /**
+     * @param Assunto[] $assuntos
+     * @return AssuntoListagemDTO[]
+     */
     public static function deObjetos(array $assuntos): array{
         $assuntosDTO = [];
 

@@ -2,6 +2,9 @@
 
 class Curso{
 
+    /**
+     * @param Assunto[] $assuntos
+     */
     public function __construct(
         private Professor $professor,
         private int $id = 0,
@@ -38,9 +41,16 @@ class Curso{
         $this->caminhoImg = $caminhoImg;
     }
 
+    /**
+     * @return Assunto[]
+     */
     public function getAssuntos(): array{
         return $this->assuntos;
     }
+
+    /**
+     * @param Assunto[] $assuntos
+     */
     public function setAssuntos(array $assuntos): void{
         $this->assuntos = $assuntos;
     }

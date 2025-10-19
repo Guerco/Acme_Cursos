@@ -13,7 +13,7 @@ interface RepositorioPerguntas {
      * Busca uma curso e dificuldade de uma pergunta com determinado id.
      * 
      * @param int $id
-     * @return ?array
+     * @return null|string[]
      */
     public function buscarCursoEDificuldadePeloID(int $id): ?array;
 
@@ -22,14 +22,15 @@ interface RepositorioPerguntas {
      * 
      * @param int $idAssunto
      * @param int $idAluno
-     * @return array
+     * @return Pergunta[]
      */
     public function buscarPorAssuntoEAluno(int $idAssunto, int $idAluno) : array;
 
     /**
      * Busca as respostas corretas de uma determinada pergunta
      * 
-     * @param int $idPergunta
+     * @param int|string $idPergunta
+     * @return array<int|string>
      */
-    public function buscarIdsRespostasCorretas(int $idPergunta): array;
+    public function buscarIdsRespostasCorretas(int|string $idPergunta): array;
 }

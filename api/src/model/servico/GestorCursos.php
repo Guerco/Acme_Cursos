@@ -5,6 +5,9 @@ class GestorCursos{
     public function __construct(private RepositorioCursos $repositorio){
     }
 
+    /**
+     * @return CursoListagemDTO[]
+     */
     public function listarCursos(string $nome): array{
         $cursos = [];
         $resultado = [];

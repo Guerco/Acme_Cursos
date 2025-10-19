@@ -27,6 +27,9 @@ class Credenciais{
         $this->senha = $senha;
     }
 
+    /**
+     * @return string[]
+     */
     public function validar(): array {
         $problemas = [];
         if (!filter_var($this->email, FILTER_VALIDATE_EMAIL)) {

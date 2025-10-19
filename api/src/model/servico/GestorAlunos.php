@@ -7,6 +7,9 @@ class GestorAlunos {
         private RepositorioCursos $repositorioCursos
     ){}
 
+    /**
+     * @param array{'email':string, 'senha':string} $dados
+     */
     public function verificarCredenciais(array $dados) : AlunoListagemDTO {
         $credenciais = $this->validarCredenciais($dados);
 
@@ -56,7 +59,7 @@ class GestorAlunos {
         }
     }
 
-    private function atualizarPontuacoes(Aluno $aluno, Pergunta $pergunta){
+    private function atualizarPontuacoes(Aluno $aluno, Pergunta $pergunta): void{
         $infoPergunta = $this->repositorioPerguntas->buscarCursoEDificuldadePeloID($pergunta->getId());
         $valorPergunta = Dificuldade::deString($infoPergunta['dificuldade'])->getValor();
 
@@ -71,6 +74,9 @@ class GestorAlunos {
         $this->repositorioAlunos->incrementarPontuacaoCurso($idAluno, $idCurso, $valorPergunta);
     }
 
+    /**
+     * @param array<string|int> $idsRespostas
+     */
     private function verificarRespostasCorretas(int $idPergunta, array $idsRespostas):bool{
         $idsRespostasCorretas = $this->repositorioPerguntas->buscarIdsRespostasCorretas($idPergunta);
 
@@ -80,6 +86,9 @@ class GestorAlunos {
         return array_unique($idsRespostas) == $idsRespostasCorretas;
     }
 
+    /**
+     * @param array{'email':string|null, 'senha':string|null} $dados
+     */
     private function validarCredenciais(array $dados): Credenciais {
         $email = $dados['email'] ?? null;
         $senha = $dados['senha'] ?? null;
@@ -98,12 +107,12 @@ class GestorAlunos {
         return $credenciais;
     }
 
-    public function buscarPontuacaoCurso($idAluno, $idCurso): float {
+    public function buscarPontuacaoCurso(int|string $idAluno, int|string $idCurso): float {
         $this->validarBuscarPontuacaoCurso($idAluno, $idCurso);
         return (float) $this->repositorioAlunos->buscarPontuacaoPorCurso($idAluno, $idCurso);
     }
 
-    private function validarBuscarPontuacaoCurso($idAluno, $idCurso) {
+    private function validarBuscarPontuacaoCurso(int|string|null  $idAluno, int|string|null $idCurso): void {
         $idAluno = $idAluno ?? null;
         $idCurso = $idCurso ?? null;
 

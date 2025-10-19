@@ -2,6 +2,9 @@
 
 class Pergunta{
 
+    /**
+     * @param RespostaPergunta[] $respostas
+     */
     public function __construct(
         private int $id = 0,
         private ?Assunto $assunto = null,
@@ -54,9 +57,16 @@ class Pergunta{
         $this->dificuldade = $dificuldade;
     }
 
+    /**
+     * @return RespostaPergunta[]
+     */
     public function getRespostas(): array{
         return $this->respostas;
     }
+
+    /**
+     * @param RespostaPergunta[] $respostas
+     */
     public function setRespostas(array $respostas): void{
         $this->respostas = $respostas;
     }
