@@ -12,11 +12,14 @@ class Aluno{
     public function getId(): int{
         return $this->id;
     }
+    public function setId(int $id): void{
+        $this->id = $id;
+    }
 
-    public function getcredenciais(): Credenciais{
+    public function getCredenciais(): Credenciais{
         return $this->credenciais;
     }
-    public function setcredenciais(Credenciais $credenciais): void{
+    public function setCredenciais(Credenciais $credenciais): void{
         $this->credenciais = $credenciais;
     }
 

@@ -4,7 +4,7 @@ class Pergunta{
 
     public function __construct(
         private int $id = 0,
-        private ?Assunto $assunto,
+        private ?Assunto $assunto = null,
         private string $descricao = '',
         private ?string $caminhoImg = '',
         private int $tempoSeg = 60,
@@ -21,6 +21,9 @@ class Pergunta{
     
     public function getId(): int{
         return $this->id;
+    }
+    public function setId(int $id): void{
+        $this->id = $id;
     }
 
     public function getDescricao(): string{

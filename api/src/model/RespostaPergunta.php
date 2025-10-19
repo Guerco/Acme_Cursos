@@ -4,7 +4,7 @@ class RespostaPergunta{
 
     public function __construct(
         private int $id = 0,
-        private ?Pergunta $pergunta,
+        private ?Pergunta $pergunta = null,
         private string $descricao = '',
         private bool $correta = false
     ){}
@@ -18,6 +18,9 @@ class RespostaPergunta{
 
     public function getId(): int{
         return $this->id;
+    }
+    public function setId(int $id): void{
+        $this->id = $id;
     }
     
     public function getDescricao(): string{

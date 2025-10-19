@@ -3,8 +3,8 @@
 class RespostaAluno{
 
     public function __construct(
-        private Aluno $aluno,
-        private Pergunta $pergunta,
+        private ?Aluno $aluno = null,
+        private ?Pergunta $pergunta = null,
         private int $id = 0,
         private bool $respostaCorreta = false        
     ){}
@@ -25,6 +25,9 @@ class RespostaAluno{
 
     public function getId(): int{
         return $this->id;
+    }
+    public function setId(int $id): void{
+        $this->id = $id;
     }
 
     public function isRespostaCorreta(): bool{
