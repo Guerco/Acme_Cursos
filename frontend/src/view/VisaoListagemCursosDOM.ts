@@ -4,6 +4,7 @@ import { ControladoraListagemCursos } from "../presenter/ControladoraListagemCur
 import { classes, ids } from "../ui/listagem-cursos-ui.ts";
 import { UtilDOM } from "../util/UtilDOM.ts";
 import { VisaoListagemCursos } from "./VisaoListagemCursos.ts";
+import { rotasPaginas } from "../rotas.ts";
 
 const DIRETORIO_IMAGENS = '../../img/cursos/';
 
@@ -137,6 +138,13 @@ export class VisaoListagemCursosDom implements VisaoListagemCursos{
         
         trAssunto.appendChild(tdDescricao);
         
+
+        const tdAcoes = UtilDOM.criaComClasses('td', ['assunto-acoes']); 
+        const botaoIniciarQuiz = UtilDOM.criaComTextoEClasses('button', 'iniciar quiz 🎲', ['botao-iniciar-quiz']);
+        botaoIniciarQuiz.addEventListener('click', this.redirecionarParaQuiz);
+        tdAcoes.appendChild(botaoIniciarQuiz);
+        trAssunto.appendChild(tdAcoes);
+
         return trAssunto;
     }
 
@@ -150,5 +158,15 @@ export class VisaoListagemCursosDom implements VisaoListagemCursos{
         secaoAssuntos!.toggleAttribute('hidden');
 
         botao!.textContent = (botao!.textContent == 'exibir assuntos') ? 'recolher assuntos' : 'exibir assuntos';
+    }
+
+    private redirecionarParaQuiz(event: Event){
+        event.stopPropagation();
+        const botao = event.target as HTMLButtonElement;
+
+        const idAssunto = (botao.closest(`.${classes.linhaAssunto}`) as HTMLTableRowElement).dataset.id;
+        const idCurso = (botao.closest(classes.curso) as HTMLDivElement).dataset.id;
+
+        window.location.href = `${rotasPaginas.quiz}?curso=${idCurso}&assunto=${idAssunto}`;
     }
 }

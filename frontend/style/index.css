@@ -152,6 +152,16 @@ header .logotipo {
     width: 30%;
 }
 
+.botao-iniciar-quiz {
+    border: none;
+    border-bottom: 2px solid #820EC0;
+    color: #820EC0;
+    background: none;
+    padding: 4px 8px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
 /* Acoes do Curso */
 .curso-acoes {
     display: flex;
@@ -167,6 +177,8 @@ header .logotipo {
     cursor: pointer;
     border-radius: 5px;
 }
+
+
 
 /* ========================================================== */
 /* Estilos específicos para telas menores */
