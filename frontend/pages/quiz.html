@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quiz</title>
+   <link rel="stylesheet" href="../style/quiz.css" />
+  <script type="module" src="../src/scripts/quiz.ts"></script>
+</head>
+
+<body>
+  <dialog id="caixa-credenciais">
+    <form id="form-credenciais">
+      <h1>Informe suas Credenciais</h1>
+      <div class="inputs-credenciais">
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" required /><br /><br />
+        <label for="senha">Senha</label>
+        <input type="password" id="senha" name="senha" required /><br /><br />
+      </div>
+      <div class="acoes-credenciais">
+        <output></output>
+        <button id="botao-enviar">Enviar</button>
+        <button id="botao-cancelar" type="button">Voltar para Cursos 🏡</button>
+      </div>
+    </form>
+  </dialog>
+
+  <div id="quiz">
+  </div>
+  
+</body>
+
+</html>
