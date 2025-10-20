@@ -18,4 +18,10 @@ Funcionalidade: Quiz
         Dado que acesso a tela de quiz
         Quando preencho credenciais incorretas na tela que se abre
             E clico em enviar
-        Então a uma mensagem é exibida informando que as credenciais são inválidas
+        Então a uma mensagem é exibida informando que as credenciais são inválidas.
+
+    Cenário: Pergunta é exibida ao informar  as credenciais
+        Dado que acesso a tela de quiz
+        Quando preencho credenciais corretas na tela que se abre
+            E clico em enviar
+        Então uma pergunta é exibida na tela de quiz.

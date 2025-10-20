@@ -22,8 +22,6 @@ test.describe( 'Quiz', () => {
         // Então há uma caixa solicitando o preenchimento das credenciais.
         await tela.exigeCredenciais();
     });
-
-    
     
     //     Cenário: Caixa de credenciais fecha ao informar credenciais corretas
     test( 'Aceita Credenciais', async () => {
@@ -35,7 +33,6 @@ test.describe( 'Quiz', () => {
         await tela.caixaCredenciaisFechada();
     });
 
-    
     // Cenário: Caixa de credenciais informa se preencher credenciais erradas
     test( 'Recusa Credenciais', async () => {
         // Quando preencho credenciais incorretas na tela que se abre
@@ -45,5 +42,17 @@ test.describe( 'Quiz', () => {
         // Então a uma mensagem é exibida informando que as credenciais são inválidas.
         await tela.deveExibirCredenciaisInvalidas();
     });
+
+    //Cenário: Pergunta é exibida ao informar  as credenciais
+    test('Pergunta é exibida', async () => {
+        //Quando preencho credenciais corretas na tela que se abre
+        await tela.preencherCredenciais('aluno@email.com', '123');
+        //E clico em enviar
+        await tela.clicarEnviarCredenciais();
+        //Então uma pergunta é exibida na tela de quiz.
+        await tela.deveExibirPergunta();
+
+    });
+        
 
 });

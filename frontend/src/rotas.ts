@@ -6,7 +6,9 @@ export const rotasApi = {
     index: BASE_URL_API,
     cursos: BASE_URL_API+'cursos/',
     cursosBusca: BASE_URL_API+'cursos/?busca=',
-    verificarCredenciais: BASE_URL_API + 'alunos/verificarCredenciais'
+    verificarCredenciais: BASE_URL_API + 'alunos/verificarCredenciais',
+    buscarPerguntas: ( idAluno: number, idAssunto: number) =>
+        BASE_URL_API + 'assuntos/' + idAssunto + '/perguntas?id_aluno=' + idAluno
 };
 
 export const rotasPaginas = {

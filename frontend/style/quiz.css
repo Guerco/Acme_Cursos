@@ -106,6 +106,139 @@
 }
 
 /* ========================================================== */
+/* Estilos do quiz */
+#quiz {
+    width: 90vw;
+    border: solid 2px #e9e9e9;
+    margin: auto;
+    border-radius: 20px;
+    padding: 2vh 2vw;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    height: 82vh;
+    margin-top: 10vh;
+}
+
+.pergunta {
+    border: solid 2px #e9e9e9;
+    border-radius: 20px;
+    padding: 10px;
+}
+
+.pergunta-container {
+    max-height: 40vh;
+    overflow-y: auto; 
+    word-wrap: break-word;
+}
+
+.pergunta h1 {
+    font-size: large;
+}
+
+.pergunta img {
+    display: block;
+    margin: 10px auto 0 auto;
+    max-height: 30vh;
+    max-width: 100%;
+    object-fit: cover;
+    border-radius: 20px;
+    overflow: hidden;
+    background-color: #f9f9f9;
+}
+
+.respostas {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    gap: 1vh;
+    height: 100%;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    overflow-y: auto; 
+    word-wrap: break-word;
+}
+
+.resposta {
+    flex: 1;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.resposta button {
+    width: 100%;
+    height: 100%;
+    border: none;
+    border-radius: 18px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    background-color: #f7f7f7;
+}
+
+.resposta button:hover {
+    background-color: #ebdeff;
+}
+
+@media (min-width: 576px) {
+    .respostas:has(.resposta:nth-child(4):last-child) {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: 1fr 1fr;
+        gap: 1vh;
+    }
+}
+
+.pergunta .dificuldade {
+    color: #fff;
+    font-weight: bold;
+    text-align: center;
+    border-radius: 20px;
+    width: 100px;
+    padding: 4px 0;
+    display: inline-block;
+    font-size: 0.7rem;
+    margin-bottom: 5px;
+}
+
+.dificuldade-facil {
+    background-color: #1fb738;
+}
+
+.dificuldade-medio {
+    background-color: #edc62c;
+}
+
+.dificuldade-dificil {
+    background-color: #d72727;
+}
+
+/* ========================================================== */
+/* Estilos mensagem de fim */
+.div-mensagem-fim {
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    text-align: center;
+}
+
+.botao-voltar-cursos {
+    border-radius: 8px;
+    padding: 4px 8px;
+    cursor: pointer;
+    background-color: #820ec0;
+    border: 1px solid #5d0c88;
+    color: #fff;
+    font-size: 1.2rem;
+    text-decoration: none;
+}
+
+/* ========================================================== */
 /* Estilos específicos para telas menores */
 @media (max-width: 575px) {
     * {
@@ -116,4 +249,32 @@
         width: 90vw;
         height: 90vh;
     }
+    
+    header {
+        height: 15vh;
+    }
+
+    #quiz {
+        width: 98vw;
+        height: 74vh;
+        margin-top: 15.5vh;
+        padding: 0.4vh 0.4vh;
+        gap: 0.4vh;
+    }
+
+    .resposta button {
+        background-color: #fff;
+    }
+
+    .resposta button {
+        border-top: 2px solid #ebebeb;
+    }
+}
+
+.resposta-selecionada button {
+    background-color: #d1b6fa;
+}
+
+.resposta-selecionada button:hover {
+    background-color: #caaafa;
 }
