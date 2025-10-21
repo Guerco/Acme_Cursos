@@ -3,9 +3,9 @@ import { rotasApi } from "../../rotas";
 import { AlunoListagem } from "../dto/AlunoListagem";
 import { Credenciais } from "../dto/Credenciais";
 
-export class RepositorioAlunosAPI implements RespositorioAlunos{
+export class RepositorioAlunosAPI implements RespositorioAlunos {
 
-     async verificarCredenciais(credenciais: Credenciais) : Promise<AlunoListagem>{
+    async verificarCredenciais(credenciais: Credenciais): Promise<AlunoListagem> {
 
         try {
             const response = await fetch(rotasApi.verificarCredenciais, {
@@ -13,18 +13,18 @@ export class RepositorioAlunosAPI implements RespositorioAlunos{
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(credenciais) 
+                body: JSON.stringify(credenciais)
             });
 
-            if (response.status == 404) {
-                throw new Error('Credenciais Inválidas');
+            if (response.status == 404 && await response.text() == 'Credenciais inválidas.') {
+                throw new Error('Credenciais Inválidas.');
             }
             else if (!response.ok) {
-                throw new Error('Erro ao validar as credenciais.');
+                throw new Error();
             } else {
                 const aluno = await response.json();
                 return aluno;
-            }    
+            }
         } catch (err: any) {
             throw new Error(err.message);
         }

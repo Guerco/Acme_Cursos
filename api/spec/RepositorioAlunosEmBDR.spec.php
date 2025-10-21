@@ -29,7 +29,7 @@ describe('RepositorioAlunosEmBDR', function(){
             $credencial = new Credenciais(0,'aluno@email.com', 123);
             $resultado = $this->repo->existeComCredenciais($credencial);
             expect($resultado)->toBeAn('object');
-            expect($resultado)->not->toBeEmpty(1);
+            expect($resultado)->not->toBeEmpty();
             expect($resultado ?? null)->toBeAnInstanceOf(Aluno::class);
         });
 

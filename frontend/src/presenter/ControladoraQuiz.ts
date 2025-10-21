@@ -21,9 +21,13 @@ export class ControladoraQuiz{
             const credenciais = this.visao.buscarCredenciais();
             const aluno = await this.servico.autenticar(credenciais);
             await this.preencherPerguntas(aluno);
-            this.visao.fecharFormCredenciais(aluno);
+            this.visao.fecharFormCredenciais();
         } catch(err : any) {
-            this.visao.exibirMensagemCredenciais(err.message);
+            if (err.message === 'Credenciais Inválidas.'){
+                this.visao.exibirMensagemCredenciais(err.message);
+            } else {
+                throw new Error('Não foi possível verificar as credenciais.');
+            }
         }
     }
 
@@ -44,8 +48,8 @@ export class ControladoraQuiz{
     private async buscarPerguntas(idAluno: number, idAssunto: number) : Promise<PerguntaListagem[]> {
         try{
             return await this.servico.buscarPerguntas(idAluno, idAssunto);
-        } catch( error: any){
-            throw new Error(error.message);
+        } catch( err: any){
+            throw err;
         }
     }
 }

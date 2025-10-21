@@ -13,7 +13,8 @@ export const rotasApi = {
 
 export const rotasPaginas = {
     listagemCursos: BASE_URL_WEB,
-    quiz: BASE_URL_WEB+'pages/quiz.html'
+    quiz: BASE_URL_WEB+'pages/quiz.html',
+    erro: BASE_URL_WEB+'pages/erro.html',
 };
 
 export const rotasJsonServer = {

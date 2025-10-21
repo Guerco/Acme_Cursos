@@ -12,7 +12,7 @@ export interface VisaoQuiz{
 
     //Saída
     exibirMensagemCredenciais(mensagem: string):void;
-    fecharFormCredenciais(aluno: AlunoListagem):void;
+    fecharFormCredenciais():void;
     irParaPaginaCursos(): void;
 
     //auxiliar

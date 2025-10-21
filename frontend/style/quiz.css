@@ -1,3 +1,7 @@
+[hidden] {
+    display: none !important;
+}
+
 * {
     margin: 0;
     font-family: Georgia, 'Times New Roman', Times, serif;
@@ -8,29 +12,53 @@
 /* Estilo das Credenciais */
 #caixa-credenciais {
     border: none;
-    border-radius: 12px;
-    padding: 3vh;
+    border-radius: 15px;
     text-align: center;
     margin: auto;
-    width: 40vh;
-    height: 50vh;
+    width: 740px;
+    height: 500px;
+    max-width: 80vw;
+    max-height: 90vh;
     background-color: #fff;
     box-sizing: border-box;
+    display: flex;
+    flex: row;
+    padding: 0;
+    overflow: hidden;
 }
 
 #caixa-credenciais::backdrop {
     background: #820ec0;
 }
 
+.logo-credenciais {
+    flex: 1;
+    width: 370px;
+    height: 100%;
+    background-image: linear-gradient(#ffffff2d, #ffffff4d),
+        url("../img/blur-bg.png");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    display: flex;
+    align-items: center;
+    border-radius: 15px;
+}
+
+.logo-credenciais img {
+    margin: auto;
+    width: 70%;
+}
 
 #form-credenciais {
+    flex: 1;
     height: 100%;
-    width: 90%;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: space-around;
     align-items: center;
     margin: 0 auto;
+    padding: 0 20px;
 }
 
 #form-credenciais h1 {
@@ -38,23 +66,21 @@
     font-weight: lighter;
 }
 
-#form-credenciais .inputs-credenciais{
+#form-credenciais .inputs-credenciais {
     text-align: left;
     width: 100%;
     border: none;
 }
-#form-credenciais .inputs-credenciais label{
-    font-size: larger;
-}
 
-#form-credenciais input{
+#form-credenciais input {
     width: 100%;
     height: 4vh;
     border-radius: 12px;
     border: solid 2px #e9e9e9;
+    box-sizing: border-box;
 }
 
-#form-credenciais .acoes-credenciais{
+#form-credenciais .acoes-credenciais {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -62,7 +88,7 @@
     width: 100%;
 }
 
-#form-credenciais .acoes-credenciais button{
+#form-credenciais .acoes-credenciais button {
     width: 100%;
     height: 4vh;
     border-radius: 12px;
@@ -72,37 +98,26 @@
     font-weight: bold;
 }
 
-#form-credenciais .acoes-credenciais button:hover{
+#form-credenciais .acoes-credenciais button:hover {
     transform: matrix3d();
     cursor: pointer;
 }
 
-#form-credenciais .acoes-credenciais  #botao-enviar {
+#form-credenciais .acoes-credenciais #botao-enviar {
     background-color: #820ec0;
 }
 
-#form-credenciais .acoes-credenciais  #botao-cancelar {
+#form-credenciais .acoes-credenciais #botao-cancelar {
     background-color: #ff7700;
 }
 
 #form-credenciais .acoes-credenciais output {
-  color: #ff0000;
-  font-weight: bold;
-  font-size: large;
-  min-height: 2em; 
-  display: block;
-  text-align: center;
-}
-
-#botao-informar-credenciais {
-    background: none;
-    border: none;
-    color: #9f9f9f;
-    border-radius: 20px;
-    cursor: pointer;
-    height: 100%;
-    width: 100%;
-    font-size: xx-large;
+    color: #ff0000;
+    font-weight: bold;
+    font-size: large;
+    min-height: 2em;
+    display: block;
+    text-align: center;
 }
 
 /* ========================================================== */
@@ -245,11 +260,6 @@
         font-family: sans-serif;
     }
 
-    #caixa-credenciais {
-        width: 90vw;
-        height: 90vh;
-    }
-    
     header {
         height: 15vh;
     }
@@ -268,6 +278,47 @@
 
     .resposta button {
         border-top: 2px solid #ebebeb;
+    }
+}
+
+/* ========================================================== */
+/* Estilos específicos para proporção retrato */
+@media (orientation: portrait) {
+    #caixa-credenciais {
+        flex-direction: column;
+        width: 95vw;
+        height: 95vh;
+        max-width: 95vw;
+        max-height: 95vh;
+        margin: 2.5vh auto;
+        border-radius: 20px;
+    }
+
+    .logo-credenciais {
+        flex: 1.2;
+        width: 100%;
+        height: 100%;
+    }
+
+    .logo-credenciais img {
+        margin: auto;
+        height: 70%;
+        width: auto;
+    }
+
+    #form-credenciais {
+        flex: 1;
+        height: 100%;
+        padding: 20px 20px
+    }
+
+    #form-credenciais h1 {
+        font-size: 1.5rem;
+        font-weight: lighter;
+    }
+
+    #form-credenciais input {
+        border: solid 1px #a8a8a8;
     }
 }
 

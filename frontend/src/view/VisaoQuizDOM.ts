@@ -49,7 +49,6 @@ export class VisaoQuizDOM implements VisaoQuiz{
     buscarParametrosUrl() : {idAssunto: number} {
         const params = new URLSearchParams(window.location.search);
         const idAssunto = Number(params.get('assunto'));
-        console.log(idAssunto);
 
         if (!idAssunto) {
             alert('ID do assunto não informado na URL.');
@@ -79,8 +78,9 @@ export class VisaoQuizDOM implements VisaoQuiz{
         out.innerText = mensagem;
     }
 
-    fecharFormCredenciais(aluno: AlunoListagem){
+    fecharFormCredenciais(){
         this.modal.close();
+        this.modal.hidden = true;
     }
 
     irParaPaginaCursos(): void{
