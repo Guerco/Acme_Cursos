@@ -17,6 +17,7 @@ export class ServicoQuiz {
             throw new Error("Preencha todos os campos!");
         }
         try {
+            await credenciais.aplicarHashSenha();
             return await this.repositorioAlunos.verificarCredenciais(credenciais);
         } catch (error) {
             throw error;
@@ -33,6 +34,7 @@ export class ServicoQuiz {
 
     async enviarResposta(respostaAluno: RespostaAlunoCadastro): Promise<boolean>{
         try{
+            await respostaAluno.credenciaisAluno.aplicarHashSenha();
             return await this.repositorioAlunos.enviarResposta(respostaAluno);
         }catch(error:any){
             throw new Error(error.message);

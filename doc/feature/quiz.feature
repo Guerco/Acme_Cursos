@@ -24,20 +24,23 @@ Funcionalidade: Quiz
         Dado que acesso a tela de quiz
         Quando preencho credenciais corretas na tela que se abre
             E clico em enviar
+            E clico em iniciar quiz
         Então uma pergunta é exibida na tela de quiz.
 
     Cenário: Informações do aluno são exibidas
-            Dado que acesso a tela de quiz
-            Quando preencho credenciais corretas na tela que se abre
-                E clico em enviar
-            Então o cabeçalho exibe o nome do aluno
-                e sua pontuação geral
-                e sua pontuação no curso em questão.
+        Dado que acesso a tela de quiz
+        Quando preencho credenciais corretas na tela que se abre
+            E clico em enviar
+            E clico em iniciar quiz
+        Então o cabeçalho exibe o nome do aluno
+            e sua pontuação geral
+            e sua pontuação no curso em questão.
 
     Cenário: Quiz reconhece respostas corretas
         Dado que acesso a tela de quiz
         Quando preencho credenciais corretas na tela que se abre
             E clico em enviar
+            E clico em iniciar quiz
             E seleciono as respostas corretas
             E clico em responder
         Então uma mensagem é exibida informando que acertei.
@@ -46,6 +49,7 @@ Funcionalidade: Quiz
         Dado que acesso a tela de quiz
         Quando preencho credenciais corretas na tela que se abre
             E clico em enviar
+            E clico em iniciar quiz
             E seleciono respostas incorretas
             E clico em responder
         Então uma mensagem é exibida informando que errei.
@@ -56,3 +60,11 @@ Funcionalidade: Quiz
             E clico em enviar
             Se não houver mais perguntas para aquele quiz
         Então uma mensagem é exibida informando que não há mais perguntas.
+
+    Cenário: Quiz se encerra ao sair de tela cheia
+        Dado que acesso a tela de quiz
+        Quando preencho credenciais corretas na tela que se abre
+            E clico em enviar
+            E clico em iniciar quiz
+            E saio de tela cheia
+        Então uma mensagem é exibida informando que o quiz se encerrou.

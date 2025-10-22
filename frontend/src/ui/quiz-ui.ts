@@ -11,7 +11,8 @@ export const ids = {
     usuario: 'usuario',
     pontuacaoGeral: 'pontuacao-geral',
     pontuacaoCurso: 'pontuacao-curso',
-    mensagemResposta: 'mensagem-resposta'
+    mensagemResposta: 'mensagem-resposta',
+    quiz: 'quiz'
 };
 
 export const classes = {
@@ -19,5 +20,8 @@ export const classes = {
     proxima: 'proxima',
     responder: 'responder',
     mensagemFim: 'div-mensagem-fim',
-    resposta: 'resposta'
+    resposta: 'resposta',
+    respostaSelecionada: 'resposta-selecionada',
+    atencaoTela: 'atencao-tela-cheia',
+    botaoIniciarQuiz: 'botao-iniciar-quiz',
 }

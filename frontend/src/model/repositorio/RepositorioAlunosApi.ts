@@ -7,7 +7,6 @@ import { RespostaAlunoCadastro } from "../dto/RespostaAlunoCadastro";
 export class RepositorioAlunosAPI implements RespositorioAlunos {
 
     async verificarCredenciais(credenciais: Credenciais): Promise<AlunoListagem> {
-
         try {
             const response = await fetch(rotasApi.verificarCredenciais, {
                 method: 'POST',
@@ -51,8 +50,6 @@ export class RepositorioAlunosAPI implements RespositorioAlunos {
 
     async enviarResposta(respostaAluno: RespostaAlunoCadastro): Promise<boolean>{
         try{
-            console.log(JSON.stringify(respostaAluno));
-            
             const response = await fetch(rotasApi.enviarResposta, {
                     method: 'POST',
                     headers: {

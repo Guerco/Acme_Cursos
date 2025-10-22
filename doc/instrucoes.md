@@ -33,6 +33,8 @@ git clone https://gitlab.com/cefet-nf/pis-2025-2/g2.git
 
 ### **2. Execução dos Scripts SQL**
 
+> ⚠️ **Atenção:** É necessário iniciar o seu servidor MySQL caso o início não seja automático (como no XAMPP) antes de executar os scripts ou iniciar a aplicação.
+
 Antes de executar os scripts, configure as informações de conexão no arquivo [`conexao.php`](../api/src/config/conexao.php), preenchendo os dados do seu banco de dados:
 
 ```php

@@ -1,37 +1,35 @@
 import { VisaoQuiz } from "./VisaoQuiz.ts";
-import { ControladoraQuiz } from "../presenter/ControladoraQuiz.ts"
+import { ControladoraQuiz } from "../presenter/ControladoraQuiz.ts";
 import { rotasPaginas } from "../rotas.ts";
-import { AlunoListagem } from "../model/dto/AlunoListagem.ts";
 import { Credenciais } from "../model/dto/Credenciais.ts";
 import { PerguntaListagem } from "../model/dto/PerguntaListagem.ts";
 import { classes, ids } from "../ui/quiz-ui.ts";
-import { UtilDOM} from "../util/UtilDOM.ts"
+import { UtilDOM } from "../util/UtilDOM.ts"
 import { Dificuldade, dificuldadeParaString, dificuldadeParaTextoValor, dificuldadeDeString, dificuldadeValor } from "../model/Dificuldade.ts";
 import { RespostaAlunoCadastro } from "../model/dto/RespostaAlunoCadastro.ts";
 
 const DIRETORIO_IMAGENS = '../../img/perguntas/';
 
-export class VisaoQuizDOM implements VisaoQuiz{
+export class VisaoQuizDOM implements VisaoQuiz {
     private controladora: ControladoraQuiz;
     private modal!: HTMLDialogElement;
-    private perguntas : PerguntaListagem[] = [];
-    private perguntaAtual! : number;
-    //adicionei agora
-    private botaoAcao! : HTMLButtonElement;
-    private contagemRegressivaResposta! : number;
-    private contagem! : HTMLElement;
-    private dificuldadePergunta! : Dificuldade;
+    private perguntas: PerguntaListagem[] = [];
+    private perguntaAtual!: number;
+    private botaoAcao!: HTMLButtonElement;
+    private contagemRegressivaResposta!: number;
+    private contagem!: HTMLElement;
+    private dificuldadePergunta!: Dificuldade;
 
     constructor() {
         this.controladora = new ControladoraQuiz(this);
     }
 
-    iniciar(): void{
+    iniciar(): void {
         this.botaoAcao = document.getElementById(ids.botaoAcao) as HTMLButtonElement;
         this.contagem = document.getElementById(ids.botaoContagem) as HTMLElement;
 
         this.modal = document.getElementById(ids.dialogCredenciais) as HTMLDialogElement;
-        
+
         this.modal.showModal();
 
         const botaoCancelar = document.getElementById(ids.cancelarCredenciais) as HTMLButtonElement;
@@ -52,11 +50,11 @@ export class VisaoQuizDOM implements VisaoQuiz{
 
     }
 
-    chamarModal():void{
+    chamarModal(): void {
         this.modal.showModal();
     }
 
-    buscarParametrosUrl() : {idAssunto: number, idCurso: number} {
+    buscarParametrosUrl(): { idAssunto: number, idCurso: number } {
         const params = new URLSearchParams(window.location.search);
         const idAssunto = Number(params.get('assunto'));
         const idCurso = Number(params.get('curso'));
@@ -72,59 +70,80 @@ export class VisaoQuizDOM implements VisaoQuiz{
     }
 
     // Entradas
-    buscarCredenciais(): Credenciais{
+    buscarCredenciais(): Credenciais {
         const form = document.getElementById(ids.formCredenciais) as (HTMLFormElement);
-        const credenciais = Object.fromEntries(new FormData(form).entries()) as { email: string; senha: string };
+        const credenciais = new Credenciais(form.email.value, form.senha.value);
         return credenciais;
     }
-    
-    carregarPerguntas(perguntas : PerguntaListagem[]) {
+
+    carregarPerguntas(perguntas: PerguntaListagem[]) {
         this.perguntas = perguntas;
         this.perguntaAtual = 0;
     }
 
-    iniciarQuiz(aluno : AlunoListagem, pontuacaoCurso : number): void{
-        this.preencherInformacoesAluno(aluno.nome, aluno.pontuacaoGeral,  pontuacaoCurso);
-        this.preencherPergunta(this.perguntas[this.perguntaAtual]);
-        this.exibirMenus();
+    async realizarContagemInicial() {
+        const divQuiz = document.getElementById(ids.quiz) as HTMLDivElement;
+        divQuiz.innerHTML = '';
+        const contagemInicial = UtilDOM.criaComTextoEClasses('h1', 'Iniciando em', ['contagem-inicial']);
+        divQuiz.appendChild(contagemInicial);
+        let tempoRestante = 3;
+
+        return new Promise<void>(resolve => {
+            const intervaloInicio = setInterval(() => {
+                if (tempoRestante <= 0) {
+                    clearInterval(intervaloInicio);
+                    resolve();
+                }
+                contagemInicial.innerText = (tempoRestante--).toString();
+            }, 1000);
+        });
     }
 
     buscarDadosResposta(credenciais: Credenciais): RespostaAlunoCadastro {
-        const pergunta = document.querySelector('.pergunta');
+        const pergunta = document.querySelector(`.${classes.pergunta}`);
 
         const idPergunta = (pergunta as HTMLElement).dataset.id;
-        
-        const respostas = document.querySelectorAll('.resposta-selecionada');
-        
+
+        const respostas = document.querySelectorAll(`.${classes.respostaSelecionada}`);
+
         const idsRespostas = [];
-        for(const r of respostas){
+        for (const r of respostas) {
             idsRespostas.push(Number((r as HTMLElement).dataset.id));
         }
 
         return new RespostaAlunoCadastro(credenciais, Number(idPergunta), idsRespostas);
-    }    
+    }
 
     // Saídas
+    exibirIniciarQuiz(): HTMLButtonElement {
+        const divQuiz = document.getElementById(ids.quiz) as HTMLDivElement;
+        divQuiz.innerHTML = '';
+
+        const botaoIniciar = UtilDOM.criaComTextoEClasses('button', 'Clique aqui para iniciar o quiz', ['botao-iniciar-quiz']);
+        divQuiz.appendChild(botaoIniciar);
+        return botaoIniciar as HTMLButtonElement;
+    }
+
     exibirMensagemCredenciais(mensagem: string): void {
         const out = document.querySelector(`#${ids.dialogCredenciais} output`) as HTMLOutputElement;
         out.innerText = mensagem;
     }
 
-    fecharFormCredenciais(){
+    fecharFormCredenciais() {
         this.modal.close();
         this.modal.hidden = true;
     }
 
-    irParaPaginaCursos(): void{
+    irParaPaginaCursos(): void {
         location.href = rotasPaginas.listagemCursos;
     }
 
-    
-    preencherPergunta(pergunta: PerguntaListagem):void{
-        const divQuiz = document.getElementById('quiz') as HTMLDivElement;
+
+    preencherPergunta(pergunta: PerguntaListagem): void {
+        const divQuiz = document.getElementById(ids.quiz) as HTMLDivElement;
         divQuiz.innerHTML = '';
 
-        const frag  = document.createDocumentFragment();
+        const frag = document.createDocumentFragment();
 
         const divPergunta = UtilDOM.criaComClasses('div', ['pergunta']);
         divPergunta.dataset.id = pergunta.id.toString();
@@ -132,11 +151,11 @@ export class VisaoQuizDOM implements VisaoQuiz{
 
         this.dificuldadePergunta = (dificuldadeDeString(pergunta.dificuldade) as Dificuldade);
 
-        const dificuldade = UtilDOM.criaComTextoEClasses('p', 
+        const dificuldade = UtilDOM.criaComTextoEClasses('p',
             dificuldadeParaTextoValor(this.dificuldadePergunta!),
             [
                 'dificuldade',
-                'dificuldade-'+dificuldadeParaString(this.dificuldadePergunta!)
+                'dificuldade-' + dificuldadeParaString(this.dificuldadePergunta!)
             ]
         );
         divPergunta.appendChild(dificuldade);
@@ -153,7 +172,7 @@ export class VisaoQuizDOM implements VisaoQuiz{
 
         const ulRespostas = UtilDOM.criaComClasses('ul', ['respostas']);
 
-        for(const r of pergunta.respostas){
+        for (const r of pergunta.respostas) {
             let liResposta = UtilDOM.criaComClasses('li', ['resposta']);
             liResposta.dataset.id = r.id.toString();
 
@@ -167,20 +186,17 @@ export class VisaoQuizDOM implements VisaoQuiz{
         frag.append(divPergunta, ulRespostas);
 
         divQuiz.appendChild(frag);
-
-        this.tornarAcaoResponder();
-        this.iniciarContagemRegressiva(pergunta.tempoSeg);
     }
 
-    exibirMensagemFim(mensagemEncerramento: string):void {
-        const divQuiz = document.getElementById('quiz')!;
+    exibirMensagemFim(mensagemEncerramento: string): void {
+        const divQuiz = document.getElementById(ids.quiz)!;
         divQuiz.innerHTML = '';
 
         const divMensagem = UtilDOM.criaComClasses('div', ['div-mensagem-fim']);
         const mensagem = UtilDOM.criaComTexto('h3', mensagemEncerramento);
 
         const botao = UtilDOM.criaComTextoEClasses('a', 'Voltar para Cursos 🏡', ['botao-voltar-cursos']) as HTMLAnchorElement;
-        botao.href = rotasPaginas.listagemCursos; 
+        botao.href = rotasPaginas.listagemCursos;
 
         divMensagem.append(mensagem, botao);
         divQuiz.appendChild(divMensagem);
@@ -188,14 +204,14 @@ export class VisaoQuizDOM implements VisaoQuiz{
         this.ocultarFooter();
     }
 
-    alternarSelecaoResposta(event: Event):void{
+    alternarSelecaoResposta(event: Event): void {
         const target = event.target as HTMLElement;
         const resposta = target.closest('.resposta');
         resposta!.classList.toggle('resposta-selecionada');
     }
 
-    exibirMensagemAcertou(acertou : boolean, tempoEsgotado: boolean) {
-        const mensagem = document.getElementById('mensagem-resposta') as HTMLElement;
+    exibirMensagemAcertou(acertou: boolean, tempoEsgotado: boolean) {
+        const mensagem = document.getElementById(ids.mensagemResposta) as HTMLElement;
 
         if (acertou) {
             let valor = dificuldadeValor(this.dificuldadePergunta);
@@ -204,71 +220,47 @@ export class VisaoQuizDOM implements VisaoQuiz{
         } else mensagem.innerText = tempoEsgotado ? 'Tempo esgotado. Você errou.' : 'Você errou...';
     }
 
-    preencherInformacoesAluno(nome: string, pontuacaoGeral: number,  pontuacaoCurso: number){
-        const h2Usuario = document.getElementById('usuario');
+    preencherInformacoesAluno(nome: string, pontuacaoGeral: number, pontuacaoCurso: number) {
+        const h2Usuario = document.getElementById(ids.usuario);
         (h2Usuario as HTMLElement).textContent = nome;
 
-        const inputPontuacaoGeral = document.getElementById('pontuacao-geral');
-        (inputPontuacaoGeral as HTMLInputElement).value  = pontuacaoGeral.toFixed(1); 
+        const inputPontuacaoGeral = document.getElementById(ids.pontuacaoGeral);
+        (inputPontuacaoGeral as HTMLInputElement).value = pontuacaoGeral.toFixed(1);
 
-        const inputPontuacaoCurso = document.getElementById('pontuacao-curso');
+        const inputPontuacaoCurso = document.getElementById(ids.pontuacaoCurso);
         (inputPontuacaoCurso as HTMLInputElement).value = pontuacaoCurso.toFixed(1);
     }
 
-    incrementarPontuacaoExibida(valor:number) {
-        const inputPontuacaoGeral = document.getElementById('pontuacao-geral');
+    incrementarPontuacaoExibida(valor: number) {
+        const inputPontuacaoGeral = document.getElementById(ids.pontuacaoGeral);
         let pontuacaoAtual = Number((inputPontuacaoGeral as HTMLInputElement).value);
         pontuacaoAtual += valor;
         (inputPontuacaoGeral as HTMLInputElement).value = pontuacaoAtual.toFixed(1);
 
-        const inputPontuacaoCurso = document.getElementById('pontuacao-curso');
+        const inputPontuacaoCurso = document.getElementById(ids.pontuacaoCurso);
         pontuacaoAtual = Number((inputPontuacaoCurso as HTMLInputElement).value);
         pontuacaoAtual += valor;
         (inputPontuacaoCurso as HTMLInputElement).value = pontuacaoAtual.toFixed(1);
     }
-    
-    // Auxiliar
-    private exibirMenus() {
-        const header = document.querySelector('header');
-        const footer = document.querySelector('footer');
 
-        (header as HTMLElement).hidden = false;
-        (footer as HTMLElement).hidden = false;
+    tornarAcaoProximaPergunta() {
+        this.botaoAcao.classList.remove(classes.responder);
+        this.botaoAcao.classList.add(classes.proxima);
+
+        this.botaoAcao.onclick = () => this.controladora.proximaPergunta();
+
+        this.botaoAcao.innerText = 'Próxima Pergunta';
     }
 
-    private ocultarFooter() {
-        const footer = document.querySelector('footer');
+    tornarAcaoResponder() {
+        this.botaoAcao.classList.remove(classes.proxima);
+        this.botaoAcao.classList.add(classes.responder);
 
-        (footer as HTMLElement).hidden = true;
+        this.botaoAcao.onclick = () => this.controladora.responder(false);
+
+        this.botaoAcao.innerText = 'Responder';
     }
 
-    private tornarAcaoResponder(){
-        (this.botaoAcao as HTMLButtonElement).classList.remove(classes.proxima);
-        (this.botaoAcao as HTMLButtonElement).classList.add(classes.responder);
-
-        (this.botaoAcao as HTMLButtonElement).removeEventListener('click', this.tratarBotaoProxima);
-        (this.botaoAcao as HTMLButtonElement).addEventListener('click', this.tratarBotaoResponder);
-
-        this.botaoAcao!.innerText = 'Responder'; 
-    }
-
-    tornarAcaoProximaPergunta(){
-        (this.botaoAcao as HTMLButtonElement).classList.remove(classes.responder);
-        (this.botaoAcao as HTMLButtonElement).classList.add(classes.proxima);
-
-        (this.botaoAcao as HTMLButtonElement).removeEventListener('click', this.tratarBotaoResponder);
-        (this.botaoAcao as HTMLButtonElement).addEventListener('click', this.tratarBotaoProxima);
-
-        (this.botaoAcao as HTMLButtonElement).innerText = 'Próxima Pergunta'; 
-    }
-    
-    private tratarBotaoResponder = () => {
-        this.controladora.responder(false);
-    }
-
-    private tratarBotaoProxima = () => {
-        this.controladora.proximaPergunta();
-    }
 
     limparContagem() {
         clearInterval(this.contagemRegressivaResposta);
@@ -276,9 +268,9 @@ export class VisaoQuizDOM implements VisaoQuiz{
     }
 
     desabilitarRespostas() {
-        const respostas = document.querySelectorAll('.resposta');
+        const respostas = document.querySelectorAll(`.${classes.resposta}`);
 
-        for(const r of respostas){
+        for (const r of respostas) {
             const botao = r.querySelector('button');
             (botao as HTMLButtonElement).disabled = true;
         }
@@ -286,18 +278,54 @@ export class VisaoQuizDOM implements VisaoQuiz{
 
     exibirProximaPergunta() {
         this.perguntaAtual++;
-        if (this.perguntaAtual >= this.perguntas.length){
+        if (this.perguntaAtual >= this.perguntas.length) {
             this.exibirMensagemFim('Parabéns! Você já respondeu todas as perguntas sobre este assunto 🎉');
+            this.ocultarMensagemTelaCheia();
+            this.limparEventosSaida();
             return;
         }
 
-        const mensagem = document.getElementById('mensagem-resposta');
+        const mensagem = document.getElementById(ids.mensagemResposta);
 
         (mensagem as HTMLElement).innerText = '';
-        this.preencherPergunta(this.perguntas[this.perguntaAtual]);   
+        this.preencherPergunta(this.perguntas[this.perguntaAtual]);
     }
 
-    private async iniciarContagemRegressiva(segundos: number): Promise<void>{
+    limparEventosSaida() {
+        document.removeEventListener('fullscreenchange', this.tratarSaidaTelaCheia);
+        window.removeEventListener('blur', this.tratarSaidaQuiz);
+        window.removeEventListener('beforeunload', this.tratarSaidaQuiz);
+        window.removeEventListener('visibilitychange', this.tratarSaidaQuiz);
+    }
+
+    ocultarMensagemTelaCheia() {
+        const mensagem = document.querySelector(`.${classes.atencaoTela}`) as HTMLDivElement;
+        mensagem!.hidden = true;
+    }
+
+    exibirMenus() {
+        const header = document.querySelector('header');
+        const footer = document.querySelector('footer');
+
+        (header as HTMLElement).hidden = false;
+        (footer as HTMLElement).hidden = false;
+    }
+
+    // Auxiliar
+    getPerguntas(): PerguntaListagem[] {
+        return this.perguntas;
+    }
+
+    getPerguntaAtual(): number {
+        return this.perguntaAtual;
+    }
+    private ocultarFooter() {
+        const footer = document.querySelector('footer');
+
+        (footer as HTMLElement).hidden = true;
+    }
+
+    async iniciarContagemRegressiva(segundos: number): Promise<void> {
         let tempoRestante = segundos;
 
         this.contagemRegressivaResposta = setInterval(async () => {
@@ -309,14 +337,37 @@ export class VisaoQuizDOM implements VisaoQuiz{
             }
 
             tempoRestante -= 0.1;
-        }, 100); 
+        }, 100);
     }
 
-    getPerguntas() : PerguntaListagem[] {
-        return this.perguntas;
+    iniciarTelaCheia() {
+        document.documentElement.requestFullscreen();
+        document.addEventListener('fullscreenchange', this.tratarSaidaTelaCheia);
+        window.addEventListener('blur', this.tratarSaidaQuiz);
+        window.addEventListener('beforeunload', this.tratarSaidaQuiz);
+        window.addEventListener('visibilitychange', this.tratarSaidaQuiz);
     }
 
-    getPerguntaAtual() : number {
-        return this.perguntaAtual;
+    private tratarSaidaQuiz = async () => {
+        this.piscarMensagemSaidaTela();
+        await this.controladora.tratarSaidaQuiz();
+    }
+    private tratarSaidaTelaCheia = async () => {
+        if (!document.fullscreenElement) {
+            this.piscarMensagemSaidaTela();
+            await this.controladora.tratarSaidaQuiz();
+        }
+    }
+
+    private piscarMensagemSaidaTela() {
+        const aviso = document.querySelector(`.${classes.atencaoTela}`);
+
+        let tempo = 0;
+        const piscaPisca = setInterval(() => {
+            if (tempo >= 5)
+                clearInterval(piscaPisca);
+            aviso!.classList.toggle('atencao-tela-cheia-destaque');
+            tempo += 1;
+        }, 500);
     }
 }

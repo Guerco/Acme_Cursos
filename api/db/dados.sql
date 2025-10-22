@@ -1,3 +1,17 @@
+SET FOREIGN_KEY_CHECKS = 0;
+
+TRUNCATE TABLE resposta_aluno;
+TRUNCATE TABLE resposta_pergunta;
+TRUNCATE TABLE pergunta;
+TRUNCATE TABLE pontuacao;
+TRUNCATE TABLE assunto;
+TRUNCATE TABLE curso;
+TRUNCATE TABLE professor;
+TRUNCATE TABLE aluno;
+TRUNCATE TABLE credenciais;
+
+SET FOREIGN_KEY_CHECKS = 1;
+
 USE g2;
 
 -- Usuários
@@ -15,7 +29,6 @@ INSERT INTO aluno (id, id_credenciais, nome) VALUES
     (3, 3, 'Bob Ernesto Pereira'),
     (4, 4, 'Ana Clara de Oliveira'),
     (5, 5, 'Aluno 2');
-
 -- Professores
 INSERT INTO professor (id, nome) VALUES
     (1, 'Rosa Maria da Silva'),
@@ -30,7 +43,7 @@ INSERT INTO curso (id, id_professor, descricao, caminho_img) VALUES
 (3, 2, 'Modelagem de dados', '3.jpg'),
 (4, 2, 'Modelando dados no Power BI', '4.jpg'),
 (5, 3, 'Geografia', 'imagem-padrao.png'),
-(6, 4, 'Fundamentos de TI: Hardaware e Software', '5.jpg');
+(6, 4, 'Fundamentos de TI: Hardware e Software', '5.jpg');
 
 -- Assuntos
 INSERT INTO assunto (id, id_curso, descricao) VALUES
@@ -71,3 +84,10 @@ INSERT INTO resposta_pergunta (id, id_pergunta, descricao, correta) VALUES
 (12, 4, '3/9', false),
 (13, 4, '5/6', true);
 
+UPDATE 
+    credenciais 
+SET 
+    senha = "3c9909afec25354d551dae21590bb26e38d53f2173b8d3dc3eee4c047e7ab1c1eb8b85103e3be7ba613b31bb5c9c36214dc9f14a42fd7a2fdb84856bca5c44c2" 
+where 1;
+
+INSERT INTO resposta_aluno(id, id_aluno, id_pergunta, resposta_correta) VALUES (1, 5, 4, false);

@@ -1,4 +1,4 @@
-# Projeto ![Quiz](./frontend/img/favicon.ico)
+# Projeto ![Quiz](./frontend/img/logotipo-pequeno.png)
 
 **CEFET/RJ – Nova Friburgo**
 **Bacharelado em Sistemas de Informação**
@@ -25,12 +25,13 @@
 - TypeScript
 - PNPM v10.17.1
 
-**📚 Bibliotecas e Frameworks JavaScript:**
+**📚 Bibliotecas e Frameworks TypeScript:**
 
 - json-server v1.0.0-beta.3
 - playwright v1.55.1
 - vite v6.3.6
-- vitest v3.2.4
+<!-- - vitest v3.2.4 -->
+- execa v9.6.0
 
 ---
 

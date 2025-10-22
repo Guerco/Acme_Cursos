@@ -4,16 +4,14 @@ import { rotasPaginas } from '../../../src/rotas';
 
 const URL = rotasPaginas.quiz;
 
-export class TelaQuiz { 
-    constructor(private page: Page) {}
+export class TelaQuiz {
+    constructor(private page: Page) { }
 
-    // ---------------------------
-    // Navegação
-    // ---------------------------
+    // Interação com a tela
     async acessar() {
         await this.page.goto(`${URL}?assunto=3&curso=2`);
     }
-    
+
     async acessarQuizFracao() {
         await this.page.goto(`${URL}?assunto=4&curso=2`);
     }
@@ -39,22 +37,6 @@ export class TelaQuiz {
         await expect(caixa).toBeVisible();
     }
 
-    async caixaCredenciaisFechada() {
-        const caixa = this.buscarCaixaCredencial();
-        await expect(caixa).not.toHaveAttribute('open', '');
-    }
-
-    async deveExibirCredenciaisInvalidas() {
-        const caixa = this.buscarCaixaCredencial();
-        await expect(caixa).toContainText('Credenciais Inválidas');
-    }
-
-    async deveExibirPergunta() {
-        const pergunta = this.page.locator(`.${classes.pergunta}`);
-        await pergunta.waitFor({ state: 'visible', timeout: 5000 });
-        await expect(pergunta).toBeVisible();
-    }
-
     async selecionarRespostasCorretasFracao() {
         const respostaCorreta = this.page.locator(`.${classes.resposta}[data-id="13"]`).first();
         await respostaCorreta.waitFor({ state: 'visible', timeout: 5000 });
@@ -71,6 +53,37 @@ export class TelaQuiz {
         const botaoResponder = this.page.locator(`#${ids.botaoAcao}`);
         await botaoResponder.waitFor({ state: 'visible', timeout: 5000 });
         await botaoResponder.click();
+    }
+
+    async clicarIniciarQuiz() {
+        const botaoIniciar = this.page.locator(`.${classes.botaoIniciarQuiz}`);
+        await botaoIniciar.waitFor({ state: 'visible', timeout: 5000 });
+        await botaoIniciar.click();
+    }
+
+    async sairDeTelaCheia() {
+        const pergunta = this.page.locator(`.${classes.pergunta}`);
+        await pergunta.waitFor({ state: 'visible', timeout: 5000 });
+        await this.page.evaluate(() => {
+            document.exitFullscreen();
+        });
+    }
+
+    // Expects
+    async deveExibirCaixaCredenciaisFechada() {
+        const caixa = this.buscarCaixaCredencial();
+        await expect(caixa).not.toHaveAttribute('open', '');
+    }
+
+    async deveExibirCredenciaisInvalidas() {
+        const caixa = this.buscarCaixaCredencial();
+        await expect(caixa).toContainText('Credenciais Inválidas');
+    }
+
+    async deveExibirPergunta() {
+        const pergunta = this.page.locator(`.${classes.pergunta}`);
+        await pergunta.waitFor({ state: 'visible', timeout: 5000 });
+        await expect(pergunta).toBeVisible();
     }
 
     async deveExibirMensagemResposta(mensagem: string) {
@@ -101,5 +114,11 @@ export class TelaQuiz {
         const mensagemFim = this.page.locator(`.${classes.mensagemFim}`);
         await mensagemFim.waitFor({ state: 'visible', timeout: 5000 });
         expect(mensagemFim).toContainText('Não há perguntas restantes');
+    }
+
+    async deveExibirMensagemQuizEncerrado() {
+        const mensagemFim = this.page.locator(`.${classes.mensagemFim}`);
+        await mensagemFim.waitFor({ state: 'visible', timeout: 5000 });
+        expect(mensagemFim).toContainText('o Quiz foi encerrado');
     }
 }
