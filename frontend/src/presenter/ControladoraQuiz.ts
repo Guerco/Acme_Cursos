@@ -4,6 +4,7 @@ import { RepositorioAlunosAPI } from "../model/repositorio/RepositorioAlunosApi"
 import { RepositorioPerguntasApi } from "../model/repositorio/RepositorioPerguntasApi";
 import { AlunoListagem } from "../model/dto/AlunoListagem";
 import { PerguntaListagem } from "../model/dto/PerguntaListagem";
+import { RespostaAlunoCadastro } from "../model/dto/RespostaAlunoCadastro";
 
 export class ControladoraQuiz{
     private servico: ServicoQuiz;
@@ -42,12 +43,53 @@ export class ControladoraQuiz{
     async preencherPerguntas(aluno: AlunoListagem){
         const parametrosUrl = this.visao.buscarParametrosUrl();
         const perguntas = await this.buscarPerguntas(aluno.id, parametrosUrl.idAssunto);
-        this.visao.carregarPerguntas(perguntas);
+
+        if(perguntas.length === 0){
+            this.visao.exibirMensagemFim('Não há perguntas restantes para esse assunto');
+        } else{
+            const pontuacaoCurso = await this.buscarPontuacaoCurso(aluno.id, parametrosUrl.idCurso);
+            this.visao.carregarPerguntas(perguntas);
+            this.visao.iniciarQuiz(aluno, pontuacaoCurso);
+        }   
+    }
+
+    async responder(tempoEsgotado: boolean) {
+        this.visao.limparContagem(); 
+        this.visao.desabilitarRespostas();
+
+        const resposta = this.visao.buscarDadosResposta(this.visao.buscarCredenciais());
+
+        const acertou = await this.servico.enviarResposta(resposta);
+
+        this.visao.exibirMensagemAcertou(acertou, tempoEsgotado);
+
+        this.visao.tornarAcaoProximaPergunta();
+    }
+
+    proximaPergunta() {
+        this.visao.limparContagem();
+        this.visao.exibirProximaPergunta();
     }
 
     private async buscarPerguntas(idAluno: number, idAssunto: number) : Promise<PerguntaListagem[]> {
         try{
             return await this.servico.buscarPerguntas(idAluno, idAssunto);
+        } catch( err: any){
+            throw err;
+        }
+    }
+
+    async enviarResposta(respostaAluno: RespostaAlunoCadastro): Promise<boolean> {
+        try{
+            return await this.servico.enviarResposta(respostaAluno);
+        } catch( err: any){
+            throw err;
+        }
+    }
+
+    async buscarPontuacaoCurso(idAluno: number, idCurso: number): Promise<number>{
+        try{
+            return await this.servico.buscarPontuacaoCurso(idAluno, idCurso);
         } catch( err: any){
             throw err;
         }

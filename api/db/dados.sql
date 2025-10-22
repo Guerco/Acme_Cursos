@@ -5,21 +5,23 @@ INSERT INTO credenciais (id, email, senha) VALUES
     (1, 'aluno@email.com', '123'),
     (2, 'maria.aluno@cefet.com', '123'),
     (3, 'bob.aluno@cefet.com', '123'),
-    (4, 'ana.aluno@cefet.com', '123');
+    (4, 'ana.aluno@cefet.com', '123'),
+    (5, 'aluno2@email.com', '123');
 
 -- Alunos
 INSERT INTO aluno (id, id_credenciais, nome) VALUES
     (1, 1, 'Aluno'),
     (2, 2, 'Maria de Souza Alvez'),
     (3, 3, 'Bob Ernesto Pereira'),
-    (4, 4, 'Ana Clara de Oliveira');
+    (4, 4, 'Ana Clara de Oliveira'),
+    (5, 5, 'Aluno 2');
 
 -- Professores
 INSERT INTO professor (id, nome) VALUES
     (1, 'Rosa Maria da Silva'),
     (2, 'Cerginho da Pereira Nunes'),
     (3, 'Cleber Breno Souza'),
-    (4, 'Amaurício');
+    (4, 'Amauricio');
 
 -- Cursos
 INSERT INTO curso (id, id_professor, descricao, caminho_img) VALUES

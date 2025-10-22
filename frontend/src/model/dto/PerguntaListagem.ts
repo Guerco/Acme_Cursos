@@ -5,7 +5,7 @@ export class PerguntaListagem{
                 public readonly id: number,
                 public readonly descricao: string,
                 public readonly caminhoImg: string,
-                public readonly tempSeg : number,
+                public readonly tempoSeg : number,
                 public readonly dificuldade: string,
                 public readonly respostas: Array<RespostaPerguntaListagem>
         ){}

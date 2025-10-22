@@ -15,6 +15,17 @@ export function dificuldadeParaTextoValor(dificuldade: Dificuldade): string {
     }
 }
 
+export function dificuldadeValor(dificuldade: Dificuldade): number {
+    switch (dificuldade) {
+        case Dificuldade.FACIL:
+            return 1.0;
+        case Dificuldade.MEDIO:
+            return 1.5;
+        case Dificuldade.DIFICIL:
+            return 2.0;
+    }   
+}
+
 export function dificuldadeParaString(dificuldade: Dificuldade): string {
     switch (dificuldade) {
         case Dificuldade.FACIL:

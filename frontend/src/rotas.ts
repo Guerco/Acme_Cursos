@@ -8,7 +8,10 @@ export const rotasApi = {
     cursosBusca: BASE_URL_API+'cursos/?busca=',
     verificarCredenciais: BASE_URL_API + 'alunos/verificarCredenciais',
     buscarPerguntas: ( idAluno: number, idAssunto: number) =>
-        BASE_URL_API + 'assuntos/' + idAssunto + '/perguntas?id_aluno=' + idAluno
+        BASE_URL_API + 'assuntos/' + idAssunto + '/perguntas?id_aluno=' + idAluno,
+    buscarPontuacao: ( idAluno: number, idCurso: number) =>
+        BASE_URL_API + 'alunos/' + idAluno + '/pontuacaoCurso/?id_curso=' + idCurso,
+    enviarResposta: BASE_URL_API+'respostasAluno/'
 };
 
 export const rotasPaginas = {

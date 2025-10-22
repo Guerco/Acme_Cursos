@@ -3,9 +3,9 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Quiz</title>
-    <link rel="icon" href="../img/favicon.ico" />
+    <title>Listagem de Perguntas</title>
     <link rel="stylesheet" href="../style/quiz.css" />
+    <link rel="icon" href="../img/favicon.ico">
     <script type="module" src="../src/scripts/quiz.ts"></script>
   </head>
 
@@ -42,8 +42,43 @@
       </form>
     </dialog>
 
+    <header hidden>
+      <div class="informacoes-aluno">
+        <h3 id="usuario"></h3>
+
+        <div class="container-pontuacoes">
+          <div class="container-pontuacao">
+            <label for="pontuacao-geral">🏆 Geral</label>
+            <input
+              id="pontuacao-geral"
+              type="number"
+              value="0.0"
+              disabled=""
+              class="input-pontuacao"
+            />
+          </div>
+          <div class="container-pontuacao">
+            <label for="pontuacao-curso">🎯 Curso</label>
+            <input
+              id="pontuacao-curso"
+              type="number"
+              value="0.0"
+              disabled=""
+              class="input-pontuacao"
+            />
+          </div>
+        </div>
+      </div>
+    </header>
+
     <div id="quiz">
       <button id="botao-informar-credenciais">Informar Credenciais</button>
     </div>
+
+    <footer id="acoes" hidden>
+      <h2 id="contagem"></h2>
+      <h2 id="mensagem-resposta"></h2>
+      <button id="acao"></button>
+    </footer>
   </body>
 </html>

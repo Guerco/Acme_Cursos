@@ -15,8 +15,7 @@ export class RepositorioPerguntasApi implements RepositorioPerguntas{
             const perguntas =  await response.json();
             return perguntas;
         } catch (error: any) {
-            //throw new Error('Erro ao buscar as perguntas.');
-            throw new Error(error.message);
+            throw new Error('Não foi possível buscar as perguntas.');
         }
 }
 

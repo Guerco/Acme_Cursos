@@ -1,9 +1,3 @@
-
-
-
-
-
-
 import { test, expect, Page  } from 'playwright/test';
 import { TelaQuiz } from './telas/TelaQuiz';
 
@@ -45,14 +39,75 @@ test.describe( 'Quiz', () => {
 
     //Cenário: Pergunta é exibida ao informar  as credenciais
     test('Pergunta é exibida', async () => {
-        //Quando preencho credenciais corretas na tela que se abre
+        // Quando preencho credenciais corretas na tela que se abre
         await tela.preencherCredenciais('aluno@email.com', '123');
-        //E clico em enviar
+        // E clico em enviar
         await tela.clicarEnviarCredenciais();
-        //Então uma pergunta é exibida na tela de quiz.
+        // Então uma pergunta é exibida na tela de quiz.
         await tela.deveExibirPergunta();
 
     });
-        
 
+    // Cenário: Informações do aluno são exibidas
+    test('Informações do aluno são exibidas', async () =>{
+        // Quando preencho credenciais corretas na tela que se abre
+         await tela.preencherCredenciais('aluno@email.com', '123');
+        // E clico em enviar
+        await tela.clicarEnviarCredenciais();
+        // Então o cabeçalho exibe o nome do aluno
+        await tela.deveExibirNomeAluno();
+        // e sua pontuação geral
+        await tela.deveExibirPontuacaoGeral();
+        // e sua pontuação no curso em questão.  
+        await tela.deveExibirPontuacaoCurso();
+    });   
+});
+
+test.describe( 'Quiz - Fração', () => {
+    let tela: TelaQuiz;
+
+    test.beforeEach(async ({ page }) => {
+        tela = new TelaQuiz(page);
+        // Dado que acesso a tela de quiz
+        await tela.acessarQuizFracao();
+    });
+
+    // Cenário: Quiz reconhece respostas corretas
+    test('Resposta certa é reconhecida.', async() => {
+        // Quando preencho credenciais corretas na tela que se abre
+        await tela.preencherCredenciais('aluno@email.com', '123');
+        // E clico em enviar
+        await tela.clicarEnviarCredenciais();
+        // E seleciono as respostas corretas
+        await tela.selecionarRespostasCorretasFracao();
+        // E clico em responder
+        await tela.clicarAcao();
+        // Então uma mensagem é exibida informando que acertei.
+        await tela.deveExibirMensagemResposta('acertou');
+    });
+
+    // Cenário: Quiz reconhece respostas incorretas
+    test('Resposta incorreta é reconhecida', async() =>{
+        // Quando preencho credenciais corretas na tela que se abre
+        await tela.preencherCredenciais('aluno2@email.com', '123');
+        // E clico em enviar
+        await tela.clicarEnviarCredenciais();
+        // E seleciono respostas incorretas
+        await tela.selecionarRespostasErradasFracao();
+        // E clico em responder
+        await tela.clicarAcao();
+        // Então uma mensagem é exibida informando que errei.
+        await tela.deveExibirMensagemResposta('Você errou...');
+    }); 
+
+    // Cenário: Apresenta mensagem quando acaba as perguntas
+    test('Quiz Apresenta mensagem quando acaba as perguntas', async() =>{
+        // Quando preencho credenciais corretas na tela que se abre
+        await tela.preencherCredenciais('aluno2@email.com', '123');
+        // E clico em enviar
+        await tela.clicarEnviarCredenciais();
+        // Se não houver mais perguntas para aquele quiz
+        // Então uma mensagem é exibida informando que não há mais perguntas.
+        await tela.deveExibirNaoHaPerguntas();
+    });
 });

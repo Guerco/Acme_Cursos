@@ -38,11 +38,11 @@ test.describe( 'Listagem de Cursos', () => {
     // Cenário: Listagem apresenta um curso ao buscar pelo nome de seu professor
     test( 'Apresenta um curso ao buscar o nome de seu professor', async () => {
         // Quando digito parte do nome de um professor na caixa de pesquisa 
-        await tela.preencheTextoBusca('Amaurício');
+        await tela.preencheTextoBusca('Amauricio');
         //      e aperto o botão enter
         await tela.apertaEnter();
         // Então apenas cursos que satisfaçam aquele filtro são listados. 
-        await tela.deveExibirCursosFiltrados('Amaurício');
+        await tela.deveExibirCursosFiltrados('Amauricio');
     });
     
     // Cenário: Listagem não apresenta cursos ao buscar por um texto inexistente no nome de nenhum curso ou professor

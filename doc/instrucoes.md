@@ -63,12 +63,12 @@ Os scripts de banco de dados estão localizados no diretório [`/api/db`](../api
 
 1. **Criar a estrutura do banco:**
 
-   * Abra o arquivo [`estrutura.sql`](../api/db/producao/estrutura.sql).
+   * Abra o arquivo [`estrutura.sql`](../api/db/estrutura.sql).
    * Copie todo o conteúdo e execute-o em uma ferramenta de gerenciamento MySQL, como **phpMyAdmin**, **DBeaver** ou similar.
 
 2. **Popular o banco com dados iniciais:**
 
-   * Abra o arquivo [`dados.sql`](../api/db/producao/dados.sql).
+   * Abra o arquivo [`dados.sql`](../api/db/dados.sql).
    * Copie o script e execute-o na mesma ferramenta para inserir os dados iniciais.
 
 ---

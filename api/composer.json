@@ -14,8 +14,8 @@
             "@db-e",
             "@db-d"
         ],
-        "db-e": "mysql -u root --password=\"\" < ./db/producao/estrutura.sql",
-        "db-d": "mysql -u root --password=\"\" g2 < ./db/producao/dados.sql"
+        "db-e": "mysql -u root --password=\"\" < ./db/estrutura.sql",
+        "db-d": "mysql -u root --password=\"\" g2 < ./db/dados.sql"
     },
     "autoload": {
         "psr-4": {
