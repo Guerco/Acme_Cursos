@@ -1,4 +1,4 @@
-# Projeto ![Quiz](./frontend/img/favicon.png)
+# Projeto ![Quiz](./frontend/img/favicon.ico)
 
 **CEFET/RJ – Nova Friburgo**
 **Bacharelado em Sistemas de Informação**
@@ -7,7 +7,7 @@
 
 ---
 
-## Desenvolvedores 👨‍💻
+## 👨‍💻 Desenvolvedores
 
 - [Gabriel Guerço](https://github.com/Guerco)
 - [Mychelle Satyn](https://github.com/MychelleSatyn)
@@ -50,24 +50,35 @@
 
 ---
 
-## Estrutura de Diretórios arqui
+## Primeiros Passos 🏃‍♂️
 
-| **📂**                             | **Descrição**                           |
-| ---------------------------------------- | ----------------------------------------------- |
-| [/doc](./doc/)                              | Documentação do projeto                       |
-| [/api](./api/)                              | Implementação da API                          |
-| [/frontend](./frontend/)                    | Implementação do frontend                     |
-| 🛠️**Estrutura da API**           |                                                 |
-| [/json-server/](./api/json-server/)         | API simulada                                    |
-| 🎨**Estrutura do Frontend**        |                                                 |
-| [/src/](./frontend/src/)                    | Código-fonte do frontend                       |
-| [/src/model/](./frontend/src/model)         | Modelos de dados e lógica de negócio          |
-| [/src/view/](./frontend/src/view)           | Camada de visualização e manipulação do DOM |
-| [/src/presenter/](./frontend/src/presenter) | Controladores da aplicação                    |
-| [/src/util/](./frontend/src/util)           | Funções utilitárias                          |
-| [/test/](./frontend/test/)                  | Testes automatizados da aplicação             |
-| [/test/e2e/](./frontend/test/e2e)           | Testes end-to-end                               |
-| [/test/unit/](./frontend/test/unit)         | Testes unitários e de integração             |
+Para aprender a instalar e executar o projeto, consulte o guia completo em [Instruções de Rodagem.](./doc/instrucoes.md)   
+
+## Estrutura de Diretórios 🗃
+
+| **📂**                                       | **Descrição**                                          |
+|----------------------------------------------|---------------------------------------------------------|
+| [/doc/](./doc/)                              | Documentação do projeto                                 |
+| [/api/](./api/)                              | Implementação da API                                    |
+| [/frontend/](./frontend/)                    | Implementação do frontend                               |
+| 🛠️**Estrutura da API**                       |                                                         |
+| [/src/](./api/src/)                          | Código-fonte da API                                     |
+| [/src/model](./api/src/model/)               | Modelos de dados, acesso a dados e lógica de negócio    |
+| [/db/](./api/db/)                            | Scripts de Banco de Dados                               |   
+| [/json-server/](./api/json-server/)          | API simulada                                            |
+| [/spec/](./api/spec)                         | Testes automatizados da API                             |
+| 🎨**Estrutura do Frontend**                  |                                                         |
+| [/src/](./frontend/src/)                     | Código-fonte do frontend                                |
+| [/src/model/](./frontend/src/model/)         | Modelos de dados, interação com API e lógica de negócio |
+| [/src/view/](./frontend/src/view/)           | Camada de visualização e manipulação do DOM             |
+| [/src/presenter/](./frontend/src/presenter/) | Controladores da aplicação                              |
+| [/src/util/](./frontend/src/util/)           | Funções utilitárias                                     |
+| [/test/](./frontend/test/)                   | Testes automatizados da aplicação                       |
+| [/test/e2e/](./frontend/test/e2e/)           | Testes end-to-end                                       |
+| [/test/unit/](./frontend/test/unit/)         | Testes unitários e de integração                        |
+| [/pages/](./frontend/pages/)                 | Páginas da aplicação                                    |
+| [/style/](./frontend/style/)                 | Arquivos de Estilização das Páginas                     |
+| [/img/](./frontend/img/)                     | Imagens e logotipos exibidas na aplicação               |
 
 ---
 

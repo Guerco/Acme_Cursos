@@ -120,6 +120,17 @@
     text-align: center;
 }
 
+#botao-informar-credenciais {
+    background: none;
+    border: none;
+    color: #9f9f9f;
+    border-radius: 20px;
+    cursor: pointer;
+    height: 100%;
+    width: 100%;
+    font-size: xx-large;
+}
+
 /* ========================================================== */
 /* Estilos do quiz */
 #quiz {
@@ -328,4 +339,11 @@
 
 .resposta-selecionada button:hover {
     background-color: #caaafa;
+}
+
+
+#caixa-credenciais:not([open]) {
+  display: none !important;
+  opacity: 0;
+  pointer-events: none;
 }

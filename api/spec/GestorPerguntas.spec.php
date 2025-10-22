@@ -42,6 +42,36 @@ describe('GestorPerguntas', function(): void{
             expect(count($resultado))->not->toBe(0);
             expect($resultado[0]?? null)->toBeAnInstanceOf(PerguntaListagemDTO::class);
         });
+
+        it('lança uma exceção ao não informar id de assunto e aluno', function():void{
+            
+            $idAssunto = '';
+            $idAluno = '';
+
+            expect(function () use ($idAssunto, $idAluno): void {
+                $this->gestorPerguntas->buscarPerguntasAluno($idAssunto, $idAluno);
+            })->toThrow(new DominioException('Informe assunto e aluno.'));
+        });
+
+        it('lança uma exceção ao informar id de assunto e aluno não inteiro', function():void{
+            
+            $idAssunto = 'id_nao_numerico';
+            $idAluno = 'id_nao_numerico';
+
+            expect(function () use ($idAssunto, $idAluno): void {
+                $this->gestorPerguntas->buscarPerguntasAluno($idAssunto, $idAluno);
+            })->toThrow(new DominioException('Os ids devem ser inteiros.'));
+        });
+        
+        it('lança uma exceção ao informar id de um aluno inexistente', function():void{
+            allow($this->repositorioTesteAlunos)->toReceive('existeComId')->andReturn(false);
+            
+            $idAssunto = 1;
+            $idAluno = -1;
+
+            expect(function () use ($idAssunto, $idAluno): void {
+                $this->gestorPerguntas->buscarPerguntasAluno($idAssunto, $idAluno);
+            })->toThrow(new NaoEncontradoException('Aluno inexistente.'));
+        });
     });
-      
 });

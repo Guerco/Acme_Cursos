@@ -17,8 +17,8 @@ class GestorPerguntas {
     }
 
     private function validarBuscarPerguntasAluno(string|int|null $idAssunto, string|int|null $idAluno): void{
-        $idAssunto = $idAssunto ?? null;
-        $idAluno = $idAluno ?? null;
+        $idAssunto = $idAssunto ?: null;
+        $idAluno = $idAluno ?: null;
 
         if ($idAssunto === null || $idAluno === null ) {
             throw new DominioException('Informe assunto e aluno.'); 

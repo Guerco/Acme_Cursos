@@ -9,7 +9,13 @@
                     "php -S localhost:8080"
                 ], 
         "test": "kahlan",
-        "check": "phpstan analyze src --level=6"
+        "check": "phpstan analyze src --level=6",
+        "db": [
+            "@db-e",
+            "@db-d"
+        ],
+        "db-e": "mysql -u root --password=\"\" < ./db/producao/estrutura.sql",
+        "db-d": "mysql -u root --password=\"\" g2 < ./db/producao/dados.sql"
     },
     "autoload": {
         "psr-4": {
