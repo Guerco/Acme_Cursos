@@ -7,7 +7,7 @@
     "start": "vite",
     "test": "vitest run --dir test/unitario",
     "pree2e": "pnpm run db",
-    "e2e": "playwright test test/e2e",
+    "e2e": "playwright test test/e2e --headed",
     "poste2e": "pnpm run db",
     "pree2e-ui": "pnpm run db",
     "e2e-ui": "playwright test test/e2e --ui",

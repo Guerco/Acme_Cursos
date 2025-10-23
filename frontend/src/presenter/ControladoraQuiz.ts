@@ -93,6 +93,8 @@ export class ControladoraQuiz {
     proximaPergunta() {
         this.visao.limparContagem();
         this.visao.exibirProximaPergunta();
+        const pergunta = this.visao.getPerguntas()[this.visao.getPerguntaAtual()];
+        this.visao.iniciarContagemRegressiva(pergunta.tempoSeg);
         this.visao.tornarAcaoResponder();
     }
 

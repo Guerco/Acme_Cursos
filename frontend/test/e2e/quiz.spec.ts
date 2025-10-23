@@ -73,8 +73,7 @@ test.describe('Quiz - Fração', () => {
     test.beforeEach(async ({ page }) => {
         const { execa } = await import('execa');
         try {
-            const { stdout } = await execa`pnpm run db`;
-            console.log(stdout);
+            await execa`pnpm run db`;
         } catch (err : any) {
             console.error(err.message);
         }
