@@ -10,6 +10,7 @@ export interface VisaoQuiz {
     buscarParametrosUrl(): { idAssunto: number; idCurso: number };
     chamarModal(): void;
     buscarDadosResposta(credenciais: Credenciais): RespostaAlunoCadastro;
+    buscarMensagemAcertou() : string;
 
     //Saída
     exibirMensagemCredenciais(mensagem: string): void;
@@ -20,10 +21,8 @@ export interface VisaoQuiz {
     exibirMensagemAcertou(acertou: boolean, tempoEsgotado: boolean): void;
     limparContagem(): void;
     desabilitarRespostas(): void;
-    exibirProximaPergunta(): void;
     tornarAcaoProximaPergunta(): void;
     limparEventosSaida(): void;
-    carregarPerguntas(perguntas: PerguntaListagem[]): void;
     preencherInformacoesAluno(nome: string, pontuacaoGeral: number, pontuacaoCurso: number) : void;
     preencherPergunta(pergunta: PerguntaListagem): void;
     tornarAcaoResponder() : void;
@@ -31,7 +30,11 @@ export interface VisaoQuiz {
     iniciarContagemRegressiva(segundos: number): Promise<void>;
     exibirMenus() : void;
     realizarContagemInicial() : void;
+    limparMensagemAcertou() : void;
+    ocultarMensagemTelaCheia() : void;
     // Auxiliar
+    carregarPerguntas(perguntas: PerguntaListagem[]): void;
     getPerguntas() : PerguntaListagem[];
     getPerguntaAtual() : number;
+    setPerguntaAtual(valor : number): void;
 }

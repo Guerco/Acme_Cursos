@@ -76,11 +76,6 @@ export class VisaoQuizDOM implements VisaoQuiz {
         return credenciais;
     }
 
-    carregarPerguntas(perguntas: PerguntaListagem[]) {
-        this.perguntas = perguntas;
-        this.perguntaAtual = 0;
-    }
-
     async realizarContagemInicial() {
         const divQuiz = document.getElementById(ids.quiz) as HTMLDivElement;
         divQuiz.innerHTML = '';
@@ -112,6 +107,12 @@ export class VisaoQuizDOM implements VisaoQuiz {
         }
 
         return new RespostaAlunoCadastro(credenciais, Number(idPergunta), idsRespostas);
+    }
+
+    buscarMensagemAcertou() : string {
+        const mensagem = document.getElementById(ids.mensagemResposta);
+
+        return (mensagem as HTMLElement).innerText;
     }
 
     // Saídas
@@ -285,10 +286,14 @@ export class VisaoQuizDOM implements VisaoQuiz {
             return;
         }
 
+        
+        this.preencherPergunta(this.perguntas[this.perguntaAtual]);
+    }
+
+    limparMensagemAcertou() {
         const mensagem = document.getElementById(ids.mensagemResposta);
 
         (mensagem as HTMLElement).innerText = '';
-        this.preencherPergunta(this.perguntas[this.perguntaAtual]);
     }
 
     limparEventosSaida() {
@@ -319,6 +324,16 @@ export class VisaoQuizDOM implements VisaoQuiz {
     getPerguntaAtual(): number {
         return this.perguntaAtual;
     }
+
+    setPerguntaAtual(valor : number): void {
+        this.perguntaAtual = valor;
+    }
+
+    carregarPerguntas(perguntas: PerguntaListagem[]) {
+        this.perguntas = perguntas;
+        this.perguntaAtual = 0;
+    }
+
     private ocultarFooter() {
         const footer = document.querySelector('footer');
 

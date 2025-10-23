@@ -86,16 +86,30 @@ export class ControladoraQuiz {
 
     async tratarSaidaQuiz() {
         this.visao.limparEventosSaida();
-        await this.responder();
+        if (this.visao.buscarMensagemAcertou() == '')
+            await this.responder();
         this.visao.exibirMensagemFim('Você saiu da tela de quiz. Sua resposta foi registrada e o Quiz foi encerrado. ❌');
     }
 
     proximaPergunta() {
         this.visao.limparContagem();
-        this.visao.exibirProximaPergunta();
-        const pergunta = this.visao.getPerguntas()[this.visao.getPerguntaAtual()];
-        this.visao.iniciarContagemRegressiva(pergunta.tempoSeg);
-        this.visao.tornarAcaoResponder();
+        
+        const perguntas = this.visao.getPerguntas();
+        let perguntaAtual = this.visao.getPerguntaAtual();
+        perguntaAtual++;
+        
+        if (perguntaAtual >= perguntas.length ) {
+            this.visao.exibirMensagemFim('Parabéns! Você já respondeu todas as perguntas sobre este assunto 🎉');
+            this.visao.ocultarMensagemTelaCheia();
+            this.visao.limparEventosSaida();
+        } else {
+            this.visao.setPerguntaAtual(perguntaAtual);
+            this.visao.limparMensagemAcertou();
+            const pergunta = perguntas[perguntaAtual];
+            this.visao.preencherPergunta(pergunta);
+            this.visao.iniciarContagemRegressiva(pergunta.tempoSeg);
+            this.visao.tornarAcaoResponder();
+        }
     }
 
     private async buscarPerguntas(idAluno: number, idAssunto: number): Promise<PerguntaListagem[]> {
