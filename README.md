@@ -95,6 +95,12 @@ Todas as referências a imagens, conteúdos e estilos **externos** utilizados ne
 
 ---
 
+## Slides de Apresentação
+
+[Clique para visualizar os slides de apresentação para P1](./doc/apresentacao/slides-p1.pdf)
+
+---
+
 ![Logotipo](./frontend/img/logotipo.png)
 
 ---

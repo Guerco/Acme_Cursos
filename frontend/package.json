@@ -6,14 +6,16 @@
   "scripts": {
     "start": "vite",
     "test": "vitest run --dir test/unitario",
-    "pree2e": "pnpm run reiniciar-db",
+    "pree2e": "pnpm run db",
     "e2e": "playwright test test/e2e",
-    "poste2e": "pnpm run reiniciar-db",
-    "pree2e-ui": "pnpm run reiniciar-db",
+    "poste2e": "pnpm run db",
+    "pree2e-ui": "pnpm run db",
     "e2e-ui": "playwright test test/e2e --ui",
-    "poste2e-ui": "pnpm run reiniciar-db",
+    "poste2e-ui": "pnpm run db",
     "api": "json-server  ../api/json-server/api.json",
-    "reiniciar-db": "mysql --default-character-set=utf8mb4 -u root --password=\"\" g2 < ../api/db/dados.sql"
+    "db": "pnpm run db-e && pnpm run db-d",
+    "db-e": "mysql --default-character-set=utf8mb4 -u root --password=\"\" < ../api/db/estrutura.sql",
+    "db-d": "mysql --default-character-set=utf8mb4 -u root --password=\"\" g2 < ../api/db/dados.sql"
   },
   "keywords": [],
   "author": "",

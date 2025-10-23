@@ -11,7 +11,7 @@ class GestorPerguntas {
      */
     public function buscarPerguntasAluno (string|int $idAssunto, string|int $idAluno): array {
         $this->validarBuscarPerguntasAluno($idAssunto, $idAluno);
-        $perguntas = $this->repositorioPerguntas->buscarPorAssuntoEAluno($idAssunto, $idAluno);
+        $perguntas = $this->repositorioPerguntas->buscarPorAssuntoEAluno((int) $idAssunto, (int) $idAluno);
         shuffle($perguntas);
         return PerguntaListagemDTO::deObjetos($perguntas);
     }
@@ -29,7 +29,7 @@ class GestorPerguntas {
             throw new DominioException('Os ids devem ser inteiros.');     
         }
         
-        if (! $this->repositorioAlunos->existeComId($idAluno)){
+        if (! $this->repositorioAlunos->existeComId((int) $idAluno)){
             throw new NaoEncontradoException('Aluno inexistente.');
         }
     }

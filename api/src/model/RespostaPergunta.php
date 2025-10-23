@@ -9,7 +9,7 @@ class RespostaPergunta{
         private bool $correta = false
     ){}
 
-    public function getPergunta(): Pergunta{
+    public function getPergunta(): ?Pergunta{
         return $this->pergunta;
     }
     public function setPergunta(Pergunta $pergunta): void{

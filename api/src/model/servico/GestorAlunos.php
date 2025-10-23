@@ -15,7 +15,7 @@ class GestorAlunos {
 
         $aluno = $this->repositorioAlunos->existeComCredenciais($credenciais);
 
-        if(!$aluno){
+        if(! ($aluno instanceof Aluno) ){
             throw new NaoEncontradoException('Credenciais inválidas.'); 
         } else return AlunoListagemDTO::deObjeto($aluno);
     }
@@ -24,9 +24,10 @@ class GestorAlunos {
         $this->validarSalvarResposta($resposta);
         
         $credenciais = $this->validarCredenciais($resposta->credenciais);
+
         $aluno = $this->repositorioAlunos->existeComCredenciais($credenciais);
 
-        if(!$aluno) throw new NaoEncontradoException('Credenciais inválidas.'); 
+        if(! ($aluno instanceof Aluno) ) throw new NaoEncontradoException('Credenciais inválidas.'); 
 
         $pergunta = new Pergunta($resposta->idPergunta, null);
 
@@ -60,8 +61,11 @@ class GestorAlunos {
     }
 
     private function atualizarPontuacoes(Aluno $aluno, Pergunta $pergunta): void{
+        /** @var array{idCurso: string, dificuldade: string} $infoPergunta  */
         $infoPergunta = $this->repositorioPerguntas->buscarCursoEDificuldadePeloID($pergunta->getId());
-        $valorPergunta = Dificuldade::deString($infoPergunta['dificuldade'])->getValor();
+        /** @var Dificuldade $dificuldade  */
+        $dificuldade = Dificuldade::deString($infoPergunta['dificuldade']);
+        $valorPergunta = $dificuldade->getValor();
 
         $idAluno = $aluno->getId();
         $idCurso = (int) $infoPergunta['idCurso'];
@@ -124,12 +128,12 @@ class GestorAlunos {
         ) {
             throw new DominioException('Os ids devem ser inteiros.');     
         }
-        
+
         $problemas = [];
-        if (! $this->repositorioAlunos->existeComId($idAluno)){
+        if (! $this->repositorioAlunos->existeComId((int) $idAluno)){
             $problemas [] = 'Aluno inexistente.';
         }  
-        if (! $this->repositorioCursos->existeComId($idCurso)){
+        if (! $this->repositorioCursos->existeComId((int) $idCurso)){
             $problemas [] = 'Curso inexistente.';
         }    
         if(! empty($problemas)) throw NaoEncontradoException::comProblemas($problemas);

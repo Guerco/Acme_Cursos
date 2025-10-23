@@ -3,7 +3,7 @@
 class RespostaAlunoCadastroDTO{
 
     /**
-     * @param string[] $credenciais
+     * @param array{ email: string, senha: string } $credenciais
      * @param string[]|int[] $idsRespostas
      */
     public function __construct(
@@ -14,7 +14,7 @@ class RespostaAlunoCadastroDTO{
 
 
     /**
-     * @param array{'credenciaisAluno': string[], "idPergunta": int, "idsRespostas":null|array<string|int>} $dados
+     * @param array{'credenciaisAluno': array{ email: string, senha: string }, "idPergunta": int, "idsRespostas":null|array<string|int>} $dados
      */
     public static function deArray(array $dados): RespostaAlunoCadastroDTO{
         return new self(
@@ -26,7 +26,7 @@ class RespostaAlunoCadastroDTO{
     }
 
     /**
-     * @param array{'credenciaisAluno': string[], "idPergunta": int, "idsRespostas":null|array<string|int>}[] $dados
+     * @param array{'credenciaisAluno': array{ email: string, senha: string }, "idPergunta": int, "idsRespostas":null|array<string|int>}[] $dados
      * @return RespostaAlunoCadastroDTO[]
      */
     public static function deArrays(array $dados): array{

@@ -1,19 +1,3 @@
-SET FOREIGN_KEY_CHECKS = 0;
-
-TRUNCATE TABLE resposta_aluno;
-TRUNCATE TABLE resposta_pergunta;
-TRUNCATE TABLE pergunta;
-TRUNCATE TABLE pontuacao;
-TRUNCATE TABLE assunto;
-TRUNCATE TABLE curso;
-TRUNCATE TABLE professor;
-TRUNCATE TABLE aluno;
-TRUNCATE TABLE credenciais;
-
-SET FOREIGN_KEY_CHECKS = 1;
-
-USE g2;
-
 -- Usuários
 INSERT INTO credenciais (id, email, senha) VALUES
     (1, 'aluno@email.com', '123'),

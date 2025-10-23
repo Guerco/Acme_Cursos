@@ -16,7 +16,7 @@ class Aluno{
         $this->id = $id;
     }
 
-    public function getCredenciais(): Credenciais{
+    public function getCredenciais(): ?Credenciais{
         return $this->credenciais;
     }
     public function setCredenciais(Credenciais $credenciais): void{

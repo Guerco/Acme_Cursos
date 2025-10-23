@@ -15,7 +15,7 @@ class Pergunta{
         private array $respostas = []
     ){}
 
-    public function getAssunto(): Assunto{
+    public function getAssunto(): ?Assunto{
         return $this->assunto;
     }
     public function setAssunto(Assunto $assunto): void{

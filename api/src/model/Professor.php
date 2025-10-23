@@ -4,8 +4,7 @@ class Professor{
     
     public function __construct(
         private int $id = 0,
-        private string $nome = '',
-        private ?Credenciais $credenciais = null
+        private string $nome = ''
     ){}
 
     public function getId(): int{
@@ -13,13 +12,6 @@ class Professor{
     }
     public function setId(int $id): void{
         $this->id = $id;
-    }
-
-    public function getCredenciais(): Credenciais{
-        return $this->credenciais;
-    }
-    public function setCredenciais(Credenciais $credenciais): void{
-        $this->credenciais = $credenciais;
     }
 
     public function getNome(): string{

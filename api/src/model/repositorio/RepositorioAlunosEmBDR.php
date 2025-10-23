@@ -67,10 +67,16 @@ class RepositorioAlunosEmBDR implements RepositorioAlunos{
                 VALUES (:id_aluno, :id_pergunta, :resposta_correta)
             SQL;
 
+            /** @var Aluno $aluno */
+            $aluno = $respostaAluno->getAluno();
+
+            /** @var Pergunta $pergunta */
+            $pergunta = $respostaAluno->getPergunta();
+
             $ps = $this->pdo->prepare($sql);
             $ps->execute( [
-                'id_aluno' => $respostaAluno->getAluno()->getId(),
-                'id_pergunta' => $respostaAluno->getPergunta()->getId(),
+                'id_aluno' => $aluno->getId(),
+                'id_pergunta' => $pergunta->getId(),
                 'resposta_correta' => $respostaAluno->isRespostaCorreta()
             ] );
         } catch (PDOException $e) {

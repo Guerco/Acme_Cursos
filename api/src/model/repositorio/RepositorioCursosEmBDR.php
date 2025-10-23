@@ -1,7 +1,7 @@
 <?php
 
 class RepositorioCursosEmBDR implements RepositorioCursos{
-    public function __construct( private ?PDO $pdo){
+    public function __construct( private PDO $pdo){
     }
 
     public function existeComId(int $id): bool {

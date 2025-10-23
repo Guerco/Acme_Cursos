@@ -88,13 +88,16 @@ class RepositorioPerguntasEmBDR implements RepositorioPerguntas {
             foreach($ps as $d) {
                 $perguntaId = $d['id_pergunta'];
 
+                /** @var Dificuldade $dificuldade  */
+                $dificuldade = Dificuldade::deString($d['dificuldade']);
+                
                 $perguntas[(int) $perguntaId] ??= new Pergunta(
                     $perguntaId,
                     null,
                     $d['descricao_pergunta'],
                     $d['caminho_img'],
                     $d['tempo_seg'],
-                    Dificuldade::deString($d['dificuldade'])
+                    $dificuldade
                 );
 
                 $perguntas[$perguntaId]->addResposta(

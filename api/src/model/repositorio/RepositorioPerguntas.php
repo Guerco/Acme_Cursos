@@ -13,7 +13,7 @@ interface RepositorioPerguntas {
      * Busca uma curso e dificuldade de uma pergunta com determinado id.
      * 
      * @param int $id
-     * @return null|string[]
+     * @return null|array{idCurso: string, dificuldade: string}
      */
     public function buscarCursoEDificuldadePeloID(int $id): ?array;
 

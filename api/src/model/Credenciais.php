@@ -9,7 +9,7 @@ class Credenciais{
         private string $senha = ''
     ){}
 
-    public function getId(): int{
+    public function getId(): ?int{
         return $this->id;
     }
 

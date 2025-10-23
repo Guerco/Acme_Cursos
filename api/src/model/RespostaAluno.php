@@ -9,14 +9,14 @@ class RespostaAluno{
         private bool $respostaCorreta = false        
     ){}
 
-    public function getAluno(): Aluno{
+    public function getAluno(): ?Aluno{
         return $this->aluno;
     }
     public function setAluno(Aluno $aluno): void{
         $this->aluno = $aluno;
     }
     
-    public function getPergunta(): Pergunta{
+    public function getPergunta(): ?Pergunta{
         return $this->pergunta;
     }
     public function setPergunta(Pergunta $pergunta): void{

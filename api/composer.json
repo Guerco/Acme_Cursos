@@ -9,7 +9,7 @@
                     "php -S localhost:8080"
                 ], 
         "test": "kahlan",
-        "check": "phpstan analyze src --level=6",
+        "check": "phpstan analyze src --level=8",
         "db": [
             "@db-e",
             "@db-d"
