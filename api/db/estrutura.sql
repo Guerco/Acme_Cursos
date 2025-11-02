@@ -82,3 +82,24 @@ ADD UNIQUE KEY unica_aluno_curso (id_aluno, id_curso);
 
 ALTER TABLE resposta_aluno
 ADD UNIQUE KEY unica_aluno_curso (id_aluno, id_pergunta);
+
+ALTER TABLE credenciais 
+ADD COLUMN salSenha VARCHAR(100);
+
+ALTER TABLE professor
+ADD COLUMN id_credenciais INT
+AFTER id;
+
+ALTER TABLE professor 
+ADD FOREIGN KEY (id_credenciais) 
+REFERENCES credenciais(id);
+
+CREATE TABLE IF NOT EXISTS administrador(
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  id_credenciais INT,
+  nome VARCHAR(100) NOT NULL,
+  FOREIGN KEY (id_credenciais) REFERENCES credenciais(id)
+) ENGINE=INNODB;
+
+ALTER TABLE pergunta
+ADD column ultimaAtualizacao DATETIME;

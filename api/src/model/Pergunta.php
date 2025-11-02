@@ -12,7 +12,8 @@ class Pergunta{
         private ?string $caminhoImg = '',
         private int $tempoSeg = 60,
         private Dificuldade $dificuldade = Dificuldade::FACIL,
-        private array $respostas = []
+        private array $respostas = [],
+        private ?DateTime $ultimaAtualizacao = null
     ){}
 
     public function getAssunto(): ?Assunto{
@@ -73,5 +74,13 @@ class Pergunta{
 
     public function addResposta(RespostaPergunta $resposta): void{
         $this->respostas []= $resposta;
+    }
+
+    public function getUltimaAtualizacao(): ?DateTime {
+    return $this->ultimaAtualizacao;
+    }
+
+    public function setUltimaAtualizacao(DateTime $ultimaAtualizacao): void {
+        $this->ultimaAtualizacao = $ultimaAtualizacao;
     }
 }

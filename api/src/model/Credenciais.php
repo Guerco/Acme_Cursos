@@ -6,7 +6,8 @@ class Credenciais{
     public function __construct(
         private ?int $id = 0,
         private string $email = '',
-        private string $senha = ''
+        private string $senha = '',
+        private string $salSenha = ''
     ){}
 
     public function getId(): ?int{
@@ -24,6 +25,13 @@ class Credenciais{
         return $this->senha;
     }
     public function setSenha(string $senha): void{
+        $this->senha = $senha;
+    }
+
+    public function getSalSenha(): string{
+        return $this->senha;
+    }
+    public function setSalSenha(string $senha): void{
         $this->senha = $senha;
     }
 
