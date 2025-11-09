@@ -7,6 +7,7 @@ use function phputil\cors\cors;
 
 try {
     $pdo = criarConexao();
+    GerenciadorDeTransacao::definirConexao($pdo);
 } catch (PDOException $e) {
     http_response_code(500);
     die('Erro ao conectar com o banco de dados.');
@@ -19,6 +20,9 @@ $app->use( cors() );
 $repositorioAlunos = new RepositorioAlunosEmBDR($pdo);
 $repositorioPerguntas = new RepositorioPerguntasEmBDR($pdo);
 $repositorioCursos = new RepositorioCursosEmBDR($pdo);
+$repositorioCredenciais = new RepositorioCredenciaisEmBDR($pdo);
+$repositorioProfessor = new RepositorioProfessoresEmBDR($pdo);
+$repositorioAdministrador = new RepositorioAdministradoresEmBDR($pdo);
 
 // Servicos
 $gestorCursos = new GestorCursos(
@@ -33,19 +37,25 @@ $gestorPerguntas = new GestorPerguntas(
     $repositorioPerguntas,
     $repositorioAlunos
 );
+$gestorCredenciais = new GestorCredenciais(
+    $repositorioCredenciais,
+    $repositorioAlunos,
+    $repositorioProfessor,
+    $repositorioAdministrador
+);
 
 // Rotas
 // Rotas de Cursos
 $app->route('/cursos')
 
     ->get( '/', function( HttpRequest $req, HttpResponse $res ) use ( $gestorCursos ) {
-    try {
-        $filtro = $_GET['busca'] ?? '';
-        $resultado = $gestorCursos->listarCursos($filtro);
-        $res->status( 200 )->json( $resultado );
-    } catch ( RepositorioException $e ) {
-        $res->status( 500 )->json( $e->getMessage());
-    }
+        try {
+            $filtro = $_GET['busca'] ?? '';
+            $resultado = $gestorCursos->listarCursos($filtro);
+            $res->status( 200 )->json( $resultado );
+        } catch ( RepositorioException $e ) {
+            $res->status( 500 )->json( $e->getMessage());
+        }
 } );
 
 // Rotas de Alunos
@@ -114,5 +124,34 @@ $app->route('/respostasAluno')
             $res->status( 500 )->json( $e->getMessage());
         }
     });
+
+// Rotas de usuarios
+$app->route('/usuarios')
+
+    ->get( '/', function( HttpRequest $req, HttpResponse $res ) use ( $gestorCredenciais ) {
+
+        try {
+            $resultado = $gestorCredenciais->listarUsuarios();
+            $res->status( 200 )->json( $resultado );
+        } catch ( RepositorioException $e ) {
+            $res->status( 500 )->json( $e->getMessage());
+        }
+    })
+
+    ->post('/', function(HttpRequest $req, HttpResponse $res) use ($gestorCredenciais){
+        
+        try {
+            $body = (array) $req->body();
+            $resultado = $gestorCredenciais->criarUsuario(UsuarioCadastroDTO::deArray($body));
+            $res->status(201)->json(['Sucesso']);
+        } catch ( NaoEncontradoException $e ) {
+            $res->status( 404 )->json( ['erros' => $e->getProblemas()]);
+        } catch ( DominioException $e ) {
+            $res->status( 400 )->json( ['erros' => $e->getProblemas()]);
+        } catch ( RepositorioException $e ) {
+            $res->status( 500 )->json( $e->getMessage());
+        }
+    });
+
 
 $app->listen(); 

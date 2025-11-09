@@ -164,4 +164,21 @@ class RepositorioAlunosEmBDR implements RepositorioAlunos{
         }    
     }
 
+    public function adicionar(Aluno $aluno): int {
+        try{
+            $ps = $this->pdo->prepare(
+            'insert into aluno (id_credenciais, nome) 
+                values (:idCredenciais, :nome)'
+            );
+            $ps->execute([
+                'idCredenciais' => $aluno->getCredenciais()->getId(),
+                'nome' => $aluno->getNome()
+            ]);
+            $idAluno = $this->pdo->lastInsertId();
+
+            return $idAluno;
+        } catch (PDOException $e){
+            throw new RepositorioException ($e->getMessage());
+        }    
+    }
 }

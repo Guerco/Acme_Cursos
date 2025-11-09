@@ -58,4 +58,11 @@ interface RepositorioAlunos {
      * @return void
      */
     public function incrementarPontuacaoCurso(int $idAluno, int $idCurso, float $valor) : void;
+
+    /**
+     * Cria um aluno
+     * @param Aluno $aluno
+     * @return int
+     */
+    public function adicionar(Aluno $aluno): int;
 }

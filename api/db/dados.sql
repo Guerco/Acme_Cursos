@@ -4,7 +4,12 @@ INSERT INTO credenciais (id, email, senha) VALUES
     (2, 'maria.aluno@cefet.com', '123'),
     (3, 'bob.aluno@cefet.com', '123'),
     (4, 'ana.aluno@cefet.com', '123'),
-    (5, 'aluno2@email.com', '123');
+    (5, 'aluno2@email.com', '123'),
+    (6, 'professor1@email.com', '123'),
+    (7, 'professor2@cefet.com', '123'),
+    (8, 'professor3@cefet.com', '123'),
+    (9, 'professor4@cefet.com', '123'),
+    (10, 'administrador1@cefet.com', '123');
 
 -- Alunos
 INSERT INTO aluno (id, id_credenciais, nome) VALUES
@@ -14,11 +19,11 @@ INSERT INTO aluno (id, id_credenciais, nome) VALUES
     (4, 4, 'Ana Clara de Oliveira'),
     (5, 5, 'Aluno 2');
 -- Professores
-INSERT INTO professor (id, nome) VALUES
-    (1, 'Rosa Maria da Silva'),
-    (2, 'Cerginho da Pereira Nunes'),
-    (3, 'Cleber Breno Souza'),
-    (4, 'Amauricio');
+INSERT INTO professor (id, id_credenciais, nome) VALUES
+    (1, 6,'Rosa Maria da Silva'),
+    (2, 7,'Cerginho da Pereira Nunes'),
+    (3, 8,'Cleber Breno Souza'),
+    (4, 9,'Amauricio');
 
 -- Cursos
 INSERT INTO curso (id, id_professor, descricao, caminho_img) VALUES
@@ -75,3 +80,8 @@ SET
 where 1;
 
 INSERT INTO resposta_aluno(id, id_aluno, id_pergunta, resposta_correta) VALUES (1, 5, 4, false);
+
+-- Administrador
+INSERT INTO administrador (id, id_credenciais, nome) VALUES
+    (1, 10,'Roberto Rodrigues de Paula');
+
