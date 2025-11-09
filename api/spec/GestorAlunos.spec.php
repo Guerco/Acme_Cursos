@@ -29,7 +29,7 @@ describe('GestorAlunos', function (): void {
             );
 
             $dados['email'] = 'aluno@email.com';
-            $dados['senha'] = '123';
+            $dados['senha'] = '123456';
             $resultado      = $this->gestorAlunos->verificarCredenciais($dados);
             expect($resultado)->toBeAn('object');
             expect($resultado)->not->toBe(0);
@@ -37,7 +37,7 @@ describe('GestorAlunos', function (): void {
         });
 
         it('lança uma exceção ao informar um email inválido', function (): void {
-            $credenciaisInválidas = ['email' => 'email_invalido', 'senha' => 'senha'];
+            $credenciaisInválidas = ['email' => 'email_invalido', 'senha' => '123456'];
 
             expect(function () use ($credenciaisInválidas): void {
                 $this->gestorAlunos->verificarCredenciais($credenciaisInválidas);
@@ -125,7 +125,7 @@ describe('GestorAlunos', function (): void {
             allow($this->repositorioTestePerguntas)->toReceive('buscarCursoEDificuldadePeloID')->andReturn(['idCurso'=>1, 'dificuldade'=>'facil']);
             $respostaAluno = RespostaAlunoCadastroDTO::deArray(
                 [
-                    'credenciaisAluno' => ['email' => 'aluno@email.com', 'senha' => 'senha'], 
+                    'credenciaisAluno' => ['email' => 'aluno@email.com', 'senha' => '123456'], 
                     'idPergunta' => 1, 
                     'idsRespostas' => [0, 1, 2, 3]
                 ]
@@ -150,7 +150,7 @@ describe('GestorAlunos', function (): void {
             allow($this->repositorioTestePerguntas)->toReceive('buscarCursoEDificuldadePeloID')->andReturn(['idCurso'=>1, 'dificuldade'=>'facil']);
             $respostaAluno = RespostaAlunoCadastroDTO::deArray(
                 [
-                    'credenciaisAluno' => ['email' => 'aluno@email.com', 'senha' => 'senha'], 
+                    'credenciaisAluno' => ['email' => 'aluno@email.com', 'senha' => '123456'], 
                     'idPergunta' => 1, 
                     'idsRespostas' => [0, 1, 2, 3]
                 ]

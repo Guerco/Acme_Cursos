@@ -126,6 +126,27 @@
 
             ALTER TABLE resposta_aluno
             ADD UNIQUE KEY unica_aluno_curso (id_aluno, id_pergunta);
+
+            ALTER TABLE credenciais 
+            ADD COLUMN salSenha VARCHAR(100);
+
+            ALTER TABLE professor
+            ADD COLUMN id_credenciais INT
+            AFTER id;
+
+            ALTER TABLE professor 
+            ADD FOREIGN KEY (id_credenciais) 
+            REFERENCES credenciais(id);
+
+            CREATE TABLE IF NOT EXISTS administrador(
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            id_credenciais INT,
+            nome VARCHAR(100) NOT NULL,
+            FOREIGN KEY (id_credenciais) REFERENCES credenciais(id)
+            ) ENGINE=INNODB;
+
+            ALTER TABLE pergunta
+            ADD column ultimaAtualizacao DATETIME;
         SQL;
 
         $ps = $pdo->prepare($sql);
@@ -140,19 +161,26 @@
                 (1, 'aluno@email.com', '123'),
                 (2, 'maria.aluno@cefet.com', '123'),
                 (3, 'bob.aluno@cefet.com', '123'),
-                (4, 'ana.aluno@cefet.com', '123');
+                (4, 'ana.aluno@cefet.com', '123'),
+                (5, 'aluno2@email.com', '123'),
+                (6, 'professor1@email.com', '123'),
+                (7, 'professor2@cefet.com', '123'),
+                (8, 'professor3@cefet.com', '123'),
+                (9, 'professor4@cefet.com', '123'),
+                (10, 'administrador1@cefet.com', '123');
 
             INSERT INTO aluno (id, id_credenciais, nome) VALUES
                 (1, 1, 'Aluno'),
                 (2, 2, 'Maria de Souza Alvez'),
                 (3, 3, 'Bob Ernesto Pereira'),
-                (4, 4, 'Ana Clara de Oliveira');
+                (4, 4, 'Ana Clara de Oliveira'),
+                (5, 5, 'Aluno 2');
 
-            INSERT INTO professor (id, nome) VALUES
-                (1, 'Rosa Maria da Silva'),
-                (2, 'Cerginho da Pereira Nunes'),
-                (3, 'Cleber Breno Souza'),
-                (4, 'Amaurício');
+            INSERT INTO professor (id, id_credenciais, nome) VALUES
+                (1, 6,'Rosa Maria da Silva'),
+                (2, 7,'Cerginho da Pereira Nunes'),
+                (3, 8,'Cleber Breno Souza'),
+                (4, 9,'Amaurício');
 
             INSERT INTO curso (id, id_professor, descricao, caminho_img) VALUES
                 (1, 1, 'Microsoft Excel Intermediário', '1.jpg'),
@@ -203,6 +231,9 @@
                 (1,1,1,10),
                 (2,2,1,0),
                 (3,3,2,5);
+
+            INSERT INTO administrador (id, id_credenciais, nome) VALUES
+                (1, 10,'Roberto Rodrigues de Paula');
         SQL;
 
         $ps = $pdo->prepare($sql);
