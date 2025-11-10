@@ -1,5 +1,6 @@
 import { rotasApi, rotasJsonServer } from "../../rotas";
 import { CursoListagem } from "../dto/CursoListagem";
+import { CursoListagemResumo } from "../dto/CursoListagemResumo";
 import { RepositorioCursos } from "./RepositorioCursos";
 
 
@@ -32,4 +33,10 @@ export class RepositorioCursosApi implements RepositorioCursos  {
             throw new Error('Não foi possível buscar os cursos filtrados.');
         }
     }
+
+    async buscarResumidoPorIdProfessor(idProfessor : number) : Promise<CursoListagemResumo[]>{
+        const dados = [] as CursoListagemResumo[];
+        return dados;
+    }
+    
 }

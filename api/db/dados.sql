@@ -47,11 +47,11 @@ INSERT INTO assunto (id, id_curso, descricao) VALUES
 (9, 6, 'Introdução a Hardware');
 
 -- Perguntas
-INSERT INTO pergunta (id, id_assunto, descricao, caminho_img, tempo_seg, dificuldade) VALUES
-(1, 3, 'Quanto é 1 + 1?', 'imagem-padrao.png', 60, 'dificil'),
-(2, 3, 'Qual é o resultado de 5 + (-3)?', NULL, 40, 'medio'),
-(3, 3, '10 + 10 é igual a:', NULL, 30, 'facil'),
-(4, 4, 'Quanto é 2/3 + 1/6?', NULL, 30, 'medio');
+INSERT INTO pergunta (id, id_assunto, descricao, caminho_img, tempo_seg, dificuldade, ultima_atualizacao) VALUES
+(1, 3, 'Quanto é 1 + 1?', 'imagem-padrao.png', 60, 'dificil', NOW()),
+(2, 3, 'Qual é o resultado de 5 + (-3)?', NULL, 40, 'medio', NOW()),
+(3, 3, '10 + 10 é igual a:', NULL, 30, 'facil', NOW()),
+(4, 4, 'Quanto é 2/3 + 1/6?', NULL, 30, 'medio', NOW());
 
 -- Respostas das perguntas
 INSERT INTO resposta_pergunta (id, id_pergunta, descricao, correta) VALUES

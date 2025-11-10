@@ -1,9 +1,9 @@
 export class UtilDOM {
-    static cria(nomeElemento: string) : HTMLElement{
+    static cria(nomeElemento: string): HTMLElement {
         return document.createElement(nomeElemento);
     }
 
-    static criaComClasses(nomeElemento: string, classes: Array<string>){
+    static criaComClasses(nomeElemento: string, classes: Array<string>) {
         const elemento = this.cria(nomeElemento);
         for (const c of classes) {
             elemento.classList.add(c.replace('.', ''));
@@ -17,21 +17,29 @@ export class UtilDOM {
         return elemento;
     }
 
-    static criaImg(src: string){
+    static criaImg(src: string) {
         const img = this.cria('img') as HTMLImageElement;
         img.src = src;
         return img;
     }
 
-    static criaComTextoEClasses(nomeElemento: string, texto: string, classes:Array<string>) {
+    static criaComTextoEClasses(nomeElemento: string, texto: string, classes: Array<string>) {
         const elemento = this.criaComClasses(nomeElemento, classes);
         elemento.textContent = texto;
         return elemento;
     }
 
-    static criaFragmentoComElementos(elementos: Array<HTMLElement>):DocumentFragment{
+    static criaFragmentoComElementos(elementos: Array<HTMLElement>): DocumentFragment {
         const fragment = document.createDocumentFragment();
         fragment.append(...elementos);
         return fragment;
     }
+
+    static criaSelectOption(valor: string, conteudo: string) {
+        const option = this.cria("option") as HTMLOptionElement;
+        option.value = valor;
+        option.textContent = conteudo;
+        return option;
+    }
+
 }

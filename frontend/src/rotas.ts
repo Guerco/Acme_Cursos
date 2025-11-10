@@ -18,9 +18,12 @@ export const rotasPaginas = {
     listagemCursos: BASE_URL_WEB,
     quiz: BASE_URL_WEB+'pages/quiz.html',
     erro: BASE_URL_WEB+'pages/erro.html',
+    cadastroPerguntas: BASE_URL_WEB+'pages/cadastro-perguntas.html',
 };
 
 export const rotasJsonServer = {
     index: BASE_URL_JSON_SERVER,
     cursos: BASE_URL_JSON_SERVER+'cursos/',
+    professores: BASE_URL_JSON_SERVER+'professores/',
+    perguntas: BASE_URL_JSON_SERVER+'perguntas/',
 }

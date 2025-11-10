@@ -102,4 +102,4 @@ CREATE TABLE IF NOT EXISTS administrador(
 ) ENGINE=INNODB;
 
 ALTER TABLE pergunta
-ADD column ultimaAtualizacao DATETIME;
+ADD column ultima_atualizacao DATETIME;

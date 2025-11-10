@@ -1,0 +1,258 @@
+import { ProfessorListagem } from "../model/dto/ProfessorListagem";
+import { ControladoraCadastroPerguntas } from "../presenter/ControladoraCadastroPerguntas";
+import { UtilDOM } from "../util/UtilDOM";
+import { VisaoCadastroPerguntas } from "./VisaoCadastroPerguntas";
+import { classes, classesCss, ids, names } from "../ui/cadastro-perguntas-ui.ts";
+import { CursoListagemResumo } from "../model/dto/CursoListagemResumo.ts";
+import { AssuntoListagem } from "../model/dto/AssuntoListagem.ts";
+import { PerguntaCadastro } from "../model/dto/PerguntaCadastro.ts";
+import { Base64 } from "../util/Base64";
+import { RespostaPerguntaCadastro } from "../model/dto/RespostaPerguntaCadastro.ts";
+import { rotasPaginas } from "../rotas.ts";
+
+export class VisaoCadastroPerguntasDOM implements VisaoCadastroPerguntas {
+    private controladora: ControladoraCadastroPerguntas;
+    private selectProfessor!: HTMLSelectElement;
+    private selectCurso!: HTMLSelectElement;
+    private selectAssunto!: HTMLSelectElement;
+    private botaoAdicionarResposta!: HTMLButtonElement;
+    private botaoRemoverResposta!: HTMLButtonElement;
+    private respostas!: HTMLDivElement[];
+    private caixasCorreta!: HTMLInputElement[];
+    private textDescricao!: HTMLTextAreaElement;
+    private selectDificuldade!: HTMLSelectElement;
+    private inputFigura!: HTMLInputElement;
+    private formCadastro!: HTMLFormElement;
+    private mensagemErro!: HTMLOutputElement;
+    private divCadastro!: HTMLDivElement;
+
+    constructor() {
+        this.controladora = new ControladoraCadastroPerguntas(this);
+    }
+
+    async iniciar(): Promise<void> {
+        this.carregarElementos();
+
+        await this.controladora.carregarProfessores();
+
+        this.selectProfessor.addEventListener('change', async () => {
+            if (this.selectProfessor.value) {
+                this.controladora.limparAssuntos();
+                await this.controladora.carregarCursos();
+            }
+        });
+
+        this.selectCurso.addEventListener('change', async () => {
+            if (this.selectCurso.value)
+                await this.controladora.carregarAssuntos();
+        });
+
+        this.botaoAdicionarResposta.addEventListener('click', () => {
+            this.controladora.adicionarResposta();
+        });
+
+        this.botaoRemoverResposta.addEventListener('click', () => {
+            this.controladora.removerResposta();
+        });
+
+        this.caixasCorreta.forEach(c => c.addEventListener('click', (e) => {
+            this.controladora.alternarRespostaCorreta(e);
+        }));
+
+        this.formCadastro.addEventListener('submit', async (e) => {
+            await this.controladora.salvarPergunta(e);
+        });
+    }
+
+    // Métodos de Entrada
+    buscarIdProfessorSelecionado(): number {
+        return Number(this.selectProfessor.value);
+    }
+
+    buscarIdCursoSelecionado(): number {
+        return Number(this.selectCurso.value);
+    }
+
+    buscarQtdRespostas(): number {
+        return this.respostas.filter(r => !r.hidden).length;
+    }
+
+    buscarQtdRespostasCorretas(): number {
+        return this.caixasCorreta.filter(c => (!c.disabled && c.checked)).length;
+    }
+
+    async buscarDadosPergunta(): Promise<PerguntaCadastro> {
+        const idAssunto = Number(this.selectAssunto.value);
+        const descricao = this.textDescricao.value.trim();
+        const dificuldade = this.selectDificuldade.value;
+
+        const respostas = [] as RespostaPerguntaCadastro[];
+
+        this.respostas.filter(r => !r.hidden).forEach((r, i) => {
+            const caixaCorreto = r.querySelector('input[type="checkbox"]') as HTMLInputElement;
+            const inputDescricao = r.querySelector('input[type="text"]') as HTMLInputElement;
+
+            respostas.push(new RespostaPerguntaCadastro(
+                caixaCorreto.checked,
+                inputDescricao.value.trim()
+            ));
+        });
+
+        let figuraBase64 = null;
+        if (this.inputFigura.files && this.inputFigura.files.length > 0) {
+            const arquivoFigura = this.inputFigura.files[0];
+            const formatosAceitos = ["image/png", "image/jpeg"];
+
+            if (!formatosAceitos.includes(arquivoFigura.type)) {
+                throw new Error("Formato de imagem inválido.");
+            }
+
+            const dataURL = await Base64.blobToDataURL(arquivoFigura);
+            figuraBase64 = Base64.extractBase64FromDataURL(dataURL);
+        }
+
+        const pergunta = new PerguntaCadastro(
+            idAssunto,
+            descricao,
+            dificuldade,
+            respostas,
+            figuraBase64
+        );
+
+        return pergunta;
+    }
+
+
+    // Métodos de Saída
+    preencherListaProfessores(professores: ProfessorListagem[]): void {
+        const opcaoPadrao = this.selectProfessor.querySelector('option[value=""]') as HTMLOptionElement;
+
+        const opcoesProfessor = [opcaoPadrao!];
+        for (const p of professores) {
+            opcoesProfessor.push(UtilDOM.criaSelectOption(String(p.id), p.nome));
+        }
+        const frag = UtilDOM.criaFragmentoComElementos(opcoesProfessor);
+
+        this.selectProfessor.innerHTML = '';
+        this.selectProfessor.appendChild(frag);
+    }
+
+    preencherListaCursos(cursos: CursoListagemResumo[]): void {
+        const opcaoPadrao = this.selectCurso.querySelector('option[value=""]') as HTMLOptionElement;
+
+        const opcoesCurso = [opcaoPadrao!];
+        for (const c of cursos) {
+            opcoesCurso.push(UtilDOM.criaSelectOption(String(c.id), c.descricao));
+        }
+        const frag = UtilDOM.criaFragmentoComElementos(opcoesCurso);
+
+        this.selectCurso.innerHTML = '';
+        this.selectCurso.appendChild(frag);
+    }
+
+    habilitarSelecaoCursos(): void {
+        this.selectCurso.removeAttribute('disabled');
+        this.selectCurso.value = "";
+    }
+
+    preencherListaAssuntos(cursos: AssuntoListagem[]): void {
+        const opcaoPadrao = this.selectAssunto.querySelector('option[value=""]') as HTMLOptionElement;
+
+        const opcoesAssunto = [opcaoPadrao!];
+        for (const c of cursos) {
+            opcoesAssunto.push(UtilDOM.criaSelectOption(String(c.id), c.descricao));
+        }
+        const frag = UtilDOM.criaFragmentoComElementos(opcoesAssunto);
+
+        this.selectAssunto.innerHTML = '';
+        this.selectAssunto.appendChild(frag);
+    }
+
+    habilitarSelecaoAssuntos(): void {
+        this.selectAssunto.removeAttribute('disabled');
+        this.selectAssunto.value = "";
+    }
+
+    desabilitarSelecaoAssuntos(): void {
+        this.selectAssunto.setAttribute('disabled', 'true');
+        this.selectAssunto.value = "";
+    }
+
+    habilitarProximaResposta(): void {
+        const proximaInvisivel = this.respostas.find(r => r.hidden);
+        if (proximaInvisivel) {
+            proximaInvisivel.hidden = false;
+            (proximaInvisivel.querySelectorAll('input')).forEach(i => i.disabled = false);
+        }
+    }
+
+    atualizarBotoesRespostas(): void {
+        const qtdVisiveis = this.respostas.filter(r => !r.hidden).length;
+        this.botaoAdicionarResposta.disabled = (qtdVisiveis >= this.respostas.length);
+        this.botaoRemoverResposta.disabled = (qtdVisiveis <= 2);
+    }
+
+    desabilitarUltimaResposta(): void {
+        const ultimaVisivel = this.respostas.findLast(r => !r.hidden);
+        if (ultimaVisivel) {
+            ultimaVisivel.hidden = true;
+            (ultimaVisivel.querySelectorAll('input')).forEach(i => {
+                i.disabled = true;
+                if (i.type === 'checkbox') i.checked = false;
+            });
+        }
+    }
+
+    desmarcarTodasRespostasCorretas(): void {
+        this.caixasCorreta.forEach(c => c.checked = false)
+    }
+
+    marcarRespostaCorreta(caixaCorreta: HTMLInputElement) {
+        caixaCorreta.checked = true;
+    };
+
+    desmarcarUltimaRespostaCorreta(): void {
+        (this.caixasCorreta.findLast(c => c.checked) as HTMLInputElement).checked = false;
+    }
+
+    desmarcarRespostaCorreta(caixaCorreta: HTMLInputElement) {
+        caixaCorreta.checked = false;
+    };
+
+    marcarPrimeiraRespostaCorreta(): void {
+        this.caixasCorreta[0].checked = true;
+    }
+
+    exibirMensagemErro(mensagem: string): void {
+        this.mensagemErro.value = mensagem;
+    }
+
+    exibirMensagemSucesso(): void {
+        const container = UtilDOM.criaComClasses('div', ['container-sucesso']);
+        const mensagem = UtilDOM.criaComTextoEClasses('output', 'Pergunta cadastrada com sucesso!', ['mensagem-sucesso']);
+        const botaoVoltar = UtilDOM.criaComTextoEClasses('button', 'Voltar à Listagem', ['botao-voltar']);
+        botaoVoltar.onclick = () => {
+            window.location.href = rotasPaginas.listagemCursos;
+        };
+        container.append(mensagem, botaoVoltar);
+        this.divCadastro.innerHTML = '';
+        this.divCadastro.append(container);
+    }
+
+    // Auxiliares
+    private carregarElementos() {
+        this.selectProfessor = document.getElementById(ids.selectProfessor) as HTMLSelectElement;
+        this.selectCurso = document.getElementById(ids.selectCurso) as HTMLSelectElement;
+        this.selectAssunto = document.getElementById(ids.selectAssunto) as HTMLSelectElement;
+        this.botaoAdicionarResposta = document.getElementById(ids.botaoAdicionarResposta) as HTMLButtonElement;
+        this.botaoRemoverResposta = document.getElementById(ids.botaoRemoverResposta) as HTMLButtonElement;
+        this.respostas = Array.from(document.getElementsByClassName(classes.resposta)) as HTMLDivElement[];
+        this.caixasCorreta = Array.from(document.getElementsByName(names.respostaCorreta)) as HTMLInputElement[];
+        this.textDescricao = document.getElementById(ids.campoDescricao) as HTMLTextAreaElement;
+        this.selectDificuldade = document.getElementById(ids.selectDificuldade) as HTMLSelectElement;
+        this.inputFigura = document.getElementById(ids.inputFigura) as HTMLInputElement;
+        this.formCadastro = document.getElementById(ids.formCadastro) as HTMLFormElement;
+        this.mensagemErro = document.getElementById(ids.mensagemCadastro) as HTMLOutputElement;
+        this.divCadastro = document.getElementById(ids.cadastro) as HTMLDivElement;
+    }
+}

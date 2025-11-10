@@ -1,52 +1,106 @@
 {
   "cursos": [
     {
-      "id": 1,
-      "caminhoImg": "imagem-padrao.png",
-      "descricao": "Matemática",
-      "nomeProfessor": "Juvenal",
+      "id": "1",
+      "caminhoImg": "1.jpg",
+      "descricao": "Microsoft Excel Intermediário",
+      "nomeProfessor": "Rosa Maria da Silva",
       "assuntos": [
         {
           "id": 1,
-          "descricao": "Soma"
+          "descricao": "Gráficos"
         },
         {
           "id": 2,
-          "descricao": "Divisão"
-        },
-        {
-          "id": 3,
-          "descricao": "Multiplicação"
+          "descricao": "Automatização de Planilhas"
         }
       ]
     },
     {
-      "id": 2,
-      "caminhoImg": "imagem-padrao.png",
-      "descricao": "História",
-      "nomeProfessor": "Amaurício",
+      "id": "2",
+      "caminhoImg": "2.jpg",
+      "descricao": "Matemática Básica",
+      "nomeProfessor": "Rosa Maria da Silva",
       "assuntos": [
         {
-          "id": 4,
-          "descricao": "Império Brasileiro"
+          "id": 3,
+          "descricao": "Soma"
         },
         {
-          "id": 5,
-          "descricao": "Primeira Guerra"
+          "id": 4,
+          "descricao": "Frações"
         }
       ]
     },
     {
-      "id": 3,
+      "id": "3",
+      "caminhoImg": "3.jpg",
+      "descricao": "Modelagem de dados",
+      "nomeProfessor": "Cerginho da Pereira Nunes",
+      "assuntos": [
+        {
+          "id": 5,
+          "descricao": "Diagrama de Classes"
+        }
+      ]
+    },
+    {
+      "id": "4",
+      "caminhoImg": "4.jpg",
+      "descricao": "Modelando dados no Power BI",
+      "nomeProfessor": "Cerginho da Pereira Nunes",
+      "assuntos": []
+    },
+    {
+      "id": "5",
       "caminhoImg": "imagem-padrao.png",
       "descricao": "Geografia",
-      "nomeProfessor": "Selverson",
+      "nomeProfessor": "Cleber Breno Souza",
       "assuntos": [
         {
           "id": 6,
-          "descricao": "Brasil"
+          "descricao": "Relevo"
+        },
+        {
+          "id": 7,
+          "descricao": "Bacias Hidrográficas"
+        },
+        {
+          "id": 8,
+          "descricao": "Regiões do Brasil"
+        }
+      ]
+    },
+    {
+      "id": "6",
+      "caminhoImg": "5.jpg",
+      "descricao": "Fundamentos de TI: Hardware e Software",
+      "nomeProfessor": "Amauricio",
+      "assuntos": [
+        {
+          "id": 9,
+          "descricao": "Introdução a Hardware"
         }
       ]
     }
-  ]
+  ],
+  "professores": [
+    {
+      "id": "1",
+      "nome": "Rosa Maria da Silva"
+    },
+    {
+      "id": "2",
+      "nome": "Cerginho da Pereira Nunes"
+    },
+    {
+      "id": "3",
+      "nome": "Cleber Breno Souza"
+    },
+    {
+      "id": "4",
+      "nome": "Amauricio"
+    }
+  ],
+  "perguntas": []
 }
