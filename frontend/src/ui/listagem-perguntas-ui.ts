@@ -19,8 +19,9 @@ export const classes = {
     tituloDescricaoResposta: 'titulo-descricao-resposta',
     respostaCorreta: 'resposta-correta',
     linhaResposta: 'tr-resposta',
-    cursoAcoes: 'curso-acoes',
+    perguntaAcoes: 'pergunta-acoes',
     botaoExibirRespostas: 'botao-exibir-resposta',
+    detalhesPergunta: 'detalhes-pergunta'
 };
 
 export const idsCss = Object.fromEntries(

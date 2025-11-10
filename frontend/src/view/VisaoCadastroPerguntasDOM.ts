@@ -25,6 +25,7 @@ export class VisaoCadastroPerguntasDOM implements VisaoCadastroPerguntas {
     private formCadastro!: HTMLFormElement;
     private mensagemErro!: HTMLOutputElement;
     private divCadastro!: HTMLDivElement;
+    private inputTempoSeg!: HTMLInputElement;
 
     constructor() {
         this.controladora = new ControladoraCadastroPerguntas(this);
@@ -85,6 +86,7 @@ export class VisaoCadastroPerguntasDOM implements VisaoCadastroPerguntas {
         const idAssunto = Number(this.selectAssunto.value);
         const descricao = this.textDescricao.value.trim();
         const dificuldade = this.selectDificuldade.value;
+        const tempoSeg = Number(this.inputTempoSeg.value);
 
         const respostas = [] as RespostaPerguntaCadastro[];
 
@@ -115,6 +117,7 @@ export class VisaoCadastroPerguntasDOM implements VisaoCadastroPerguntas {
             idAssunto,
             descricao,
             dificuldade,
+            tempoSeg,
             respostas,
             figuraBase64
         );
@@ -254,5 +257,6 @@ export class VisaoCadastroPerguntasDOM implements VisaoCadastroPerguntas {
         this.formCadastro = document.getElementById(ids.formCadastro) as HTMLFormElement;
         this.mensagemErro = document.getElementById(ids.mensagemCadastro) as HTMLOutputElement;
         this.divCadastro = document.getElementById(ids.cadastro) as HTMLDivElement;
+        this.inputTempoSeg = document.getElementById(ids.inputTempoSeg) as HTMLInputElement;
     }
 }

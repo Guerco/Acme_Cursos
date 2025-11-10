@@ -1,0 +1,132 @@
+* {
+    margin: 0;
+    box-sizing: border-box;
+}
+
+body {
+    margin-top: 70px;
+}
+
+/* ========================================================== */
+/* Estilos do Header */
+header {
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+}
+
+.cabecalho {
+    background-color: #820ec0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 10vh;
+    width: 100%;
+    height: 60px;
+    color: white;
+}
+
+.cabecalho .logotipo {
+    height: 50px;
+    width: auto;
+    cursor: pointer;
+}
+
+.cabecalho .icone {
+    height: 35px;
+    width: auto;
+    cursor: pointer;
+}
+
+.botao-menu {
+    background-color: #ffffff6b;
+    border-radius: 5px;
+    border: none;
+    padding: 4px 8px;
+    cursor: pointer;
+    height: 30px;
+    font-size: larger;
+}
+
+/* ========================================================== */
+/* Estilos do Menu Lateral */
+.menu-lateral {
+    position: fixed;
+    top: 0;
+    left: 0;
+    left: -300px;
+    width: 300px;
+    height: 100%;
+    background-color: #650996;
+    color: white;
+    padding: 20px;
+    transition: 0.1s;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    scrollbar-color: #ffffff18 transparent;
+}
+
+.menu-lateral .logotipo {
+    height: 50px;
+    width: auto;
+    cursor: pointer;
+    margin: 0 auto;
+}
+
+.menu-lateral.visivel {
+    left: 0;
+}
+
+.menu-lateral a {
+    text-decoration: none;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    display: block;
+    transition: 0.3s;
+}
+
+.menu-lateral a:hover {
+    background-color: #ffffff10;
+}
+
+body.menu-aberto {
+    overflow: hidden;
+}
+
+/* ========================================================== */
+/* Estilos específicos para telas menores */
+@media (max-width: 575px) {
+    .cabecalho {
+        height: 60px;
+        padding: 0px 40px;
+    }
+
+    .cabecalho .logotipo {
+        height: 40px;
+    }
+
+    .cabecalho .icone {
+        height: 30px;
+    }
+
+    .menu-lateral {
+        gap: 20px;
+    }
+
+    .menu-lateral.visivel {
+        width: 100%;
+        color: white;
+        padding: 20px 50px;
+    }
+
+    .menu-lateral .logotipo {
+        margin-bottom: 30px;
+        height: 100px;
+    }
+
+}

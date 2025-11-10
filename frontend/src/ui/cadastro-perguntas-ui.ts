@@ -10,6 +10,7 @@ export const ids = {
     formCadastro: 'form-cadastro',
     mensagemCadastro: 'mensagem-cadastro',
     cadastro: 'cadastro',
+    inputTempoSeg: 'tempo-segundos',
 };
 
 export const classes = {

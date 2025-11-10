@@ -1,31 +1,30 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Quiz - Cursos</title>
 
-    <script type="module" src="./src/index.ts"></script>
-    <link rel="stylesheet" href="./style/index.css" />
-    <link rel="icon" href="./img/favicon.ico">
-  </head>
-  <body>
-    <header>
-      <img src="./img/logotipo.png" alt="Logotipo do Site" class="logotipo" />
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quiz - Cursos</title>
 
+  <script type="module" src="./src/index.ts"></script>
+  <link rel="stylesheet" href="./style/index.css" />
+  <link rel="stylesheet" href="./style/menu.css" />
+  <link rel="icon" href="./img/favicon.ico">
+</head>
+
+<body>
+  <header>  
+    <div class="container-busca">
       <form id="form-busca">
-        <label for="input-busca"> </label>
-        <input
-          type="search"
-          id="input-busca"
-          placeholder="Busque por nome do curso ou professor"
-        />
+        <input type="search" id="input-busca" placeholder="Busque por nome do curso ou professor" />
         <button>🔍</button>
       </form>
-    </header>
+    </div>
+  </header>
 
-    <output id="mensagem"></output>
+  <output id="mensagem"></output>
 
-    <section id="secao-cursos"></section>
-  </body>
+  <section id="secao-cursos"></section>
+</body>
+
 </html>

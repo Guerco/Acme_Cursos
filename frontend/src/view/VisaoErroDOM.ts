@@ -1,6 +1,6 @@
 import { rotasPaginas } from "../rotas.ts";
 
-export class VisaoErro {
+export class VisaoErroDOM {
     private mensagemPadrao = 'Sentimos muito, ocorreu um problema inesperado...';
 
     iniciar() {

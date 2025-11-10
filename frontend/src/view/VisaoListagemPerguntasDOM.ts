@@ -70,22 +70,24 @@ export class VisaoListagemPerguntasDOM implements VisaoListagemPerguntas {
         const infoPergunta = UtilDOM.criaComClasses('div', [classes.infoPergunta]);
 
         const h2Descricao = UtilDOM.criaComTextoEClasses('h2', pergunta.descricao, [classes.descricaoPergunta]);
-        const pAssunto = UtilDOM.criaComTextoEClasses('p', `Assunto: ${pergunta.descricaoAssunto}`, [classes.descricaoAssunto]);
-        const pDificuldade = UtilDOM.criaComTextoEClasses('p', `Dificuldade: ${pergunta.dificuldade}`, [classes.dificuldade]);
-        const pTempo = UtilDOM.criaComTextoEClasses('p', `Tempo: ${pergunta.tempoSeg}s`, [classes.tempoSeg]);
-        const pUltimaAtualizacao = UtilDOM.criaComTextoEClasses('p', `Última Atualização: ${pergunta.ultimaAtualizacao}`, [classes.ultimaAtualizacao]);
 
-        infoPergunta.append(h2Descricao, pAssunto, pDificuldade, pTempo, pUltimaAtualizacao);
+        const divDetalhes = UtilDOM.criaComClasses('div', [classes.detalhesPergunta]);
+        const pAssunto = UtilDOM.criaComTextoEClasses('p', `💬 Assunto: ${pergunta.descricaoAssunto}`, [classes.descricaoAssunto]);
+        const pDificuldade = UtilDOM.criaComTextoEClasses('p', `🧠 Dificuldade: ${pergunta.dificuldade}`, [classes.dificuldade]);
+        const pTempo = UtilDOM.criaComTextoEClasses('p', `⌛ Tempo: ${pergunta.tempoSeg}s`, [classes.tempoSeg]);
+        const pUltimaAtualizacao = UtilDOM.criaComTextoEClasses('p', `🔄 Última Atualização: ${pergunta.ultimaAtualizacao}`, [classes.ultimaAtualizacao]);
+
+        divDetalhes.append(pAssunto, pDificuldade, pTempo, pUltimaAtualizacao);
+        infoPergunta.append(h2Descricao, divDetalhes);
 
         if (figura) containerPergunta.appendChild(figura);
         containerPergunta.appendChild(infoPergunta);
 
         const containerRespostas = UtilDOM.criaComClasses('div', [classes.containerRespostas]);
-        containerRespostas.appendChild(UtilDOM.criaComTexto('h3', 'Respostas'));
         containerRespostas.appendChild(this.respostasParaTabela(pergunta.respostas));
         containerRespostas.hidden = true;
 
-        const containerAcoes = UtilDOM.criaComClasses('div', [classes.cursoAcoes]);
+        const containerAcoes = UtilDOM.criaComClasses('div', [classes.perguntaAcoes]);
         const botaoExibirRespostas = UtilDOM.criaComTextoEClasses('button', 'exibir respostas', [classes.botaoExibirRespostas]);
         botaoExibirRespostas.addEventListener('click', this.alternarVisibilidadeRespostas);
         containerAcoes.appendChild(botaoExibirRespostas);
@@ -101,7 +103,7 @@ export class VisaoListagemPerguntasDOM implements VisaoListagemPerguntas {
         const thead = UtilDOM.cria('thead');
         const tr = UtilDOM.cria('tr');
 
-        const thDescricao = UtilDOM.criaComTextoEClasses('th', 'Descrição', [classes.tituloDescricaoResposta]);
+        const thDescricao = UtilDOM.criaComTextoEClasses('th', 'Resposta', [classes.tituloDescricaoResposta]);
         const thCorreta = UtilDOM.criaComTextoEClasses('th', 'Correta', [classes.tituloRespostaCorreta]);
 
         tr.appendChild(thDescricao);

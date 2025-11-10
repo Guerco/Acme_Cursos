@@ -56,7 +56,17 @@ export class ServicoCadastroPerguntas {
             return 'O enunciado deve ter no mínimo 10 caracteres.';
         }
         if (pergunta.descricao.length > 255) {
-            return 'DesO enunciadocrição deve ter no máximo 255 caracteres.';
+            return 'O enunciado deve ter no máximo 255 caracteres.';
+        }
+
+        if (!Number.isInteger(pergunta.tempoSeg)) {
+            return 'O tempo em segundos deve ser um número inteiro.';
+        }
+        if (pergunta.tempoSeg < 30) {
+            return 'O tempo em segundos deve ser no mínimo 30.';
+        }
+        if (pergunta.tempoSeg > 180) {
+            return 'O tempo em segundos deve ser no máximo 180.';
         }
 
         for (const resposta of pergunta.respostas) {
