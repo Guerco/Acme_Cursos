@@ -4,7 +4,7 @@ import { rotasApi, rotasJsonServer } from "../../rotas";
 import { PerguntaCadastro } from "../dto/PerguntaCadastro";
 
 const URL_API = rotasJsonServer.perguntas;
-
+const URL_API_LISTAGEM = rotasJsonServer.perguntasListagem;
 
 export class RepositorioPerguntasJsonServer implements RepositorioPerguntas {
 
@@ -30,4 +30,17 @@ export class RepositorioPerguntasJsonServer implements RepositorioPerguntas {
         }
     }
 
+    async buscarTodos() : Promise<PerguntaListagem[]> {
+        try {
+            const response = await fetch(URL_API_LISTAGEM);
+
+            if (!response.ok) {
+                throw new Error();
+            }
+
+            return await response.json();
+        } catch (err) {
+            throw new Error('Não foi possível buscar as perguntas.');
+        }
+    }
 }

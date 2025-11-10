@@ -11,7 +11,9 @@ export const rotasApi = {
         BASE_URL_API + 'assuntos/' + idAssunto + '/perguntas?id_aluno=' + idAluno,
     buscarPontuacao: ( idAluno: number, idCurso: number) =>
         BASE_URL_API + 'alunos/' + idAluno + '/pontuacaoCurso/?id_curso=' + idCurso,
-    enviarResposta: BASE_URL_API+'respostasAluno/'
+    enviarResposta: BASE_URL_API+'respostasAluno/',
+    imagensCursos: 'http://localhost:8080/img/cursos/',
+    imagensPerguntas: 'http://localhost:8080/img/perguntas/'
 };
 
 export const rotasPaginas = {
@@ -19,6 +21,7 @@ export const rotasPaginas = {
     quiz: BASE_URL_WEB+'pages/quiz.html',
     erro: BASE_URL_WEB+'pages/erro.html',
     cadastroPerguntas: BASE_URL_WEB+'pages/cadastro-perguntas.html',
+    listagemPerguntas: BASE_URL_WEB+'pages/listagem-perguntas.html',
 };
 
 export const rotasJsonServer = {
@@ -26,4 +29,5 @@ export const rotasJsonServer = {
     cursos: BASE_URL_JSON_SERVER+'cursos/',
     professores: BASE_URL_JSON_SERVER+'professores/',
     perguntas: BASE_URL_JSON_SERVER+'perguntas/',
+    perguntasListagem: BASE_URL_JSON_SERVER+'perguntasListagem/'
 }

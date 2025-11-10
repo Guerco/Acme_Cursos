@@ -24,4 +24,7 @@ export class RepositorioPerguntasApi implements RepositorioPerguntas {
         
     }
 
+    async buscarTodos() : Promise<PerguntaListagem[]> {
+        return [];
+    }
 }

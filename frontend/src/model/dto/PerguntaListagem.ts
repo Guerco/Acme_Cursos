@@ -1,13 +1,14 @@
-import { RespostaPerguntaListagem } from "./RespostaPerguntaListagem";
+import { RespostaPerguntaCadastro } from "./RespostaPerguntaCadastro";
 
-export class PerguntaListagem{
-        constructor (
-                public readonly id: number,
-                public readonly descricao: string,
-                public readonly caminhoImg: string,
-                public readonly tempoSeg : number,
-                public readonly dificuldade: string,
-                public readonly respostas: Array<RespostaPerguntaListagem>
-        ){}
-        
+export class PerguntaListagem {
+    constructor(
+        public readonly descricao: string,
+        public readonly caminhoImg: string|null,
+        public readonly tempoSeg: number,
+        public readonly dificuldade: string,
+        public readonly descricaoAssunto: string,
+        public readonly ultimaAtualizacao: string,
+        public readonly respostas: RespostaPerguntaCadastro[]
+    ) { }
+
 }

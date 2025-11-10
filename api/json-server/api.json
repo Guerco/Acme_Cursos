@@ -102,5 +102,117 @@
       "nome": "Amauricio"
     }
   ],
-  "perguntas": []
+  "perguntas": [],
+  "perguntasListagem": [
+    {
+      "descricao": "Quanto é 1 + 1?",
+      "caminhoImg": null,
+      "tempoSeg": 60,
+      "dificuldade": "Fácil",
+      "descricaoAssunto": "Soma",
+      "ultimaAtualizacao": "2025-11-09 14:30:00",
+      "respostas": [
+        {
+          "ehCorreta": true,
+          "descricao": "2"
+        },
+        {
+          "ehCorreta": false,
+          "descricao": "3"
+        },
+        {
+          "ehCorreta": false,
+          "descricao": "4"
+        }
+      ]
+    },
+    {
+      "descricao": "Quanto é 3 + 3?",
+      "caminhoImg": null,
+      "tempoSeg": 90,
+      "dificuldade": "Médio",
+      "descricaoAssunto": "Soma",
+      "ultimaAtualizacao": "2025-11-08 10:15:00",
+      "respostas": [
+        {
+          "ehCorreta": false,
+          "descricao": "5"
+        },
+        {
+          "ehCorreta": true,
+          "descricao": "6"
+        },
+        {
+          "ehCorreta": false,
+          "descricao": "7"
+        }
+      ]
+    },
+    {
+      "descricao": "Quanto é 7 + 5?",
+      "caminhoImg": "imagem-padrao.png",
+      "tempoSeg": 120,
+      "dificuldade": "Difícil",
+      "descricaoAssunto": "Soma",
+      "ultimaAtualizacao": "2025-11-07 16:45:00",
+      "respostas": [
+        {
+          "ehCorreta": false,
+          "descricao": "10"
+        },
+        {
+          "ehCorreta": false,
+          "descricao": "11"
+        },
+        {
+          "ehCorreta": true,
+          "descricao": "12"
+        }
+      ]
+    },
+    {
+      "descricao": "Quanto é 9 - 4?",
+      "caminhoImg": null,
+      "tempoSeg": 50,
+      "dificuldade": "Fácil",
+      "descricaoAssunto": "Subtração",
+      "ultimaAtualizacao": "2025-11-06 09:20:00",
+      "respostas": [
+        {
+          "ehCorreta": true,
+          "descricao": "5"
+        },
+        {
+          "ehCorreta": false,
+          "descricao": "6"
+        },
+        {
+          "ehCorreta": false,
+          "descricao": "4"
+        }
+      ]
+    },
+    {
+      "descricao": "Quanto é 8 × 3?",
+      "caminhoImg": "imagem-padrao.png",
+      "tempoSeg": 100,
+      "dificuldade": "Médio",
+      "descricaoAssunto": "Multiplicação",
+      "ultimaAtualizacao": "2025-11-05 13:10:00",
+      "respostas": [
+        {
+          "ehCorreta": false,
+          "descricao": "21"
+        },
+        {
+          "ehCorreta": true,
+          "descricao": "24"
+        },
+        {
+          "ehCorreta": false,
+          "descricao": "27"
+        }
+      ]
+    }
+  ]
 }

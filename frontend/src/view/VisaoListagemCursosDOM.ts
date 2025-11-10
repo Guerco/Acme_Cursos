@@ -4,9 +4,9 @@ import { ControladoraListagemCursos } from "../presenter/ControladoraListagemCur
 import { classes, ids } from "../ui/listagem-cursos-ui.ts";
 import { UtilDOM } from "../util/UtilDOM.ts";
 import { VisaoListagemCursos } from "./VisaoListagemCursos.ts";
-import { rotasPaginas } from "../rotas.ts";
+import { rotasApi, rotasPaginas } from "../rotas.ts";
 
-const DIRETORIO_IMAGENS = '../../img/cursos/';
+const DIRETORIO_IMAGENS = rotasApi.imagensCursos;
 
 export class VisaoListagemCursosDom implements VisaoListagemCursos{
     private controladora: ControladoraListagemCursos;

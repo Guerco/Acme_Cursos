@@ -1,6 +1,6 @@
 import { VisaoQuiz } from "./VisaoQuiz.ts";
 import { ControladoraQuiz } from "../presenter/ControladoraQuiz.ts";
-import { rotasPaginas } from "../rotas.ts";
+import { rotasApi, rotasPaginas } from "../rotas.ts";
 import { Credenciais } from "../model/dto/Credenciais.ts";
 import { PerguntaListagem } from "../model/dto/PerguntaListagem.ts";
 import { classes, ids } from "../ui/quiz-ui.ts";
@@ -8,7 +8,7 @@ import { UtilDOM } from "../util/UtilDOM.ts"
 import { Dificuldade, dificuldadeParaString, dificuldadeParaTextoValor, dificuldadeDeString, dificuldadeValor } from "../model/Dificuldade.ts";
 import { RespostaAlunoCadastro } from "../model/dto/RespostaAlunoCadastro.ts";
 
-const DIRETORIO_IMAGENS = '../../img/perguntas/';
+const DIRETORIO_IMAGENS = rotasApi.imagensPerguntas;
 
 export class VisaoQuizDOM implements VisaoQuiz {
     private controladora: ControladoraQuiz;
