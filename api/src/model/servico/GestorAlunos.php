@@ -21,27 +21,36 @@ class GestorAlunos {
     }
 
     public function salvarResposta(RespostaAlunoCadastroDTO $resposta): bool{ 
-        $this->validarSalvarResposta($resposta);
+        try {
+            GerenciadorDeTransacao::iniciar();
+
+            $this->validarSalvarResposta($resposta);
         
-        $credenciais = $this->validarCredenciais($resposta->credenciais);
+            $credenciais = $this->validarCredenciais($resposta->credenciais);
 
-        $aluno = $this->repositorioAlunos->existeComCredenciais($credenciais);
+            $aluno = $this->repositorioAlunos->existeComCredenciais($credenciais);
 
-        if(! ($aluno instanceof Aluno) ) throw new NaoEncontradoException('Credenciais inválidas.'); 
+            if(! ($aluno instanceof Aluno) ) throw new NaoEncontradoException('Credenciais inválidas.'); 
 
-        $pergunta = new Pergunta($resposta->idPergunta, null);
+            $pergunta = new Pergunta($resposta->idPergunta, null);
 
-        $acertou = empty($resposta->idsRespostas) ? false : $this->verificarRespostasCorretas($resposta->idPergunta, $resposta->idsRespostas); 
+            $acertou = empty($resposta->idsRespostas) ? false : $this->verificarRespostasCorretas($resposta->idPergunta, $resposta->idsRespostas); 
 
-        $respostaObj = new RespostaAluno($aluno, $pergunta, 0, $acertou);
+            $respostaObj = new RespostaAluno($aluno, $pergunta, 0, $acertou);
 
-        if ($this->repositorioAlunos->existeResposta($aluno->getId(), $pergunta->getId()))
-                throw new DominioException('Resposta já cadastrada para o aluno.');
+            if ($this->repositorioAlunos->existeResposta($aluno->getId(), $pergunta->getId()))
+                    throw new DominioException('Resposta já cadastrada para o aluno.');
+                
+            $this->repositorioAlunos->cadastrarResposta($respostaObj);
+            if ($acertou) $this->atualizarPontuacoes($aluno, $pergunta);
             
-        $this->repositorioAlunos->cadastrarResposta($respostaObj);
-        if ($acertou) $this->atualizarPontuacoes($aluno, $pergunta);
-        
-        return $respostaObj->isRespostaCorreta();
+            
+            GerenciadorDeTransacao::confirmar();
+            return $respostaObj->isRespostaCorreta();
+        } catch (Throwable $e) {
+            GerenciadorDeTransacao::reverter();
+            throw $e;
+        }
     }
 
     private function validarSalvarResposta(RespostaAlunoCadastroDTO $resposta): void{

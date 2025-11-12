@@ -6,7 +6,7 @@ class Curso{
      * @param Assunto[] $assuntos
      */
     public function __construct(
-        private Professor $professor,
+        private ?Professor $professor,
         private int $id = 0,
         private string $descricao = '',
         private string $caminhoImg = '',

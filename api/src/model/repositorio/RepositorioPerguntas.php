@@ -33,4 +33,11 @@ interface RepositorioPerguntas {
      * @return array<int|string>
      */
     public function buscarIdsRespostasCorretas(int|string $idPergunta): array;
+
+    /**
+     * Cadastra uma pergunta e retorna o id cadastrado.
+     * @param Pergunta $pergunta
+     * @return void
+     */
+    public function cadastrarPergunta(Pergunta $pergunta): int;
 }

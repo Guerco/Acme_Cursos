@@ -25,7 +25,15 @@ describe('GestorPerguntas', function(): void{
     beforeEach(function(): void{
         $this->repositorioTestePerguntas = Double::instance(['implements' => RepositorioPerguntas::class]);
         $this->repositorioTesteAlunos = Double::instance(['implements' => RepositorioAlunos::class]);
-        $this->gestorPerguntas = new GestorPerguntas($this->repositorioTestePerguntas,$this->repositorioTesteAlunos);
+        $this->repositorioAssuntos = Double::instance(['implements' => RepositorioAssuntos::class]);
+        $this->repositorioRespostas = Double::instance(['implements' => RepositorioRespostasPergunta::class]);
+
+        $this->gestorPerguntas = new GestorPerguntas(
+            $this->repositorioTestePerguntas,
+            $this->repositorioTesteAlunos,
+            $this->repositorioAssuntos,
+            $this->repositorioRespostas
+        );
     });
 
     describe('buscarPerguntasAluno', function():void{

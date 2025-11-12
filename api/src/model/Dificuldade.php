@@ -21,4 +21,12 @@ enum Dificuldade: string{
             self::DIFICIL => 2.0,
         };
     }
+
+    public function paraString(): string {
+        return match($this) {
+            self::FACIL => 'facil',
+            self::MEDIO => 'medio',
+            self::DIFICIL => 'dificil5',
+        };
+    }
 }

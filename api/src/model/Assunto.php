@@ -6,7 +6,7 @@ class Assunto{
      * @param Pergunta[] $perguntas
      */
     public function __construct(
-        private Curso $curso,
+        private ?Curso $curso,
         private int $id = 0,
         private string $descricao = '',
         private array $perguntas = []

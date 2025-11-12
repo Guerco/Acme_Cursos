@@ -89,6 +89,41 @@ class RepositorioCursosEmBDR implements RepositorioCursos{
         return array_values($cursosCriados);
     }
 
+    public function buscarPorIdProfessor(int $idProfessor):array {
+        $sql = <<<'SQL'
+            SELECT DISTINCT
+                c.id,
+                c.descricao
+            FROM curso c
+            JOIN assunto a
+            ON c.id = a.id_curso
+            WHERE
+                c.id_professor = :id_professor
+            ORDER BY
+                c.descricao;
+        SQL;
+
+        try {
+            $ps = $this->pdo->prepare($sql);
+            $ps->execute(
+                ['id_professor' => $idProfessor]
+            );
+
+            $cursos = [];
+
+            foreach ($ps as $d) {
+                $cursos []= new Curso(
+                    null,
+                    (int) $d['id'], 
+                    $d['descricao']
+                );
+            }
+
+            return $cursos;
+        } catch (PDOException $e) {
+            throw new RepositorioException('Não foi possível buscar os cursos.');
+        }
+    }
 }
 
 ?>

@@ -26,7 +26,6 @@ class RepositorioPerguntasEmBDR implements RepositorioPerguntas {
     }
 
     /**
-     * Summary of buscarCursoEDificuldadePeloID
      * @return null|string[] 
      */
     public function buscarCursoEDificuldadePeloID(int $id): ?array{
@@ -132,7 +131,47 @@ class RepositorioPerguntasEmBDR implements RepositorioPerguntas {
         }catch (PDOException $e){
             throw new RepositorioException($e->getMessage());
         }
-
     }
     
+    public function cadastrarPergunta(Pergunta $pergunta): int
+    {
+        try {
+            $sql = <<<'SQL'
+                INSERT INTO 
+                    pergunta(
+                        id_assunto, 
+                        descricao, 
+                        caminho_img,
+                        tempo_seg,
+                        dificuldade,
+                        ultima_atualizacao
+                    )
+                VALUES 
+                    (
+                        :id_assunto, 
+                        :descricao, 
+                        :caminho_img,
+                        :tempo_seg,
+                        :dificuldade,
+                        NOW()
+                    )
+            SQL;
+
+            /** @var Assunto $assunto */
+            $assunto = $pergunta->getAssunto();
+
+            $ps = $this->pdo->prepare($sql);
+            $ps->execute([
+                'id_assunto' => $assunto->getId(),
+                'descricao' => $pergunta->getDescricao(),
+                'caminho_img' => $pergunta->getCaminhoImg(),
+                'tempo_seg' => $pergunta->getTempoSeg(),
+                'dificuldade' => $pergunta->getDificuldade()->paraString(),
+            ]);
+
+            return $this->pdo->lastInsertId();
+        } catch (PDOException $e) {
+            throw new RepositorioException('Não foi possível cadastrar a pergunta.');
+        }
+    }
 }

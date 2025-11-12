@@ -16,6 +16,12 @@ interface RepositorioCursos{
      */
     public function listarCursos(string $nome):array;
 
+    /**
+     * Retorna todos os cursos de um professor.
+     * @param int $idProfessor
+     * @return Curso[]
+     */
+    public function buscarPorIdProfessor(int $idProfessor):array;
 }
 
 

@@ -2,8 +2,10 @@
 
 class GestorCursos{
         
-    public function __construct(private RepositorioCursos $repositorio){
-    }
+    public function __construct(
+        private RepositorioCursos $repoCursos,
+        private RepositorioAssuntos $repoAssuntos
+    ) { }
 
     /**
      * @return CursoListagemDTO[]
@@ -12,12 +14,37 @@ class GestorCursos{
         $cursos = [];
         $resultado = [];
 
-        $cursos = $this->repositorio->listarCursos($nome);
+        $cursos = $this->repoCursos->listarCursos($nome);
         $resultado = CursoListagemDTO::deObjetosParaDTO($cursos);
 
         return $resultado;
     }
 
-      
+    /**
+     * @return AssuntoListagemDTO[]
+     */
+    public function buscarAssuntosCurso(string|int $idCurso): array{
+        $this->validarBuscarAssuntosCurso($idCurso);
 
+        $assuntos = [];
+        $assuntos = $this->repoAssuntos->buscarPorIdCurso($idCurso);
+        
+        return AssuntoListagemDTO::deObjetos($assuntos);
+    }
+
+    private function validarBuscarAssuntosCurso(string|int|null $idCurso): void{
+        $idCurso = $idCurso ?: null;
+
+        if ($idCurso === null) {
+            throw new DominioException('Informe curso.'); 
+        } else if (
+            !filter_var($idCurso, FILTER_VALIDATE_INT) 
+        ) {
+            throw new DominioException('Os ids devem ser inteiros.');     
+        }
+        
+        if (! $this->repoCursos->existeComId((int) $idCurso)){
+            throw new DominioException('Curso inexistente.');
+        }
+    }
 }

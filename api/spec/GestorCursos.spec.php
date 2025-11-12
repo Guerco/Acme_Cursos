@@ -24,14 +24,19 @@ function criarCursoTeste($id = 0, $descricao = "", $nomeProfessor = ""): Curso{
 describe('GestorCursos', function(): void{
 
     beforeEach(function(): void{
-        $this->repositorioTeste = Double::instance(['implements' => RepositorioCursos::class]);
-        $this->gestorCursos = new GestorCursos($this->repositorioTeste);
+        $this->repositorioCursos = Double::instance(['implements' => RepositorioCursos::class]);
+        $this->repositorioAssuntos = Double::instance(['implements' => RepositorioAssuntos::class]);
+
+        $this->gestorCursos = new GestorCursos( 
+            $this->repositorioCursos,
+            $this->repositorioAssuntos
+        );
     });
 
     describe('listarCursos', function():void{
 
         it('retorna um array de objetos de CursoListagemDTO', function():void{
-            allow($this->repositorioTeste)->toReceive('listarCursos')->andReturn([
+            allow($this->repositorioCursos)->toReceive('listarCursos')->andReturn([
                 criarCursoTeste(1,'Curso teste 1', 'Professor 1'),
                 criarCursoTeste(2,'Curso teste 2', 'Professor 2')
             ]);

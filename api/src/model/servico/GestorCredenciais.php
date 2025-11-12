@@ -77,11 +77,10 @@ class GestorCredenciais
             }
             GerenciadorDeTransacao::confirmar();
 
-        } catch (PDOException $e){
+        } catch (Throwable $e){
             GerenciadorDeTransacao::reverter();
-            throw new DominioException ('Erro ao salvar usuário');
+            throw $e;
         } 
-        
     }
 
     private function validarUsuario(UsuarioCadastroDTO $usuario): array {

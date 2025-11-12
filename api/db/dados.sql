@@ -41,7 +41,7 @@ INSERT INTO assunto (id, id_curso, descricao) VALUES
 (3, 2, 'Soma'),
 (4, 2, 'Frações'),
 (5, 3, 'Diagrama de Classes'),
-(6, 5, 'Relevo'),
+(6, 5, 'Capitais'),
 (7, 5, 'Bacias Hidrográficas'),
 (8, 5, 'Regiões do Brasil'),
 (9, 6, 'Introdução a Hardware');
