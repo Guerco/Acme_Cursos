@@ -3,6 +3,7 @@ import { rotasApi } from "../../rotas";
 import { AlunoListagem } from "../dto/AlunoListagem";
 import { Credenciais } from "../dto/Credenciais";
 import { RespostaAlunoCadastro } from "../dto/RespostaAlunoCadastro";
+import { DominioException } from "../exception/DominioException";
 
 export class RepositorioAlunosAPI implements RespositorioAlunos {
 
@@ -16,8 +17,8 @@ export class RepositorioAlunosAPI implements RespositorioAlunos {
                 body: JSON.stringify(credenciais)
             });
 
-            if (response.status == 404 && await response.text() == 'Credenciais inválidas.') {
-                throw new Error('Credenciais Inválidas.');
+            if (response.status >= 400 && response.status < 500) {
+                throw new DominioException('Credenciais Inválidas.');
             }
             else if (!response.ok) {
                 throw new Error();
@@ -26,7 +27,7 @@ export class RepositorioAlunosAPI implements RespositorioAlunos {
                 return aluno;
             }
         } catch (err: any) {
-            if (err.message == 'Credenciais Inválidas.')
+            if (err instanceof DominioException)
                 throw err;
             else
                 throw new Error('Não foi possível verificar as crecenciais.');

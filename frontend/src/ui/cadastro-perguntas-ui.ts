@@ -15,6 +15,10 @@ export const ids = {
 
 export const classes = {
   resposta: 'container-resposta',
+  botaoCadastrarNova: 'botao-cadastrar-nova',
+  mensagemSucesso: 'mensagem-sucesso',
+  botaoVoltar: 'botao-voltar',
+  containerSucesso: 'container-sucesso',
 };
 
 export const names = {

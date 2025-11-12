@@ -1,12 +1,13 @@
 import { RepositorioPerguntas } from "./RepositorioPerguntas";
 import { PerguntaListagem } from "../dto/PerguntaListagem";
+import { PerguntaListagemQuiz } from "../dto/PerguntaListagemQuiz";
 import { rotasApi } from "../../rotas";
 import { PerguntaCadastro } from "../dto/PerguntaCadastro";
 import { DominioException } from "../exception/DominioException";
 
 export class RepositorioPerguntasApi implements RepositorioPerguntas {
 
-    async buscarPerguntas(idAluno: number, idAssunto: number): Promise<PerguntaListagem[]> {
+    async buscarPerguntas(idAluno: number, idAssunto: number): Promise<PerguntaListagemQuiz[]> {
         try {
             const response = await fetch(rotasApi.buscarPerguntas(idAluno, idAssunto));
 
@@ -35,7 +36,7 @@ export class RepositorioPerguntasApi implements RepositorioPerguntas {
                 if (response.status >= 400 && response.status < 500) {
                     const body = await response.json();
                     throw DominioException.comProblemas(body.erros)
-                } else throw new Error('Não foi possível salvar a resposta.');
+                } else throw new Error();
             }
         } catch (error) {
             if (error instanceof DominioException) {
@@ -46,7 +47,29 @@ export class RepositorioPerguntasApi implements RepositorioPerguntas {
         }
     }
 
-    async buscarTodos(): Promise<PerguntaListagem[]> {
-        return [];
+    async buscarTodosOuPorAssunto(idAssunto: number|null = null): Promise<PerguntaListagem[]> {
+        try {
+            const url = rotasApi.perguntas + (idAssunto ? `?id_assunto=${idAssunto}`: '');
+
+            const response = await fetch(url);
+
+            if (!response.ok){
+                if (response.status >= 400 && response.status < 500) {
+                    const body = await response.json();
+                    throw DominioException.comProblemas(body.erros)
+                } else throw new Error();
+            }
+
+            const resultado = await response.json();
+            if ('mensagem' in resultado)
+                throw new DominioException(resultado.mensagem);
+            return resultado;
+        } catch(err) {
+            if (err instanceof DominioException) {
+                throw err;
+            }
+
+            throw new Error('Não foi possível buscar as perguntas.');
+        }
     }
 }

@@ -9,6 +9,7 @@ import { Dificuldade, dificuldadeParaString, dificuldadeParaTextoValor, dificuld
 import { RespostaAlunoCadastro } from "../model/dto/RespostaAlunoCadastro.ts";
 
 const DIRETORIO_IMAGENS = rotasApi.imagensPerguntas;
+const SRC_LOGO = '/img/logotipo.png';
 
 export class VisaoQuizDOM implements VisaoQuiz {
     private controladora: ControladoraQuiz;
@@ -361,6 +362,21 @@ export class VisaoQuizDOM implements VisaoQuiz {
         window.addEventListener('blur', this.tratarSaidaQuiz);
         window.addEventListener('beforeunload', this.tratarSaidaQuiz);
         window.addEventListener('visibilitychange', this.tratarSaidaQuiz);
+    }
+
+    animacaoInicioQuiz() : void {
+        const caixaAnimacao = UtilDOM.criaComClasses('div', ['caixa-animacao', 'esquerda']);
+        const body = document.querySelector('body');
+        const logo = UtilDOM.criaImg(SRC_LOGO, 'Logotipo Quiz');
+
+        caixaAnimacao.appendChild(logo);
+        body!.prepend(caixaAnimacao);
+        
+        caixaAnimacao.addEventListener('transitionend', () => caixaAnimacao.remove());
+        requestAnimationFrame(() => {
+            caixaAnimacao.classList.remove('esquerda');
+            caixaAnimacao.classList.add('direita');
+        });
     }
 
     private tratarSaidaQuiz = async () => {

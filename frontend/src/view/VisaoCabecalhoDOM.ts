@@ -74,6 +74,7 @@ export class VisaoCabecalhoDOM {
     private criaMenuLateral(): HTMLDivElement {
         const menu = UtilDOM.criaComClasses('div', [classes.menuLateral]) as HTMLDivElement;
         const logo = UtilDOM.criaImgComClassesEId(SRC_LOGO, 'Logotipo do Site', [classes.logo], ids.logoMenu);
+        logo.title = 'Fechar Menu';
         logo.addEventListener('click', () => this.alternarVisibilideMenu(menu));
         const itens = this.criaItensMenu();
         menu.append(logo, ...itens);

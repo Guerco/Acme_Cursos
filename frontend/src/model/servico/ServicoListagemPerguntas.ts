@@ -7,11 +7,7 @@ const URL_API = rotasJsonServer.perguntasListagem;
 export class ServicoListagemPerguntas {
     constructor(private repositorio : RepositorioPerguntas){}
 
-    async buscarTodos() : Promise<PerguntaListagem[]> {
-        try {
-            return await this.repositorio.buscarTodos();
-        } catch(err : any) {
-            throw new Error(err.message);
-        }
+    async buscarTodos(idAssunto: number|null = null) : Promise<PerguntaListagem[]> {
+        return await this.repositorio.buscarTodosOuPorAssunto(idAssunto);
     }
 }

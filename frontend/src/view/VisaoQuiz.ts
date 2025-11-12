@@ -32,6 +32,8 @@ export interface VisaoQuiz {
     realizarContagemInicial() : void;
     limparMensagemAcertou() : void;
     ocultarMensagemTelaCheia() : void;
+    animacaoInicioQuiz() : void;
+
     // Auxiliar
     carregarPerguntas(perguntas: PerguntaListagemQuiz[]): void;
     getPerguntas() : PerguntaListagemQuiz[];

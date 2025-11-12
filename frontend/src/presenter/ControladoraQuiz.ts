@@ -3,8 +3,9 @@ import { ServicoQuiz } from "../model/servico/ServicoQuiz";
 import { RepositorioAlunosAPI } from "../model/repositorio/RepositorioAlunosApi";
 import { RepositorioPerguntasApi } from "../model/repositorio/RepositorioPerguntasApi";
 import { AlunoListagem } from "../model/dto/AlunoListagem";
-import { PerguntaListagem } from "../model/dto/PerguntaListagem";
 import { RespostaAlunoCadastro } from "../model/dto/RespostaAlunoCadastro";
+import { PerguntaListagemQuiz } from "../model/dto/PerguntaListagemQuiz";
+import { DominioException } from "../model/exception/DominioException";
 
 export class ControladoraQuiz {
     private servico: ServicoQuiz;
@@ -24,11 +25,10 @@ export class ControladoraQuiz {
             await this.preencherPerguntas(aluno);
             this.visao.fecharFormCredenciais();
         } catch (err: any) {
-            if (err.message === 'Credenciais Inválidas.') {
+            if (err instanceof DominioException) 
                 this.visao.exibirMensagemCredenciais(err.message);
-            } else {
+            else 
                 throw new Error('Não foi possível verificar as credenciais.');
-            }
         }
     }
 
@@ -62,6 +62,7 @@ export class ControladoraQuiz {
     }
 
     async iniciarQuiz(aluno: AlunoListagem, pontuacaoCurso: number): Promise<void> {
+        this.visao.animacaoInicioQuiz();
         this.visao.preencherInformacoesAluno(aluno.nome, aluno.pontuacaoGeral, pontuacaoCurso);
         const pergunta = this.visao.getPerguntas()[this.visao.getPerguntaAtual()];
         this.visao.preencherPergunta(pergunta);
@@ -71,7 +72,7 @@ export class ControladoraQuiz {
         this.visao.exibirMenus();
     }
 
-    async responder(tempoEsgotado: boolean = false) {
+    async responder(tempoEsgotado: boolean = false): Promise<boolean>{
         this.visao.limparContagem();
         this.visao.desabilitarRespostas();
 
@@ -82,13 +83,22 @@ export class ControladoraQuiz {
         this.visao.exibirMensagemAcertou(acertou, tempoEsgotado);
 
         this.visao.tornarAcaoProximaPergunta();
+
+        return acertou;
     }
 
     async tratarSaidaQuiz() {
         this.visao.limparEventosSaida();
-        if (this.visao.buscarMensagemAcertou() == '')
-            await this.responder();
-        this.visao.exibirMensagemFim('Você saiu da tela de quiz. Sua resposta foi registrada e o Quiz foi encerrado. ❌');
+
+        let acertou = null;
+        let mensagem = 'Você saiu do quiz. 🚪';
+        if (this.visao.buscarMensagemAcertou() == '') {
+            acertou = await this.responder();
+        }
+        if (acertou !== null)  {
+            mensagem = acertou ? 'Parabéns! Você acertou, mas saiu do quiz. Sua resposta foi registrada e o quiz foi encerrado. ✅' : 'Ops! Você errou e saiu do quiz. Sua resposta foi registrada e o quiz foi encerrado. ❌';
+        }
+        this.visao.exibirMensagemFim(mensagem);
     }
 
     proximaPergunta() {
@@ -112,7 +122,7 @@ export class ControladoraQuiz {
         }
     }
 
-    private async buscarPerguntas(idAluno: number, idAssunto: number): Promise<PerguntaListagem[]> {
+    private async buscarPerguntas(idAluno: number, idAssunto: number): Promise<PerguntaListagemQuiz[]> {
         try {
             return await this.servico.buscarPerguntas(idAluno, idAssunto);
         } catch (err: any) {

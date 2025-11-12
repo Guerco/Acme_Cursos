@@ -528,3 +528,33 @@ footer#acoes {
     color: #5a0909;
     box-shadow: 0 0 10px #ff0000;
 }
+
+/* ========================================================== */
+/* Estilos animação de início */
+.caixa-animacao {
+    position: fixed;
+    top: -25vh;
+    left: -115vw;
+    width: 110vw;
+    height: 150vh;
+    background-color: #650996;
+    z-index: 9999;
+    transition: 0.5s ease-in-out;
+    pointer-events: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.caixa-animacao.esquerda {
+    left: -115vw;
+}
+
+.caixa-animacao.direita {
+    left: 115vw;
+}
+
+.caixa-animacao img {
+    width: 200px;
+    height: auto;
+}

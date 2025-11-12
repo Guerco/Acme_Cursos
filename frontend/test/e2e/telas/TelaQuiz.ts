@@ -119,6 +119,6 @@ export class TelaQuiz {
     async deveExibirMensagemQuizEncerrado() {
         const mensagemFim = this.page.locator(`.${classes.mensagemFim}`);
         await mensagemFim.waitFor({ state: 'visible', timeout: 5000 });
-        expect(mensagemFim).toContainText('o Quiz foi encerrado');
+        expect(mensagemFim).toContainText('saiu do quiz');
     }
 }

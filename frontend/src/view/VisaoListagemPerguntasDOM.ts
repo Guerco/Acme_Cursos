@@ -24,15 +24,21 @@ export class VisaoListagemPerguntasDOM implements VisaoListagemPerguntas {
     }
 
     // Métodos de Entrada
+    obterIdAssunto() : number|null {
+        const params = new URLSearchParams(window.location.search);
+        const idAssunto = params.get('assunto');
+
+        return idAssunto ? Number(idAssunto) : null;
+    }
 
     // Métodos de Saída
-    exibirMensagem(mensagem: string): void {
-        this.outMensagem.innerText = mensagem;
+    exibirMensagem(mensagens: string[]): void {
+        this.outMensagem.innerText = mensagens.join(', ');
     }
 
     exibirPerguntas(perguntas: PerguntaListagem[]): void {
         if (!perguntas || perguntas.length === 0) {
-            this.exibirMensagem('Não há perguntas para se listar.');
+            this.exibirMensagem(['Não há perguntas para se listar.']);
         } else {
             const cardsPerguntas = this.perguntasParaCards(perguntas);
 

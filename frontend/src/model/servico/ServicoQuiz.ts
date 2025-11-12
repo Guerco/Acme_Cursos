@@ -1,9 +1,10 @@
 import { RespositorioAlunos } from "../repositorio/RepositorioAlunos";
 import { RepositorioPerguntas } from "../repositorio/RepositorioPerguntas";
-import { PerguntaListagem } from "../dto/PerguntaListagem";
 import { AlunoListagem } from "../dto/AlunoListagem";
 import { Credenciais } from "../dto/Credenciais";
 import { RespostaAlunoCadastro } from "../dto/RespostaAlunoCadastro";
+import { PerguntaListagemQuiz } from "../dto/PerguntaListagemQuiz";
+import { DominioException } from "../exception/DominioException";
 
 export class ServicoQuiz {
 
@@ -14,7 +15,7 @@ export class ServicoQuiz {
 
     async autenticar(credenciais: Credenciais): Promise<AlunoListagem>{
         if(!credenciais.email || !credenciais.senha){
-            throw new Error("Preencha todos os campos!");
+            throw new DominioException("Preencha todos os campos!");
         }
         try {
             await credenciais.aplicarHashSenha();
@@ -24,7 +25,7 @@ export class ServicoQuiz {
         }
     }
 
-    async buscarPerguntas(idAluno: number, idAssunto: number): Promise<PerguntaListagem[]>{
+    async buscarPerguntas(idAluno: number, idAssunto: number): Promise<PerguntaListagemQuiz[]>{
         try{
             return await this.repositorioPerguntas.buscarPerguntas(idAluno, idAssunto);
         } catch(error:any){

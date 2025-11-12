@@ -243,13 +243,13 @@ export class VisaoCadastroPerguntasDOM implements VisaoCadastroPerguntas {
 
 
     exibirMensagemSucesso(): void {
-        const container = UtilDOM.criaComClasses('div', ['container-sucesso']);
-        const mensagem = UtilDOM.criaComTextoEClasses('h3', 'Pergunta cadastrada com sucesso!', ['mensagem-sucesso']);
-        const botaoVoltar = UtilDOM.criaComTextoEClasses('button', 'Voltar para Cursos 🏡', ['botao-voltar']);
+        const container = UtilDOM.criaComClasses('div', [classes.containerSucesso]);
+        const mensagem = UtilDOM.criaComTextoEClasses('h3', 'Pergunta cadastrada com sucesso!', [classes.mensagemSucesso]);
+        const botaoVoltar = UtilDOM.criaComTextoEClasses('button', 'Voltar para Cursos 🏡', [classes.botaoVoltar]);
         botaoVoltar.onclick = () => {
             window.location.href = rotasPaginas.listagemCursos;
         };
-        const botaoCadastrarNova = UtilDOM.criaComTextoEClasses('button', 'Cadastrar Nova 🆕', ['botao-cadastrar-nova']);
+        const botaoCadastrarNova = UtilDOM.criaComTextoEClasses('button', 'Cadastrar Nova 🆕', [classes.botaoCadastrarNova]);
         botaoCadastrarNova.onclick = () => {
             window.location.href = rotasPaginas.cadastroPerguntas;
         };

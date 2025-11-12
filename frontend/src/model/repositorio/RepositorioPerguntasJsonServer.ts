@@ -1,5 +1,6 @@
 import { RepositorioPerguntas } from "./RepositorioPerguntas";
 import { PerguntaListagem } from "../dto/PerguntaListagem";
+import { PerguntaListagemQuiz } from "../dto/PerguntaListagemQuiz";
 import { rotasApi, rotasJsonServer } from "../../rotas";
 import { PerguntaCadastro } from "../dto/PerguntaCadastro";
 
@@ -8,7 +9,7 @@ const URL_API_LISTAGEM = rotasJsonServer.perguntasListagem;
 
 export class RepositorioPerguntasJsonServer implements RepositorioPerguntas {
 
-    async buscarPerguntas(idAluno: number, idAssunto: number): Promise<PerguntaListagem[]> {
+    async buscarPerguntas(idAluno: number, idAssunto: number): Promise<PerguntaListagemQuiz[]> {
         return [];
     }
 
@@ -30,7 +31,7 @@ export class RepositorioPerguntasJsonServer implements RepositorioPerguntas {
         }
     }
 
-    async buscarTodos() : Promise<PerguntaListagem[]> {
+    async buscarTodosOuPorAssunto(idAssunto: number|null = null) : Promise<PerguntaListagem[]> {
         try {
             const response = await fetch(URL_API_LISTAGEM);
 
