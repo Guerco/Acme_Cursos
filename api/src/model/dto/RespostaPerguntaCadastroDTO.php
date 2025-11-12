@@ -43,4 +43,25 @@ class RespostaPerguntaCadastroDTO {
             (bool) $this->ehCorreta
         );
     }
+
+    public static function deObjeto(RespostaPergunta $resposta): RespostaPerguntaCadastroDTO {
+        return new self(
+            $resposta->isCorreta(),
+            $resposta->getDescricao()
+        );
+    }
+
+    /**
+     * @param RespostaPergunta[] $respostas
+     * @return RespostaPerguntaCadastroDTO[]
+     */
+    public static function deObjetos(array $respostas): array {
+        $dtos = [];
+
+        foreach($respostas as $r) {
+            $dtos [] = self::deObjeto($r);
+        }
+
+        return $dtos;
+    }
 }

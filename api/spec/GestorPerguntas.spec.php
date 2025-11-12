@@ -38,7 +38,7 @@ describe('GestorPerguntas', function(): void{
 
     describe('buscarPerguntasAluno', function():void{
 
-        it('retorna um array de objetos de PerguntaListagemDTO', function():void{
+        it('retorna um array de objetos de PerguntaListagemQuizDTO', function():void{
             allow($this->repositorioTestePerguntas)->toReceive('buscarPorAssuntoEAluno')->andReturn([
                 criarPerguntaTeste(1,'pergunta teste 1'),
                 criarPerguntaTeste(2,'pergunta teste 2')
@@ -48,7 +48,7 @@ describe('GestorPerguntas', function(): void{
             $resultado = $this->gestorPerguntas->buscarPerguntasAluno(1, 1);
             expect($resultado)->toBeAn('array');
             expect(count($resultado))->not->toBe(0);
-            expect($resultado[0]?? null)->toBeAnInstanceOf(PerguntaListagemDTO::class);
+            expect($resultado[0]?? null)->toBeAnInstanceOf(PerguntaListagemQuizDTO::class);
         });
 
         it('lança uma exceção ao não informar id de assunto e aluno', function():void{

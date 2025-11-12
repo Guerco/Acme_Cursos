@@ -13,14 +13,14 @@ class GestorPerguntas
     }
 
     /**
-     * @return PerguntaListagemDTO[]
+     * @return PerguntaListagemQuizDTO[]
      */
     public function buscarPerguntasAluno(string|int $idAssunto, string|int $idAluno): array
     {
         $this->validarBuscarPerguntasAluno($idAssunto, $idAluno);
         $perguntas = $this->repositorioPerguntas->buscarPorAssuntoEAluno((int) $idAssunto, (int) $idAluno);
         shuffle($perguntas);
-        return PerguntaListagemDTO::deObjetos($perguntas);
+        return PerguntaListagemQuizDTO::deObjetos($perguntas);
     }
 
     private function validarBuscarPerguntasAluno(string|int|null $idAssunto, string|int|null $idAluno): void
@@ -56,7 +56,8 @@ class GestorPerguntas
 
             $perguntaObj = $pergunta->paraObjeto();
 
-            if (!is_null($nomeImg)) $perguntaObj->setCaminhoImg($nomeImg);
+            if (!is_null($nomeImg))
+                $perguntaObj->setCaminhoImg($nomeImg);
 
             $perguntaObj->setId($this->repositorioPerguntas->cadastrarPergunta($perguntaObj));
 
@@ -68,7 +69,8 @@ class GestorPerguntas
             GerenciadorDeTransacao::confirmar();
         } catch (Throwable $e) {
             GerenciadorDeTransacao::reverter();
-            if (!is_null($nomeImg)) $this->excluirFigura($nomeImg);
+            if (!is_null($nomeImg))
+                $this->excluirFigura($nomeImg);
             throw $e;
         }
     }
@@ -106,5 +108,25 @@ class GestorPerguntas
         if (file_exists($caminhoArquivo)) {
             unlink($caminhoArquivo);
         }
+    }
+
+    /**
+     * @return PerguntaListagemDTO[]
+     */
+    public function listarPerguntasOuPorAssunto(?int $idAssunto): array
+    {
+        $this->validarListarPerguntasOuPorAssunto($idAssunto);
+
+        $perguntas = $this->repositorioPerguntas->listarTodosOuPorAssunto($idAssunto);
+
+        return PerguntaListagemDTO::deObjetos($perguntas);
+    }
+
+    private function validarListarPerguntasOuPorAssunto(?int $idAssunto)
+    {
+        if (!is_null($idAssunto))
+            if (!$this->repositorioAssuntos->existeComId((int) $idAssunto)) {
+                throw new DominioException('Assunto inexistente.');
+            }
     }
 }

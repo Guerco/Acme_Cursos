@@ -21,182 +21,172 @@ $app->use(cors());
 $app->route('/cursos')
 
     ->get('/', function (HttpRequest $req, HttpResponse $res) use ($pdo) {
-        try {
-            $gestorCursos = criarGestor('cursos');
 
+        executaComTratamentoErros(function () use ($pdo, $req, $res) {
+            $gestorCursos = criarGestor('cursos');
+    
             $filtro = $_GET['busca'] ?? '';
             $resultado = $gestorCursos->listarCursos($filtro);
             $res->status(200)->json($resultado);
-        } catch (RepositorioException $e) {
-            $res->status(500)->json($e->getMessage());
-        }
+        }, $res);
+
     })
 
     ->get('/:id/assuntos', function (HttpRequest $req, HttpResponse $res) use ($pdo) {
-        try {
+
+        executaComTratamentoErros(function () use ($pdo, $req, $res) {
             $gestorCursos = criarGestor('cursos');
-
+    
             $idCurso = $req->param('id') ?? '';
-
+    
             $assuntos = $gestorCursos->buscarAssuntosCurso($idCurso);
-
+    
             $res->status(200)->json($assuntos);
-        } catch (DominioException $e) {
-            $res->status(400)->json(['erros' => $e->getProblemas()]);
-        } catch (RepositorioException $e) {
-            $res->status(500)->json(['erros' => $e->getProblemas()]);
-        }
+        }, $res);
+
     });
 
 // Rotas de Alunos
 $app->route('/alunos')
 
     ->post('/verificarCredenciais', function (HttpRequest $req, HttpResponse $res) use ($pdo) {
-        try {
-            $gestorAlunos = criarGestor('alunos');
 
+        executaComTratamentoErros(function () use ($pdo, $req, $res) {
+            $gestorAlunos = criarGestor('alunos');
+    
             $aluno = $gestorAlunos->verificarCredenciais((array) $req->body());
             $res->status(200)->json($aluno);
-        } catch (NaoEncontradoException $e) {
-            $res->status(404)->json($e->getMessage());
-        } catch (DominioException $e) {
-            $res->status(400)->json(['erros' => $e->getProblemas()]);
-        } catch (RepositorioException $e) {
-            $res->status(500)->json($e->getMessage());
-        }
+        }, $res);
+
     })
 
     ->get('/:id/pontuacaoCurso', function (HttpRequest $req, HttpResponse $res) use ($pdo) {
-        try {
-            $gestorAlunos = criarGestor('alunos');
 
+        executaComTratamentoErros(function () use ($pdo, $req, $res) {
+            $gestorAlunos = criarGestor('alunos');
+    
             $idAluno = $req->param('id') ?? null;
             $idCurso = $_GET['id_curso'] ?? '';
             $pontuacao = $gestorAlunos->buscarPontuacaoCurso($idAluno, $idCurso);
             $res->status(200)->json(['pontuacao' => $pontuacao]);
-        } catch (NaoEncontradoException $e) {
-            $res->status(404)->json(['erros' => $e->getProblemas()]);
-        } catch (DominioException $e) {
-            $res->status(400)->json(['erros' => $e->getProblemas()]);
-        } catch (RepositorioException $e) {
-            $res->status(500)->json($e->getMessage());
-        }
+        }, $res);
+
     });
 
 // Rotas de assuntos
 $app->route('/assuntos')
 
     ->get('/:id/perguntas', function (HttpRequest $req, HttpResponse $res) use ($pdo) {
-        try {
-            $gestorPerguntas = criarGestor('perguntas');
 
+        executaComTratamentoErros(function () use ($pdo, $req, $res) {
+            $gestorPerguntas = criarGestor('perguntas');
+    
             $idAssunto = $req->param('id') ?? '';
             $idAluno = $_GET['id_aluno'] ?? '';
-
+    
             $perguntas = $gestorPerguntas->buscarPerguntasAluno($idAssunto, $idAluno);
-
+    
             $res->status(200)->json($perguntas);
-        } catch (NaoEncontradoException $e) {
-            $res->status(404)->json($e->getProblemas());
-        } catch (DominioException $e) {
-            $res->status(400)->json($e->getProblemas());
-        } catch (RepositorioException $e) {
-            $res->status(500)->json($e->getMessage());
-        }
+        }, $res);
+
     });
 
 // Rotas de RespostasAluno
 $app->route('/respostasAluno')
 
     ->post('/', function (HttpRequest $req, HttpResponse $res) use ($pdo) {
-        try {
-            $gestorAlunos = criarGestor('alunos');
 
+        executaComTratamentoErros(function () use ($pdo, $req, $res) {
+            $gestorAlunos = criarGestor('alunos');
+    
             $body = (array) $req->body();
             $resultado = $gestorAlunos->salvarResposta(RespostaAlunoCadastroDTO::deArray($body));
             $res->status(200)->json(['respostaCorreta' => $resultado]);
-        } catch (NaoEncontradoException $e) {
-            $res->status(404)->json(['erros' => $e->getProblemas()]);
-        } catch (DominioException $e) {
-            $res->status(400)->json(['erros' => $e->getProblemas()]);
-        } catch (RepositorioException $e) {
-            $res->status(500)->json($e->getMessage());
-        }
+        }, $res);
+
     });
 
 // Rotas de usuarios
 $app->route('/usuarios')
 
     ->get('/', function (HttpRequest $req, HttpResponse $res) use ($pdo) {
-        try {
+
+        executaComTratamentoErros(function () use ($pdo, $req, $res) {
             $gestorCredenciais = criarGestor('credenciais');
             $resultado = $gestorCredenciais->listarUsuarios();
             $res->status(200)->json($resultado);
-        } catch (RepositorioException $e) {
-            $res->status(500)->json($e->getMessage());
-        }
+        }, $res);
+
     })
 
     ->post('/', function (HttpRequest $req, HttpResponse $res) use ($pdo) {
-        try {
-            $gestorCredenciais = criarGestor('credenciais');
 
+        executaComTratamentoErros(function () use ($pdo, $req, $res) {
+            $gestorCredenciais = criarGestor('credenciais');
+    
             $body = (array) $req->body();
             $gestorCredenciais->criarUsuario(UsuarioCadastroDTO::deArray($body));
             $res->status(201)->json(['Sucesso']);
-        } catch (NaoEncontradoException $e) {
-            $res->status(404)->json(['erros' => $e->getProblemas()]);
-        } catch (DominioException $e) {
-            $res->status(400)->json(['erros' => $e->getProblemas()]);
-        } catch (RepositorioException $e) {
-            $res->status(500)->json($e->getMessage());
-        }
+        }, $res);
+
     });
 
 // Rotas de Professores
 $app->route('/professores')
 
     ->get('/', function (HttpRequest $req, HttpResponse $res) use ($pdo) {
-        try {
-            $gestorProfessores = criarGestor('professores');
 
+        executaComTratamentoErros(function () use ($pdo, $req, $res) {
+            $gestorProfessores = criarGestor('professores');
+    
             $resultado = $gestorProfessores->listarProfessoresResumido();
             $res->status(200)->json($resultado);
-        } catch (RepositorioException $e) {
-            $res->status(500)->json($e->getMessage());
-        }
+        }, $res);
+
     })
 
     ->get('/:id/cursos', function (HttpRequest $req, HttpResponse $res) use ($pdo) {
-        try {
+
+        executaComTratamentoErros(function () use ($pdo, $req, $res) {
             $gestorProfessores = criarGestor('professores');
-
+    
             $idProfessor = $req->param('id') ?? '';
-
+    
             $professores = $gestorProfessores->buscarCursosProfessor($idProfessor);
-
+    
             $res->status(200)->json($professores);
-        } catch (DominioException $e) {
-            $res->status(400)->json(['erros' => $e->getProblemas()]);
-        } catch (RepositorioException $e) {
-            $res->status(500)->json($e->getMessage());
-        }
+        }, $res);
+
     });
 
 // Rotas de Perguntas
 $app->route('/perguntas')
 
     ->post('/', function (HttpRequest $req, HttpResponse $res) use ($pdo) {
-        try {
+
+        executaComTratamentoErros(function () use ($pdo, $req, $res) {
             $gestorPerguntas = criarGestor('perguntas');
             $pergunta = PerguntaCadastroDTO::deArray(json_decode(json_encode($req->body()), true));
             $gestorPerguntas->criarPergunta($pergunta);
             $res->status(204)->end();
-        } catch (DominioException $e) {
-            $res->status(400)->json(['erros' => $e->getProblemas()]);
-        } catch (Throwable $e) {
-            $res->status(500)->json(['erros' => $e->getMessage()]);
-        }
+        }, $res);
+
+    })
+
+    ->get('/', function (HttpRequest $req, HttpResponse $res) use ($pdo) {
+
+        executaComTratamentoErros(function () use ($pdo, $req, $res) {
+            $gestorPerguntas = criarGestor('perguntas');
+    
+            $idAssunto = $_GET['id_assunto'] ?? null;
+            $resultado = $gestorPerguntas->listarPerguntasOuPorAssunto($idAssunto);
+            if ($resultado == []) {
+                if ( $idAssunto ) $res->status(200)->json(['mensagem'=> 'Este assunto não possui perguntas.']);
+                else $res->status(200)->json(['mensagem'=> 'Não há perguntas para se listar.']);
+            } else
+                $res->status(200)->json($resultado);
+        }, $res);
+
     });
 
 $app->listen();
@@ -239,4 +229,18 @@ function criarGestor(string $tipoGestor): GestorCursos|GestorAlunos|GestorCreden
         ),
         default => null,
     };
+}
+
+function executaComTratamentoErros (callable $callback, HttpResponse $res) {
+    try {
+        $callback();
+    } catch (NaoEncontradoException $e) {
+        $res->status(404)->json(['erros' => $e->getProblemas()]);
+    } catch (DominioException $e) {
+        $res->status(400)->json(['erros' => $e->getProblemas()]);
+    } catch (RepositorioException $e) {
+        $res->status(500)->json(['erros' => $e->getMessage()]);
+    } catch (Throwable $e) {
+        $res->status(500)->json(['erros' => 'Ocorreu um erro interno no servidor.']);
+    }
 }

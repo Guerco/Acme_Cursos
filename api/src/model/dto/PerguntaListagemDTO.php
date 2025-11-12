@@ -3,25 +3,27 @@
 class PerguntaListagemDTO{
 
     /**
-     * @param null|RespostaPerguntaListagemDTO[] $respostas
+     * @param null|RespostaPerguntaCadastroDTO[] $respostas
      */
     public function __construct(
-        public ?int $id,
         public ?string $descricao,
         public ?string $caminhoImg,
         public ?int $tempoSeg,
         public ?string $dificuldade,
+        public ?string $descricaoAssunto,
+        public ?string $ultimaAtualizacao,
         public ?array $respostas
     ){}
 
     public static function deObjeto(Pergunta $pergunta): PerguntaListagemDTO {
-        return new Self(
-            $pergunta->getId(),
+        return new self(
             $pergunta->getDescricao(),
             $pergunta->getCaminhoImg(),
             $pergunta->getTempoSeg(),
             $pergunta->getDificuldade()->value,
-            RespostaPerguntaListagemDTO::deObjetos($pergunta->getRespostas())
+            $pergunta->getAssunto()->getDescricao(),
+            $pergunta->getUltimaAtualizacao()->format('d/m/Y H:i:s'),
+            RespostaPerguntaCadastroDTO::deObjetos($pergunta->getRespostas())
         );
     }
 
@@ -33,7 +35,7 @@ class PerguntaListagemDTO{
         $dtos = [];
 
         foreach($perguntas as $p) {
-            $dtos [] = Self::deObjeto($p);
+            $dtos [] = self::deObjeto($p);
         }
 
         return $dtos;

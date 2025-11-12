@@ -174,4 +174,73 @@ class RepositorioPerguntasEmBDR implements RepositorioPerguntas {
             throw new RepositorioException('Não foi possível cadastrar a pergunta.');
         }
     }
+
+    public function listarTodosOuPorAssunto(?int $idAssunto): ?array {    
+        $sql = <<<SQL
+            SELECT
+                p.descricao as descricao_pergunta,
+                p.caminho_img,
+                p.tempo_seg,
+                p.dificuldade,
+                a.descricao as descricao_assunto,
+                p.ultima_atualizacao,
+                rp.correta as resposta_correta,
+                rp.descricao as descricao_resposta
+            FROM pergunta p
+            JOIN assunto a ON a.id = p.id_assunto
+            JOIN resposta_pergunta rp ON p.id = rp.id_pergunta
+        SQL;
+        
+        $params = [];
+        if ( !is_null($idAssunto) && $idAssunto > 0 ) {
+            $sql .= ' WHERE a.id = :id_assunto ';
+            $params = ['id_assunto' => $idAssunto];
+        }
+
+        $sql .= ' ORDER BY p.descricao, rp.id';
+
+        try {
+            $ps = $this->pdo->prepare($sql);
+            $ps->execute( $params );
+
+            $perguntas = [];
+            $perguntaDescricao = '';
+
+            foreach($ps as $d) {
+                $perguntaDescricao = $d['descricao_pergunta'];
+
+                /** @var Dificuldade $dificuldade  */
+                $dificuldade = Dificuldade::deString($d['dificuldade']);
+                
+                $perguntas[$perguntaDescricao] ??= new Pergunta(
+                    0,
+                    new Assunto(
+                        null, 
+                        0, 
+                        $d['descricao_assunto']
+                    ),
+                    $perguntaDescricao,
+                    $d['caminho_img'],
+                    $d['tempo_seg'],
+                    $dificuldade,
+                    [],
+                    new DateTime($d['ultima_atualizacao'])
+                );
+
+                $perguntas[$perguntaDescricao]->addResposta(
+                    new RespostaPergunta(
+                        0,
+                        null,
+                        $d['descricao_resposta'],
+                        (bool) $d['resposta_correta']
+                    )
+                );
+            }
+
+            return array_values($perguntas);
+        } catch (PDOException $e) {
+            throw new RepositorioException('Não foi possível buscar as perguntas.'); 
+        }
+    }
+
 }
