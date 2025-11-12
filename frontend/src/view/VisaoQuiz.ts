@@ -1,5 +1,5 @@
 import { Credenciais } from "../model/dto/Credenciais";
-import { PerguntaListagem } from "../model/dto/PerguntaListagem";
+import { PerguntaListagemQuiz } from "../model/dto/PerguntaListagemQuiz";
 import { RespostaAlunoCadastro } from "../model/dto/RespostaAlunoCadastro";
 
 export interface VisaoQuiz {
@@ -24,7 +24,7 @@ export interface VisaoQuiz {
     tornarAcaoProximaPergunta(): void;
     limparEventosSaida(): void;
     preencherInformacoesAluno(nome: string, pontuacaoGeral: number, pontuacaoCurso: number) : void;
-    preencherPergunta(pergunta: PerguntaListagem): void;
+    preencherPergunta(pergunta: PerguntaListagemQuiz): void;
     tornarAcaoResponder() : void;
     iniciarTelaCheia() : void;
     iniciarContagemRegressiva(segundos: number): Promise<void>;
@@ -33,8 +33,8 @@ export interface VisaoQuiz {
     limparMensagemAcertou() : void;
     ocultarMensagemTelaCheia() : void;
     // Auxiliar
-    carregarPerguntas(perguntas: PerguntaListagem[]): void;
-    getPerguntas() : PerguntaListagem[];
+    carregarPerguntas(perguntas: PerguntaListagemQuiz[]): void;
+    getPerguntas() : PerguntaListagemQuiz[];
     getPerguntaAtual() : number;
     setPerguntaAtual(valor : number): void;
 }

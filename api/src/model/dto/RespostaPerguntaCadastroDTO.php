@@ -15,7 +15,7 @@ class RespostaPerguntaCadastroDTO {
     public static function deArray(array $dados): RespostaPerguntaCadastroDTO{
         return new self(
             (bool) $dados['ehCorreta'],
-            $dados['descricao']
+            trim($dados['descricao'])
         );
     }
 

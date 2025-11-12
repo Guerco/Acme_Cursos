@@ -12,8 +12,14 @@ export const rotasApi = {
     buscarPontuacao: ( idAluno: number, idCurso: number) =>
         BASE_URL_API + 'alunos/' + idAluno + '/pontuacaoCurso/?id_curso=' + idCurso,
     enviarResposta: BASE_URL_API+'respostasAluno/',
-    imagensCursos: 'http://localhost:8080/img/cursos/',
-    imagensPerguntas: 'http://localhost:8080/img/perguntas/'
+    imagensCursos: BASE_URL_API+'img/cursos/',
+    imagensPerguntas: BASE_URL_API+'img/perguntas/',
+    professores: BASE_URL_API+'professores/',
+    cursosProfessor: ( idProfessor: number ) =>
+        BASE_URL_API + 'professores/' + idProfessor + '/cursos/',
+    assuntosCurso: ( idCurso: number ) =>
+        BASE_URL_API + 'cursos/' + idCurso + '/assuntos/',
+    perguntas: BASE_URL_API+'perguntas/',
 };
 
 export const rotasPaginas = {

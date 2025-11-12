@@ -6,6 +6,7 @@ import { AssuntoListagem } from "../dto/AssuntoListagem";
 import { RepositorioAssuntos } from "../repositorio/RepositorioAssuntos";
 import { PerguntaCadastro } from "../dto/PerguntaCadastro";
 import { RepositorioPerguntas } from "../repositorio/RepositorioPerguntas";
+import { DominioException } from "../exception/DominioException";
 
 export class ServicoCadastroPerguntas {
     constructor(
@@ -16,11 +17,7 @@ export class ServicoCadastroPerguntas {
     ) { }
 
     async buscarProfessores(): Promise<ProfessorListagem[]> {
-        try {
-            return await this.repoProfessores.buscarTodos();
-        } catch (err: any) {
-            throw new Error(err.message);
-        }
+        return await this.repoProfessores.buscarTodos();
     }
 
     async buscarCursosProfessor(idProfessor: number): Promise<CursoListagemResumo[]> {
@@ -41,44 +38,43 @@ export class ServicoCadastroPerguntas {
 
     async cadastrarPergunta(pergunta: PerguntaCadastro) {
         try {
-            const erro = this.validarCadastrarPergunta(pergunta);
-            if (erro != '') {
-                throw new Error(erro);
-            }
-            await this.repoPerguntas.cadastrarPergunta(pergunta);
+            this.validarCadastrarPergunta(pergunta);
+            await this.repoPerguntas.enviarPergunta(pergunta);
         } catch (err: any) {
-            throw new Error(err.message);
+            throw err;
         }
     }
 
-    private validarCadastrarPergunta(pergunta: PerguntaCadastro): string {
+    private validarCadastrarPergunta(pergunta: PerguntaCadastro) {
+        const problemas = [];
+
         if (pergunta.descricao.length < 10) {
-            return 'O enunciado deve ter no mínimo 10 caracteres.';
+            problemas.push( 'O enunciado deve ter no mínimo 10 caracteres.');
         }
         if (pergunta.descricao.length > 255) {
-            return 'O enunciado deve ter no máximo 255 caracteres.';
+            problemas.push( 'O enunciado deve ter no máximo 255 caracteres.');
         }
 
         if (!Number.isInteger(pergunta.tempoSeg)) {
-            return 'O tempo em segundos deve ser um número inteiro.';
+            problemas.push( 'O tempo em segundos deve ser um número inteiro.');
         }
         if (pergunta.tempoSeg < 30) {
-            return 'O tempo em segundos deve ser no mínimo 30.';
+            problemas.push( 'O tempo em segundos deve ser no mínimo 30.');
         }
         if (pergunta.tempoSeg > 180) {
-            return 'O tempo em segundos deve ser no máximo 180.';
+            problemas.push( 'O tempo em segundos deve ser no máximo 180.');
         }
 
         for (const resposta of pergunta.respostas) {
-            if (resposta.descricao.length < 10) {
-                return 'As respostas devem ter no mínimo 10 caracteres.';
+            if (resposta.descricao.length < 1) {
+                problemas.push( 'As respostas devem ter no mínimo 1 caractere.');
             }
             if (resposta.descricao.length > 200) {
-                return 'As respostas devem ter no máximo 200 caracteres.';
+                problemas.push( 'As respostas devem ter no máximo 200 caracteres.');
             }
         }
 
-        return '';
+        if (problemas.length > 0) throw DominioException.comProblemas(problemas);
     }
 
 

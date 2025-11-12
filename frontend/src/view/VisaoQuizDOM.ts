@@ -2,7 +2,7 @@ import { VisaoQuiz } from "./VisaoQuiz.ts";
 import { ControladoraQuiz } from "../presenter/ControladoraQuiz.ts";
 import { rotasApi, rotasPaginas } from "../rotas.ts";
 import { Credenciais } from "../model/dto/Credenciais.ts";
-import { PerguntaListagem } from "../model/dto/PerguntaListagem.ts";
+import { PerguntaListagemQuiz } from "../model/dto/PerguntaListagemQuiz.ts";
 import { classes, ids } from "../ui/quiz-ui.ts";
 import { UtilDOM } from "../util/UtilDOM.ts"
 import { Dificuldade, dificuldadeParaString, dificuldadeParaTextoValor, dificuldadeDeString, dificuldadeValor } from "../model/Dificuldade.ts";
@@ -13,7 +13,7 @@ const DIRETORIO_IMAGENS = rotasApi.imagensPerguntas;
 export class VisaoQuizDOM implements VisaoQuiz {
     private controladora: ControladoraQuiz;
     private modal!: HTMLDialogElement;
-    private perguntas: PerguntaListagem[] = [];
+    private perguntas: PerguntaListagemQuiz[] = [];
     private perguntaAtual!: number;
     private botaoAcao!: HTMLButtonElement;
     private contagemRegressivaResposta!: number;
@@ -140,7 +140,7 @@ export class VisaoQuizDOM implements VisaoQuiz {
     }
 
 
-    preencherPergunta(pergunta: PerguntaListagem): void {
+    preencherPergunta(pergunta: PerguntaListagemQuiz): void {
         const divQuiz = document.getElementById(ids.quiz) as HTMLDivElement;
         divQuiz.innerHTML = '';
 
@@ -317,7 +317,7 @@ export class VisaoQuizDOM implements VisaoQuiz {
     }
 
     // Auxiliar
-    getPerguntas(): PerguntaListagem[] {
+    getPerguntas(): PerguntaListagemQuiz[] {
         return this.perguntas;
     }
 
@@ -329,7 +329,7 @@ export class VisaoQuizDOM implements VisaoQuiz {
         this.perguntaAtual = valor;
     }
 
-    carregarPerguntas(perguntas: PerguntaListagem[]) {
+    carregarPerguntas(perguntas: PerguntaListagemQuiz[]) {
         this.perguntas = perguntas;
         this.perguntaAtual = 0;
     }

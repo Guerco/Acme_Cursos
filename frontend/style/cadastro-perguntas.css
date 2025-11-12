@@ -4,9 +4,6 @@
     box-sizing: border-box;
 }
 
-[disabled] {
-  z-index: auto;
-}
 
 /* ========================================================== */
 /* Estilo do Cadastro */
@@ -21,8 +18,10 @@
     box-sizing: border-box;
 }
 
-#cadastro > h2{
-    margin-bottom: 20px;
+.mensagem-campos-obrigatorios {
+    color: #7a7a7a;
+    font-size: 12px;
+    padding-left: 10px;
 }
 
 #form-cadastro {
@@ -135,11 +134,13 @@ tfoot td {
 }
 
 #adicionar-resposta {
-    background-color: #820ec0;;
+    background-color: #820ec0;
+    ;
 }
 
 #remover-resposta {
-    background-color: #ff7700;;
+    background-color: #ff7700;
+    ;
 }
 
 #adicionar-resposta:disabled {
@@ -147,6 +148,7 @@ tfoot td {
     cursor: not-allowed;
     opacity: 0.9;
 }
+
 #remover-resposta:disabled {
     background-color: #ff770093;
     cursor: not-allowed;
@@ -156,7 +158,7 @@ tfoot td {
 /* ========================================================== */
 /* Estilo das Ações  */
 #acoes {
-    width: 100%; 
+    width: 100%;
 }
 
 .botoes {
@@ -165,13 +167,13 @@ tfoot td {
     margin-top: 15px;
 }
 
-.botoes #botao-cancelar ,
+.botoes #botao-cancelar,
 .botoes #botao-cadastrar {
     flex: 1;
 }
 
 .botoes button {
-    width: 100%; 
+    width: 100%;
     height: 40px;
     border-radius: 12px;
     border: none;
@@ -179,7 +181,7 @@ tfoot td {
     color: #ffffff;
 }
 
-.botoes #botao-cadastrar { 
+.botoes #botao-cadastrar {
     background-color: #820ec0;
 }
 
@@ -213,4 +215,59 @@ tfoot td {
     #form-cadastro {
         padding: 10px;
     }
+}
+
+/* ========================================================== */
+/* Estilos mensagem de erro */
+#mensagem-cadastro {
+    margin-top: 5px;
+    max-height: 50px;
+    overflow-y: auto;
+    list-style-type: circle;
+}
+
+#mensagem-cadastro li {
+    color: #ff0000;
+    font-size: 13px;
+}
+
+#mensagem-cadastro.destaque {
+    box-shadow: 0 0 50px #ff0000;
+    background-color: #ff000027;
+}
+
+/* ========================================================== */
+/* Estilos mensagem de sucesso */
+.container-sucesso {
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    text-align: center;
+    margin-top: 100px;
+}
+
+.botao-voltar {
+    border-radius: 8px;
+    padding: 4px 8px;
+    cursor: pointer;
+    background-color: #820ec0;
+    border: none;
+    color: #fff;
+    font-size: 1.2rem;
+    text-decoration: none;
+    width: 250px;
+}
+
+.botao-cadastrar-nova {
+    border-radius: 8px;
+    padding: 4px 8px;
+    cursor: pointer;
+    background-color: #6CBF45;
+    border: none;
+    color: #fff;
+    font-size: 1.2rem;
+    text-decoration: none;
+    width: 250px;
 }

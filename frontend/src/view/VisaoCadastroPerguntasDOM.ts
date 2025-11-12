@@ -9,6 +9,7 @@ import { PerguntaCadastro } from "../model/dto/PerguntaCadastro.ts";
 import { Base64 } from "../util/Base64";
 import { RespostaPerguntaCadastro } from "../model/dto/RespostaPerguntaCadastro.ts";
 import { rotasPaginas } from "../rotas.ts";
+import { DominioException } from "../model/exception/DominioException.ts";
 
 export class VisaoCadastroPerguntasDOM implements VisaoCadastroPerguntas {
     private controladora: ControladoraCadastroPerguntas;
@@ -103,10 +104,10 @@ export class VisaoCadastroPerguntasDOM implements VisaoCadastroPerguntas {
         let figuraBase64 = null;
         if (this.inputFigura.files && this.inputFigura.files.length > 0) {
             const arquivoFigura = this.inputFigura.files[0];
-            const formatosAceitos = ["image/png", "image/jpeg"];
+            const formatosAceitos = ['image/png', 'image/jpeg'];
 
             if (!formatosAceitos.includes(arquivoFigura.type)) {
-                throw new Error("Formato de imagem inválido.");
+                throw new DominioException('A imagem deve estar nos formatos PNG ou JPEG.');
             }
 
             const dataURL = await Base64.blobToDataURL(arquivoFigura);
@@ -226,18 +227,33 @@ export class VisaoCadastroPerguntasDOM implements VisaoCadastroPerguntas {
         this.caixasCorreta[0].checked = true;
     }
 
-    exibirMensagemErro(mensagem: string): void {
-        this.mensagemErro.value = mensagem;
+    exibirMensagemErro(mensagens: string[]): void {
+        this.mensagemErro.innerHTML = '';
+        this.mensagemErro.classList.add('destaque');
+        setTimeout(() => {
+            this.mensagemErro.classList.remove('destaque');
+        }, 500);
+
+        for (const m of mensagens) {
+            const liMensagem = UtilDOM.criaComTexto('li', m);
+
+            this.mensagemErro.appendChild(liMensagem);
+        }
     }
+
 
     exibirMensagemSucesso(): void {
         const container = UtilDOM.criaComClasses('div', ['container-sucesso']);
-        const mensagem = UtilDOM.criaComTextoEClasses('output', 'Pergunta cadastrada com sucesso!', ['mensagem-sucesso']);
-        const botaoVoltar = UtilDOM.criaComTextoEClasses('button', 'Voltar à Listagem', ['botao-voltar']);
+        const mensagem = UtilDOM.criaComTextoEClasses('h3', 'Pergunta cadastrada com sucesso!', ['mensagem-sucesso']);
+        const botaoVoltar = UtilDOM.criaComTextoEClasses('button', 'Voltar para Cursos 🏡', ['botao-voltar']);
         botaoVoltar.onclick = () => {
             window.location.href = rotasPaginas.listagemCursos;
         };
-        container.append(mensagem, botaoVoltar);
+        const botaoCadastrarNova = UtilDOM.criaComTextoEClasses('button', 'Cadastrar Nova 🆕', ['botao-cadastrar-nova']);
+        botaoCadastrarNova.onclick = () => {
+            window.location.href = rotasPaginas.cadastroPerguntas;
+        };
+        container.append(mensagem, botaoVoltar, botaoCadastrarNova);
         this.divCadastro.innerHTML = '';
         this.divCadastro.append(container);
     }

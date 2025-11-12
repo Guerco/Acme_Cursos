@@ -1,6 +1,7 @@
 import { AssuntoListagem } from "../dto/AssuntoListagem";
+import { RepositorioAssuntos } from "./RepositorioAssuntos";
 
-export class RepositorioAssuntosJson {
+export class RepositorioAssuntosJson implements RepositorioAssuntos {
     async buscarPorIdCurso(idCurso: number): Promise<AssuntoListagem[]> {
         const assuntos = [
             { "id": 1, "idCurso": 1, "descricao": "Gráficos" },

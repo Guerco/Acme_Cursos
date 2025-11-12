@@ -16,6 +16,7 @@
     <header></header>
     <div id="cadastro">
         <h2>Cadastro de Pergunta</h2>
+        <span class="mensagem-campos-obrigatorios">Campos marcados com * são obrigatórios.</span>
         <form id="form-cadastro">
             <div id="info-pergunta">
                 <div class="container-campos">
@@ -77,29 +78,29 @@
                     <tbody>
                         <tr class="container-resposta">
                             <td><input type="checkbox" name="resposta-correta" checked></td>
-                            <td><input type="text" name="resposta" placeholder="Digite a resposta 1" minlength="10"
+                            <td><input type="text" name="resposta" placeholder="Digite a resposta 1" minlength="1"
                                     maxlength="200" required id="resposta-1"></td>
                         </tr>
                         <tr class="container-resposta">
                             <td><input type="checkbox" name="resposta-correta"></td>
-                            <td><input type="text" name="resposta" placeholder="Digite a resposta 2" minlength="10"
+                            <td><input type="text" name="resposta" placeholder="Digite a resposta 2" minlength="1"
                                     maxlength="200" required></td>
                         </tr>
                         <tr class="container-resposta" hidden>
                             <td><input type="checkbox" name="resposta-correta" disabled></td>
-                            <td><input type="text" name="resposta" placeholder="Digite a resposta 3" minlength="10"
+                            <td><input type="text" name="resposta" placeholder="Digite a resposta 3" minlength="1"
                                     maxlength="200" required disabled>
                             </td>
                         </tr>
                         <tr class="container-resposta" hidden>
                             <td><input type="checkbox" name="resposta-correta" disabled></td>
-                            <td><input type="text" name="resposta" placeholder="Digite a resposta 4" minlength="10"
+                            <td><input type="text" name="resposta" placeholder="Digite a resposta 4" minlength="1"
                                     maxlength="200" required disabled>
                             </td>
                         </tr>
                         <tr class="container-resposta" hidden>
                             <td><input type="checkbox" name="resposta-correta" disabled></td>
-                            <td><input type="text" name="resposta" placeholder="Digite a resposta 5" minlength="10"
+                            <td><input type="text" name="resposta" placeholder="Digite a resposta 5" minlength="1"
                                     maxlength="200" required disabled>
                             </td>
                         </tr>
@@ -124,7 +125,7 @@
                     <a href="../index.html" id="botao-cancelar"><button type="button">Cancelar</button></a>
                     <button type="submit" id="botao-cadastrar">Cadastrar</button>
                 </div>
-                <output id="mensagem-cadastro"></output> 
+                <ul id="mensagem-cadastro"></ul> 
             </div>
         </form>
     </div>

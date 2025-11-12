@@ -28,6 +28,6 @@ export interface VisaoCadastroPerguntas {
     desmarcarUltimaRespostaCorreta() : void;
     desmarcarRespostaCorreta(caixaCorreta : HTMLInputElement) : void;
     marcarPrimeiraRespostaCorreta() : void;
-    exibirMensagemErro(mensagem: string) : void
+    exibirMensagemErro(mensagens: string[]) : void
     exibirMensagemSucesso() : void;
 }

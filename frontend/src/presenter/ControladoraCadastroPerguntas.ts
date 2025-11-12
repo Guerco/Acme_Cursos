@@ -1,9 +1,10 @@
-import { RepositorioProfessoresJsonServer } from "../model/repositorio/RepositorioProfessoresJsonServer";
-import { RepositorioCursosJson } from "../model/repositorio/RepositorioCursosJson";
+import { RepositorioProfessoresApi } from "../model/repositorio/RepositorioProfessoresApi";
+import { RepositorioCursosApi } from "../model/repositorio/RepositorioCursosApi";
 import { ServicoCadastroPerguntas } from "../model/servico/ServicoCadastroPerguntas";
 import { VisaoCadastroPerguntas } from "../view/VisaoCadastroPerguntas";
-import { RepositorioAssuntosJson } from "../model/repositorio/RepositorioAssuntosJson";
-import { RepositorioPerguntasJsonServer } from "../model/repositorio/RepositorioPerguntasJsonServer";
+import { RepositorioPerguntasApi } from "../model/repositorio/RepositorioPerguntasApi";
+import { RepositorioAssuntosApi } from "../model/repositorio/RepositorioAssuntosApi";
+import { DominioException } from "../model/exception/DominioException";
 
 export class ControladoraCadastroPerguntas {
     private servico: ServicoCadastroPerguntas;
@@ -11,10 +12,10 @@ export class ControladoraCadastroPerguntas {
     constructor(
         private visao: VisaoCadastroPerguntas
     ) {
-        const repoProfessores = new RepositorioProfessoresJsonServer();
-        const repoCursos = new RepositorioCursosJson();
-        const repoAssuntos = new RepositorioAssuntosJson();
-        const repoPerguntas = new RepositorioPerguntasJsonServer();
+        const repoProfessores = new RepositorioProfessoresApi();
+        const repoCursos = new RepositorioCursosApi();
+        const repoAssuntos = new RepositorioAssuntosApi();
+        const repoPerguntas = new RepositorioPerguntasApi();
         this.servico = new ServicoCadastroPerguntas(repoProfessores, repoCursos, repoAssuntos, repoPerguntas);
     }
 
@@ -92,7 +93,9 @@ export class ControladoraCadastroPerguntas {
             await this.servico.cadastrarPergunta(pergunta);
             this.visao.exibirMensagemSucesso();
         } catch (err : any) {
-            this.visao.exibirMensagemErro(err.message);
+            if (err instanceof DominioException) {
+                this.visao.exibirMensagemErro(err.getProblemas());
+            } else throw err;
         }
     }
 }

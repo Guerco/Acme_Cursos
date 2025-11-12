@@ -12,7 +12,7 @@ export class RepositorioPerguntasJsonServer implements RepositorioPerguntas {
         return [];
     }
 
-    async cadastrarPergunta(pergunta: PerguntaCadastro): Promise<void> {
+    async enviarPergunta(pergunta: PerguntaCadastro): Promise<void> {
         try {
             const response = await fetch(URL_API, {
                 method: 'POST',

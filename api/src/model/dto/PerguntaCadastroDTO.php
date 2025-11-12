@@ -38,7 +38,7 @@ class PerguntaCadastroDTO
         self::validarFormatoDados($dados);
         return new self(
             (int) $dados['idAssunto'],
-            $dados['descricao'],
+            trim($dados['descricao']),
             $dados['dificuldade'],
             (int) $dados['tempoSeg'],
             RespostaPerguntaCadastroDTO::deArrays($dados['respostas']),
@@ -179,26 +179,31 @@ class PerguntaCadastroDTO
 
         $respostasCorretas = 0;
         $qtdRespostas = 0;
+        $saiu = false;
+
         foreach ($respostas as $r) {
             $qtdRespostas++;
 
             $tamanhoDescricao = strlen($r->descricao);
             if ($tamanhoDescricao < 1 || $tamanhoDescricao > 200) {
                 $problemas[] = 'A descrição das respostas deve ter de 1 a 200 caracteres.';
+                $saiu = true;
                 break;
             }
 
             if ($r->ehCorreta) $respostasCorretas++;
         }
 
-        if ($qtdRespostas < 2 || $qtdRespostas > 5) {
-            $problemas[] = 'A pergunta deve possuir de 2 a 5 respostas.';
-        } else {
-            if ($respostasCorretas == 0)
-                $problemas[] = 'A pergunta não pode possuir nenhuma resposta correta.';
-    
-            if ($respostasCorretas >= $qtdRespostas)
-                $problemas[] = 'A pergunta não pode possuir todas respostas corretas.';
+        if (!$saiu) {
+            if ($qtdRespostas < 2 || $qtdRespostas > 5) {
+                $problemas[] = 'A pergunta deve possuir de 2 a 5 respostas.';
+            } else {
+                if ($respostasCorretas == 0)
+                    $problemas[] = 'A pergunta não pode possuir nenhuma resposta correta.';
+        
+                if ($respostasCorretas >= $qtdRespostas)
+                    $problemas[] = 'A pergunta não pode possuir todas respostas corretas.';
+            }
         }
 
         if (!is_null($figuraBase64)) {

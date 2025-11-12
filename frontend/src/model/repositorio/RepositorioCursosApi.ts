@@ -35,8 +35,17 @@ export class RepositorioCursosApi implements RepositorioCursos  {
     }
 
     async buscarResumidoPorIdProfessor(idProfessor : number) : Promise<CursoListagemResumo[]>{
-        const dados = [] as CursoListagemResumo[];
-        return dados;
+        try {
+            const response = await fetch(rotasApi.cursosProfessor(idProfessor));
+        
+            if (!response.ok){
+                throw new Error();
+            }
+            const cursos = await response.json();
+            return cursos;
+        } catch(err) {
+            throw new Error('Não foi possível buscar os cursos.');
+        }
     }
     
 }
