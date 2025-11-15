@@ -17,5 +17,7 @@ export const classes = {
     botaoAssuntos: '.botao-exibir-assuntos',
     tabelaAssuntos: '.tabela-assuntos',
     linhaAssunto: 'tr-assunto',
-    descricaoAssunto: 'descricao-assunto'
+    descricaoAssunto: 'descricao-assunto',
+    aberto: 'aberto',
+    scroll: 'scroll'
 };

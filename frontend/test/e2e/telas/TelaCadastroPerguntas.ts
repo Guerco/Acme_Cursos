@@ -179,7 +179,7 @@ export class TelaCadastroPerguntas {
     }
 
     private async buscarCaixaCorreto(resposta: Locator): Promise<Locator> {
-        const caixaCorreto = resposta.locator('input[type="checkbox"]');
+        const caixaCorreto = resposta.locator(classesCss.labelCorreta);
         await caixaCorreto.waitFor({ state: 'visible', timeout: 5000 });
         return caixaCorreto;
     }

@@ -143,6 +143,7 @@ export class VisaoCadastroPerguntasDOM implements VisaoCadastroPerguntas {
 
     preencherListaCursos(cursos: CursoListagemResumo[]): void {
         const opcaoPadrao = this.selectCurso.querySelector('option[value=""]') as HTMLOptionElement;
+        opcaoPadrao.innerText = 'Selecione um Curso';
 
         const opcoesCurso = [opcaoPadrao!];
         for (const c of cursos) {
@@ -159,11 +160,12 @@ export class VisaoCadastroPerguntasDOM implements VisaoCadastroPerguntas {
         this.selectCurso.value = "";
     }
 
-    preencherListaAssuntos(cursos: AssuntoListagem[]): void {
+    preencherListaAssuntos(assuntos: AssuntoListagem[]): void {
         const opcaoPadrao = this.selectAssunto.querySelector('option[value=""]') as HTMLOptionElement;
+        opcaoPadrao.innerText = (assuntos.length == 0) ? 'Selecione primeiro um Curso' : 'Selecione um Assunto';
 
         const opcoesAssunto = [opcaoPadrao!];
-        for (const c of cursos) {
+        for (const c of assuntos) {   
             opcoesAssunto.push(UtilDOM.criaSelectOption(String(c.id), c.descricao));
         }
         const frag = UtilDOM.criaFragmentoComElementos(opcoesAssunto);

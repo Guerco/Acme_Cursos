@@ -56,20 +56,20 @@ header {
 .menu-lateral {
     position: fixed;
     top: 0;
-    left: 0;
-    left: -300px;
+    right: -300px;
     width: 300px;
     height: 100%;
-    background-color: #650996;
+    background-color: #820ec0;
     color: white;
     padding: 20px;
-    transition: 0.1s;
+    transition: 0.2s;
     display: flex;
     flex-direction: column;
     gap: 10px;
     overflow-x: hidden;
     overflow-y: auto;
     scrollbar-color: #ffffff18 transparent;
+    z-index: 2;
 }
 
 .menu-lateral .logotipo {
@@ -80,7 +80,7 @@ header {
 }
 
 .menu-lateral.visivel {
-    left: 0;
+    right: 0;
 }
 
 .menu-lateral a {
@@ -98,6 +98,27 @@ header {
 
 body.menu-aberto {
     overflow: hidden;
+}
+
+/* ========================================================== */
+/* Estilos do fundo escuro do menu */
+.fundo-escuro {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #00000050;
+  opacity: 0;
+  pointer-events: none;
+  transition: 0.2s;
+  z-index: 1;
+}
+
+.menu-lateral.visivel ~ .fundo-escuro{
+  opacity: 1;
+  pointer-events: all;
+  cursor: pointer;
 }
 
 /* ========================================================== */

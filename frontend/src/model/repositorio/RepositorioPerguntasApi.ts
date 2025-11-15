@@ -11,14 +11,27 @@ export class RepositorioPerguntasApi implements RepositorioPerguntas {
         try {
             const response = await fetch(rotasApi.buscarPerguntas(idAluno, idAssunto));
 
-            if (!response.ok) {
+            if (response.status >= 400 && response.status < 500) {
+                throw DominioException.comProblemas((await response.json()).erros);
+            }
+            else if (!response.ok) {
                 throw new Error();
             }
 
             const perguntas = await response.json();
-            return perguntas;
-        } catch (error: any) {
-            throw new Error('Não foi possível buscar as perguntas.');
+            return perguntas.map((p : any) => 
+                new PerguntaListagemQuiz(
+                    p.id,
+                    p.descricao,
+                    p.caminhoImg,
+                    p.tempoSeg,
+                    p.dificuldade,
+                    p.respostas
+                )
+        );
+        } catch (error) {
+            if (error instanceof DominioException) throw error;
+            else throw new Error('Não foi possível buscar as perguntas.');
         }
     }
 
@@ -63,7 +76,15 @@ export class RepositorioPerguntasApi implements RepositorioPerguntas {
             const resultado = await response.json();
             if ('mensagem' in resultado)
                 throw new DominioException(resultado.mensagem);
-            return resultado;
+            return resultado.map((p: any) => new PerguntaListagem(
+                p.descricao,
+                p.caminhoImg,
+                p.tempoSeg,
+                p.dificuldade,
+                p.descricaoAssunto,
+                p.ultimaAtualizacao,
+                p.respostas
+            ));
         } catch(err) {
             if (err instanceof DominioException) {
                 throw err;

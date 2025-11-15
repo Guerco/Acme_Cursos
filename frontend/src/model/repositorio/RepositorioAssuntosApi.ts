@@ -10,8 +10,13 @@ export class RepositorioAssuntosApi implements RepositorioAssuntos {
             if (!response.ok) {
                 throw new Error();
             }
-            const cursos = await response.json();
-            return cursos;
+            const assuntos = await response.json();
+            return assuntos.map((a : any) => 
+                new AssuntoListagem(
+                    a.id,
+                    a.descricao
+                )
+            );
         } catch (err) {
             throw new Error('Não foi possível buscar os assuntos.');
         }

@@ -19,6 +19,7 @@ export const classes = {
   mensagemSucesso: 'mensagem-sucesso',
   botaoVoltar: 'botao-voltar',
   containerSucesso: 'container-sucesso',
+  labelCorreta: 'label-resposta-correta',
 };
 
 export const names = {

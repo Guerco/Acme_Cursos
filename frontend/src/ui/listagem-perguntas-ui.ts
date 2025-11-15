@@ -21,7 +21,9 @@ export const classes = {
     linhaResposta: 'tr-resposta',
     perguntaAcoes: 'pergunta-acoes',
     botaoExibirRespostas: 'botao-exibir-resposta',
-    detalhesPergunta: 'detalhes-pergunta'
+    detalhesPergunta: 'detalhes-pergunta',
+    aberto: 'aberto',
+    scroll: 'scroll'
 };
 
 export const idsCss = Object.fromEntries(

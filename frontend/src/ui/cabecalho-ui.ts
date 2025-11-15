@@ -4,6 +4,7 @@ export const classes = {
     icon: 'icone',
     visivel: 'visivel',
     menuLateral: 'menu-lateral',
+    fundoEscuro: 'fundo-escuro',
 };
 
 export const ids = {

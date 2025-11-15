@@ -1,4 +1,4 @@
-import { classes, classesCss, ids } from "../ui/listagem-perguntas-ui";
+import { classes, classesCss, ids, idsCss } from "../ui/listagem-perguntas-ui";
 import { UtilDOM } from "../util/UtilDOM.ts";
 import { VisaoListagemPerguntas } from "./VisaoListagemPerguntas.ts";
 import { rotasApi } from "../rotas.ts";
@@ -36,13 +36,17 @@ export class VisaoListagemPerguntasDOM implements VisaoListagemPerguntas {
         this.outMensagem.innerText = mensagens.join(', ');
     }
 
-    exibirPerguntas(perguntas: PerguntaListagem[]): void {
+    exibirPerguntas(perguntas: PerguntaListagem[], assunto: string|null): void {
         if (!perguntas || perguntas.length === 0) {
             this.exibirMensagem(['Não há perguntas para se listar.']);
         } else {
+            const titulo = (assunto !== null) ? 'Perguntas sobre '+assunto : 'Listagem de Perguntas';
+
+            const h1Titulo = UtilDOM.criaComTexto('h1', titulo);
+            
             const cardsPerguntas = this.perguntasParaCards(perguntas);
 
-            const frag = UtilDOM.criaFragmentoComElementos(cardsPerguntas);
+            const frag = UtilDOM.criaFragmentoComElementos([h1Titulo, ...cardsPerguntas]);
 
             this.secaoPerguntas.appendChild(frag);
         }
@@ -54,12 +58,27 @@ export class VisaoListagemPerguntasDOM implements VisaoListagemPerguntas {
         this.secaoPerguntas = document.getElementById(ids.secaoPerguntas) as HTMLDivElement;
     }
 
-    private perguntasParaCards(perguntas: PerguntaListagem[]): HTMLDivElement[] {
+    private perguntasParaCards(perguntas: PerguntaListagem[]): HTMLElement[] {
         if (!perguntas || perguntas.length === 0) {
-            return [UtilDOM.criaComTexto('h3', 'Não há perguntas para se listar.') as HTMLDivElement];
+            this.exibirMensagem(['Não há perguntas para se listar.']);
         }
 
-        return perguntas.map(p => this.perguntaParaCard(p));
+        const cards : HTMLElement[] = [] ;
+        let assunto = '';
+
+        for (const p of perguntas) {
+            const pergunta = this.perguntaParaCard(p);
+
+            if (p.descricaoAssunto != assunto) {
+                assunto = p.descricaoAssunto;
+                const h2Titulo = UtilDOM.criaComTexto('h2', 'Perguntas sobre '+ assunto);
+                cards.push(h2Titulo);
+            }
+
+            cards.push(pergunta);
+        }
+
+        return cards;
     }
 
     private perguntaParaCard(pergunta: PerguntaListagem): HTMLDivElement {
@@ -91,10 +110,9 @@ export class VisaoListagemPerguntasDOM implements VisaoListagemPerguntas {
 
         const containerRespostas = UtilDOM.criaComClasses('div', [classes.containerRespostas]);
         containerRespostas.appendChild(this.respostasParaTabela(pergunta.respostas));
-        containerRespostas.hidden = true;
 
         const containerAcoes = UtilDOM.criaComClasses('div', [classes.perguntaAcoes]);
-        const botaoExibirRespostas = UtilDOM.criaComTextoEClasses('button', 'exibir respostas', [classes.botaoExibirRespostas]);
+        const botaoExibirRespostas = UtilDOM.criaComTextoEClasses('button', 'Exibir Respostas 👁‍🗨', [classes.botaoExibirRespostas]);
         botaoExibirRespostas.addEventListener('click', this.alternarVisibilidadeRespostas);
         containerAcoes.appendChild(botaoExibirRespostas);
 
@@ -143,8 +161,22 @@ export class VisaoListagemPerguntasDOM implements VisaoListagemPerguntas {
 
         const botao = card!.querySelector(classesCss.botaoExibirRespostas);
         const secaoRespostas = card?.querySelector(classesCss.containerRespostas);
-        secaoRespostas!.toggleAttribute('hidden');
+    
+        if (! secaoRespostas!.classList.contains(classes.aberto)) {
+            secaoRespostas!.classList.add(classes.aberto);
 
-        botao!.textContent = (botao!.textContent == 'exibir respostas') ? 'recolher respostas' : 'exibir respostas';
+            secaoRespostas!.classList.remove(classes.scroll);
+
+            const adicionarScroll = () => {
+                secaoRespostas!.classList.add(classes.scroll);
+                secaoRespostas!.removeEventListener('transitionend', adicionarScroll);
+            }
+
+            secaoRespostas!.addEventListener('transitionend', adicionarScroll);
+        } else {
+            secaoRespostas!.classList.remove(classes.aberto, classes.scroll);
+        }
+
+        botao!.textContent = (botao!.textContent.toLowerCase().includes('exibir')) ? 'Recolher Respostas 👁‍🗨' : 'Exibir Respostas 👁‍🗨';
     }
 }

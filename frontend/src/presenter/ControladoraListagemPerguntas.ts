@@ -17,7 +17,10 @@ export class ControladoraListagemPerguntas {
         try {
             const idAssunto = this.visao.obterIdAssunto();
             const perguntas = await this.servico.buscarTodos(idAssunto);
-            this.visao.exibirPerguntas(perguntas);
+
+            const assunto = (idAssunto !== null) ? perguntas[0].descricaoAssunto : null;
+
+            this.visao.exibirPerguntas(perguntas, assunto);
         } catch (err: any) {
             if (err instanceof DominioException)
                 this.visao.exibirMensagem(err.getProblemas())

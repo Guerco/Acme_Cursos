@@ -24,7 +24,11 @@ export class RepositorioAlunosAPI implements RespositorioAlunos {
                 throw new Error();
             } else {
                 const aluno = await response.json();
-                return aluno;
+                return new AlunoListagem(
+                    aluno.id, 
+                    aluno.nome, 
+                    aluno.pontuacaoGeral
+                );
             }
         } catch (err: any) {
             if (err instanceof DominioException)

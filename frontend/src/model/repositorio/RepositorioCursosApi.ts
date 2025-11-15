@@ -13,7 +13,15 @@ export class RepositorioCursosApi implements RepositorioCursos  {
                 throw new Error();
             }
             const cursos = await response.json();
-            return cursos;
+            return cursos.map((c : any)  => 
+                new CursoListagem(
+                    c.id, 
+                    c.descricao, 
+                    c.caminhoImg, 
+                    c.nomeProfessor, 
+                    c.assuntos
+                )
+            );
         } catch(err) {
             throw new Error('Não foi possível buscar os cursos.');
         }
@@ -28,7 +36,15 @@ export class RepositorioCursosApi implements RepositorioCursos  {
             }
 
             const cursos = await response.json();
-            return cursos;
+            return cursos.map((c : any)  => 
+                new CursoListagem(
+                    c.id, 
+                    c.descricao, 
+                    c.caminhoImg, 
+                    c.nomeProfessor, 
+                    c.assuntos
+                )
+            );
         } catch(err) {
             throw new Error('Não foi possível buscar os cursos filtrados.');
         }
@@ -42,7 +58,12 @@ export class RepositorioCursosApi implements RepositorioCursos  {
                 throw new Error();
             }
             const cursos = await response.json();
-            return cursos;
+            return cursos.map((c : any) => new 
+                CursoListagemResumo(
+                    c.id,
+                    c.descricao
+                )
+            );
         } catch(err) {
             throw new Error('Não foi possível buscar os cursos.');
         }

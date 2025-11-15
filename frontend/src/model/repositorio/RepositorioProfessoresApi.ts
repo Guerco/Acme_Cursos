@@ -6,11 +6,22 @@ const URL_API = rotasApi.professores;
 
 export class RepositorioProfessoresApi implements RepositorioProfessores {
     async buscarTodos(): Promise<ProfessorListagem[]> {
-        const response = await fetch(URL_API);
+        try {
+            const response = await fetch(URL_API);
 
-        if (!response.ok) {
-            throw new Error();
+            if (!response.ok) {
+                throw new Error();
+            }
+
+            const professores = await response.json();
+            return professores.map((p : any) =>
+                new ProfessorListagem(
+                    p.id,
+                    p.nome
+                )
+            );
+        } catch (err) {
+            throw new Error('Não foi possível buscar os professores.');
         }
-        return await response.json();
     }
 }

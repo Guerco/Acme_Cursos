@@ -30,7 +30,7 @@
 - json-server v1.0.0-beta.3
 - playwright v1.55.1
 - vite v6.3.6
-<!-- - vitest v3.2.4 -->
+- vitest v3.2.4
 - execa v9.6.0
 
 ---
@@ -54,6 +54,8 @@
 ## Primeiros Passos 🏃‍♂️
 
 Para aprender a instalar e executar o projeto, consulte o guia completo em [Instruções de Rodagem.](./doc/instrucoes.md)   
+
+---
 
 ## Estrutura de Diretórios 🗃
 
@@ -89,13 +91,13 @@ Para aprender a instalar e executar o projeto, consulte o guia completo em [Inst
 
 ---
 
-## Referências de Conteúdo
+## Referências de Conteúdo 📚
 
 Todas as referências a imagens, conteúdos e estilos **externos** utilizados neste projeto encontram-se na [Documentação de Referências](./doc/referencias.md).
 
 ---
 
-## Slides de Apresentação
+## Slides de Apresentação 🖥️
 
 [Clique para visualizar os slides de apresentação para P1](./doc/apresentacao/slides-p1.pdf)
 

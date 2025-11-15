@@ -46,7 +46,8 @@ export class VisaoListagemCursosDom implements VisaoListagemCursos{
             
             const cardsCursos = this.cursosParaCards(cursos);
     
-            const frag = UtilDOM.criaFragmentoComElementos(cardsCursos);
+            const h1Cursos = UtilDOM.criaComTexto('h1', 'Listagem de Cursos');
+            const frag = UtilDOM.criaFragmentoComElementos([h1Cursos, ...cardsCursos]);
     
             secaoCursos?.appendChild(frag);
         }
@@ -97,12 +98,11 @@ export class VisaoListagemCursosDom implements VisaoListagemCursos{
         containerCurso.append(figuraCurso, infoCurso);
 
         const containerAssuntos = UtilDOM.criaComClasses('div', [classes.assuntos]);
-        containerAssuntos.hidden = true;
         const tabelaAssuntos = this.assuntosParaTabela(curso.assuntos);
         containerAssuntos.appendChild(tabelaAssuntos);
     
         const cursoAcoes = UtilDOM.criaComClasses('div', [classes.acoesCurso]);
-        const botaoExibirAssuntos = UtilDOM.criaComTextoEClasses('button', 'exibir assuntos', [classes.botaoAssuntos]);
+        const botaoExibirAssuntos = UtilDOM.criaComTextoEClasses('button', 'Exibir Asssuntos 👁‍🗨', [classes.botaoAssuntos]);
         botaoExibirAssuntos.addEventListener('click', this.alternarVisibilidadeAssuntos);
         cursoAcoes.appendChild(botaoExibirAssuntos);
     
@@ -155,9 +155,23 @@ export class VisaoListagemCursosDom implements VisaoListagemCursos{
         
         const botao = card!.querySelector(classes.botaoAssuntos);
         const secaoAssuntos = card?.querySelector(classes.assuntos);
-        secaoAssuntos!.toggleAttribute('hidden');
 
-        botao!.textContent = (botao!.textContent == 'exibir assuntos') ? 'recolher assuntos' : 'exibir assuntos';
+        if (! secaoAssuntos!.classList.contains(classes.aberto)) {
+            secaoAssuntos!.classList.add(classes.aberto);
+
+            secaoAssuntos!.classList.remove(classes.scroll);
+
+            const adicionarScroll = () => {
+                secaoAssuntos!.classList.add(classes.scroll);
+                secaoAssuntos!.removeEventListener('transitionend', adicionarScroll);
+            }
+
+            secaoAssuntos!.addEventListener('transitionend', adicionarScroll);
+        } else {
+            secaoAssuntos!.classList.remove(classes.aberto, classes.scroll);
+        }
+
+        botao!.textContent = (botao!.textContent.toLowerCase().includes('exibir')) ? 'Recolher Assuntos 👁‍🗨' : 'Exibir Assuntos 👁‍🗨';
     }
 
     private redirecionarParaQuiz(event: Event){

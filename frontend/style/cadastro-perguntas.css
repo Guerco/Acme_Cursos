@@ -51,6 +51,19 @@
     padding: 5px;
 }
 
+#info-pergunta select:disabled {
+    all: unset;
+    background-color: #8b8b8b57;
+    cursor: not-allowed;
+    width: 100%;
+    height: 40px;
+    border-radius: 12px;
+    border: solid 2px #e9e9e9;
+    padding: 5px;
+    box-sizing: border-box;
+    font-size: 13px;
+}
+
 #info-pergunta textarea {
     resize: none;
     padding: 10px;
@@ -84,21 +97,33 @@ tr.container-resposta {
 }
 
 .container-resposta td:first-child {
-    text-align: left;
-    width: 10%;
+    width: 1%;
 }
 
-.container-resposta td:first-child input {
-    cursor: pointer;
-    margin: 0 auto;
-    display: block;
-    border: 2px solid #e9e9e9;
+.label-resposta-correta {
+    display: flex;
+    align-items: center;
+    padding: 0px 10px;
+    background-color: #e9e9e9;
+    border: 2px solid #dcdcdc;
     border-radius: 12px;
+    font-size: 12px;
+    cursor: pointer;
+    height: 40px;
+    gap: 5px;
 }
 
-.container-resposta td:nth-child(2) {
-    text-align: center;
-    width: 90%;
+.check-resposta-correta {
+    display: none;
+}
+
+.label-resposta-correta::after {
+    content: "❌";
+    font-size: 18px;
+}
+
+.check-resposta-correta:checked + .label-resposta-correta::after {
+    content: "✅";
 }
 
 .container-resposta td:nth-child(2) input {
@@ -140,19 +165,16 @@ tfoot td {
 
 #remover-resposta {
     background-color: #ff7700;
-    ;
 }
 
 #adicionar-resposta:disabled {
-    background-color: #6d0ea893;
+    background-color: #6d0ea857;
     cursor: not-allowed;
-    opacity: 0.9;
 }
 
 #remover-resposta:disabled {
-    background-color: #ff770093;
+    background-color: #ff770057;
     cursor: not-allowed;
-    opacity: 0.9;
 }
 
 /* ========================================================== */
@@ -209,11 +231,31 @@ tfoot td {
 
     #cadastro {
         width: 100%;
-        padding: 20px;
+        padding: 10px;
     }
 
     #form-cadastro {
         padding: 10px;
+    }
+
+    #info-pergunta {
+        padding: 10px 10px;
+    }
+
+    #cadastro > h2 {
+        text-align: center;
+        font-size: 20px;
+    }
+
+    .mensagem-campos-obrigatorios {
+        text-align: center;
+        font-size: 11px;
+        padding: 0;
+    }
+
+    .label-resposta-correta {
+        font-size: 11px;
+        padding: 5px;
     }
 }
 

@@ -9,5 +9,5 @@ export interface VisaoListagemPerguntas {
 
     // Saída
     exibirMensagem (mensagem : string []) : void;
-    exibirPerguntas (perguntas: PerguntaListagem[]): void ;
+    exibirPerguntas(perguntas: PerguntaListagem[], assunto: string|null): void;
 }   
