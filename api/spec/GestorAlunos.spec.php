@@ -18,7 +18,20 @@ describe('GestorAlunos', function (): void {
         $this->repositorioTesteAlunos    = Double::instance(['implements' => RepositorioAlunos::class]);
         $this->repositorioTestePerguntas = Double::instance(['implements' => RepositorioPerguntas::class]);
         $this->repositorioTesteCursos    = Double::instance(['implements' => RepositorioCursos::class]);
-        $this->gestorAlunos              = new GestorAlunos($this->repositorioTesteAlunos, $this->repositorioTestePerguntas, $this->repositorioTesteCursos);
+
+        $this->gerenciadorTransacoes = Double::instance([
+            'implements' => GerenciadorDeTransacoes::class,
+        ]);
+        allow($this->gerenciadorTransacoes)->toReceive('iniciar');
+        allow($this->gerenciadorTransacoes)->toReceive('confirmar');
+        allow($this->gerenciadorTransacoes)->toReceive('reverter');
+
+        $this->gestorAlunos              = new GestorAlunos(
+            $this->repositorioTesteAlunos, 
+            $this->repositorioTestePerguntas, 
+            $this->repositorioTesteCursos,
+            $this->gerenciadorTransacoes
+        );
     });
 
     describe('verificarCredenciais', function (): void {

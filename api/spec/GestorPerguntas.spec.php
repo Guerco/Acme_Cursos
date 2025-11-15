@@ -28,11 +28,19 @@ describe('GestorPerguntas', function(): void{
         $this->repositorioAssuntos = Double::instance(['implements' => RepositorioAssuntos::class]);
         $this->repositorioRespostas = Double::instance(['implements' => RepositorioRespostasPergunta::class]);
 
+        $this->gerenciadorTransacoes = Double::instance([
+            'implements' => GerenciadorDeTransacoes::class
+        ]);
+        allow($this->gerenciadorTransacoes)->toReceive('iniciar');
+        allow($this->gerenciadorTransacoes)->toReceive('confirmar');
+        allow($this->gerenciadorTransacoes)->toReceive('reverter');
+
         $this->gestorPerguntas = new GestorPerguntas(
             $this->repositorioTestePerguntas,
             $this->repositorioTesteAlunos,
             $this->repositorioAssuntos,
-            $this->repositorioRespostas
+            $this->repositorioRespostas,
+            $this->gerenciadorTransacoes
         );
     });
 
@@ -44,6 +52,7 @@ describe('GestorPerguntas', function(): void{
                 criarPerguntaTeste(2,'pergunta teste 2')
             ]);
             allow($this->repositorioTesteAlunos)->toReceive('existeComId')->andReturn(true);
+            allow($this->repositorioAssuntos)->toReceive('existeComId')->andReturn(true);
 
             $resultado = $this->gestorPerguntas->buscarPerguntasAluno(1, 1);
             expect($resultado)->toBeAn('array');
@@ -71,15 +80,28 @@ describe('GestorPerguntas', function(): void{
             })->toThrow(new DominioException('Os ids devem ser inteiros.'));
         });
         
+        it('lança uma exceção ao informar id de um assunto inexistente', function():void{
+            allow($this->repositorioTesteAlunos)->toReceive('existeComId')->andReturn(true);
+            allow($this->repositorioAssuntos)->toReceive('existeComId')->andReturn(false);
+            
+            $idAssunto = -1;
+            $idAluno = 1;
+
+            expect(function () use ($idAssunto, $idAluno): void {
+                $this->gestorPerguntas->buscarPerguntasAluno($idAssunto, $idAluno);
+            })->toThrow(new NaoEncontradoException());
+        });
+        
         it('lança uma exceção ao informar id de um aluno inexistente', function():void{
             allow($this->repositorioTesteAlunos)->toReceive('existeComId')->andReturn(false);
+            allow($this->repositorioAssuntos)->toReceive('existeComId')->andReturn(true);
             
             $idAssunto = 1;
             $idAluno = -1;
 
             expect(function () use ($idAssunto, $idAluno): void {
                 $this->gestorPerguntas->buscarPerguntasAluno($idAssunto, $idAluno);
-            })->toThrow(new NaoEncontradoException('Aluno inexistente.'));
+            })->toThrow(new DominioException());
         });
     });
 });

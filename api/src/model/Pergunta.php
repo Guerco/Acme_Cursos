@@ -83,4 +83,49 @@ class Pergunta{
     public function setUltimaAtualizacao(DateTime $ultimaAtualizacao): void {
         $this->ultimaAtualizacao = $ultimaAtualizacao;
     }
+
+    public function validar() {
+        $problemas = [];
+
+        $tamanhoDescricao = strlen($this->descricao);
+        $tempoSeg = $this->tempoSeg;
+        $respostas = $this->respostas;
+
+        if ($tamanhoDescricao < 10 || $tamanhoDescricao > 255)
+            $problemas[] = 'A descrição deve ter de 10 a 255 caracteres.';
+
+        if ($tempoSeg < 30 || $tempoSeg > 180)
+            $problemas[] = 'O tempo em segundos deve ser de 30 a 180.';
+
+        $respostasCorretas = 0;
+        $qtdRespostas = 0;
+        $saiu = false;
+
+        foreach ($respostas as $r) {
+            $qtdRespostas++;
+
+            $tamanhoDescricao = strlen($r->getDescricao());
+            if ($tamanhoDescricao < 1 || $tamanhoDescricao > 200) {
+                $problemas[] = 'A descrição das respostas deve ter de 1 a 200 caracteres.';
+                $saiu = true;
+                break;
+            }
+
+            if ($r->isCorreta()) $respostasCorretas++;
+        }
+
+        if (!$saiu) {
+            if ($qtdRespostas < 2 || $qtdRespostas > 5) {
+                $problemas[] = 'A pergunta deve possuir de 2 a 5 respostas.';
+            } else {
+                if ($respostasCorretas == 0)
+                    $problemas[] = 'A pergunta não pode não possuir nenhuma resposta correta.';
+        
+                if ($respostasCorretas >= $qtdRespostas)
+                    $problemas[] = 'A pergunta não pode possuir todas respostas corretas.';
+            }
+        }
+
+        if (!empty($problemas)) throw DominioException::comProblemas($problemas);
+    }
 }

@@ -7,7 +7,8 @@ class GestorCredenciais
         private RepositorioCredenciais $repositorioCredenciais,
         private RepositorioAlunos $repositorioAluno,
         private RepositorioProfessores $repositorioProfessor,
-        private RepositorioAdministradores $repositorioAdministrador
+        private RepositorioAdministradores $repositorioAdministrador,
+        private GerenciadorDeTransacoes $transacao
     ) {}
 
     /**
@@ -40,7 +41,7 @@ class GestorCredenciais
             $salSenha
         );
 
-        GerenciadorDeTransacao::iniciar();
+        $this->transacao->iniciar();
 
         try{
             $idCredenciais = $this->repositorioCredenciais->adicionar($credenciais);
@@ -75,10 +76,10 @@ class GestorCredenciais
                     $resultado = $this->repositorioAdministrador->adicionar($administrador);
                     break;
             }
-            GerenciadorDeTransacao::confirmar();
+            $this->transacao->confirmar();
 
         } catch (Throwable $e){
-            GerenciadorDeTransacao::reverter();
+            $this->transacao->reverter();
             throw $e;
         } 
     }

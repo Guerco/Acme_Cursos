@@ -43,16 +43,21 @@ describe('GestorCredenciais', function(): void{
         $this->repositorioTesteAlunos = Double::instance(['implements' => RepositorioAlunos::class]);
         $this->repositorioTesteProfessores = Double::instance(['implements' => RepositorioProfessores::class]);
         $this->repositorioTesteAdministradores = Double::instance(['implements' => RepositorioAdministradores::class]);
-        $this->gestorCredenciais = new GestorCredenciais($this->repositorioTesteCredenciais,
-                                                            $this->repositorioTesteAlunos,
-                                                                $this->repositorioTesteProfessores,
-                                                                    $this->repositorioTesteAdministradores);
-
-        $this->pdoTeste = Double::instance(['extends' => PDO::class,'args' => ['sqlite::memory:'] ]);
-            allow($this->pdoTeste)->toReceive('beginTransaction')->andReturn(null);
-            allow($this->pdoTeste)->toReceive('commit')->andReturn(null);
-            allow($this->pdoTeste)->toReceive('rollBack')->andReturn(null);
-            GerenciadorDeTransacao::definirConexao($this->pdoTeste);
+        
+        $this->gerenciadorTransacoes = Double::instance([
+            'implements' => GerenciadorDeTransacoes::class,
+        ]);
+        allow($this->gerenciadorTransacoes)->toReceive('iniciar');
+        allow($this->gerenciadorTransacoes)->toReceive('confirmar');
+        allow($this->gerenciadorTransacoes)->toReceive('reverter');
+        
+        $this->gestorCredenciais = new GestorCredenciais(
+            $this->repositorioTesteCredenciais,
+            $this->repositorioTesteAlunos,
+            $this->repositorioTesteProfessores,
+            $this->repositorioTesteAdministradores,
+            $this->gerenciadorTransacoes
+        );
     });
 
     describe('listarUsuarios', function():void{

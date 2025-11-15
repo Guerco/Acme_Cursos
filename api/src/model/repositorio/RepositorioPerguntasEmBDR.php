@@ -197,7 +197,7 @@ class RepositorioPerguntasEmBDR implements RepositorioPerguntas {
             $params = ['id_assunto' => $idAssunto];
         }
 
-        $sql .= ' ORDER BY p.descricao, rp.id';
+        $sql .= ' ORDER BY a.descricao, p.descricao, rp.id';
 
         try {
             $ps = $this->pdo->prepare($sql);

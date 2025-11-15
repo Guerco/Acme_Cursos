@@ -4,7 +4,8 @@ class GestorAlunos {
     public function __construct(
         private RepositorioAlunos $repositorioAlunos,
         private RepositorioPerguntas $repositorioPerguntas,
-        private RepositorioCursos $repositorioCursos
+        private RepositorioCursos $repositorioCursos,
+        private GerenciadorDeTransacoes $transacao
     ){}
 
     /**
@@ -22,7 +23,7 @@ class GestorAlunos {
 
     public function salvarResposta(RespostaAlunoCadastroDTO $resposta): bool{ 
         try {
-            GerenciadorDeTransacao::iniciar();
+            $this->transacao->iniciar();
 
             $this->validarSalvarResposta($resposta);
         
@@ -45,10 +46,10 @@ class GestorAlunos {
             if ($acertou) $this->atualizarPontuacoes($aluno, $pergunta);
             
             
-            GerenciadorDeTransacao::confirmar();
+            $this->transacao->confirmar();
             return $respostaObj->isRespostaCorreta();
         } catch (Throwable $e) {
-            GerenciadorDeTransacao::reverter();
+            $this->transacao->reverter();
             throw $e;
         }
     }

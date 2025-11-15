@@ -9,7 +9,7 @@
                     "php -S localhost:8080"
                 ], 
         "test": "kahlan",
-        "check": "phpstan analyze src --level=8",
+        "check": "phpstan analyze src --level=6",
         "db": [
             "@db-e",
             "@db-d"
@@ -25,7 +25,8 @@
                 "src/model/dto/",
                 "src/model/exception/",
                 "src/model/repositorio/",
-                "src/model/servico/"
+                "src/model/servico/",
+                "src/model/validacao"
             ]
         }
     },

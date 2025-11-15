@@ -8,7 +8,8 @@ class GestorPerguntas
         private RepositorioPerguntas $repositorioPerguntas,
         private RepositorioAlunos $repositorioAlunos,
         private RepositorioAssuntos $repositorioAssuntos,
-        private RepositorioRespostasPergunta $repositorioRespostas
+        private RepositorioRespostasPergunta $repositorioRespostas,
+        private GerenciadorDeTransacoes $transacao
     ) {
     }
 
@@ -37,49 +38,138 @@ class GestorPerguntas
             throw new DominioException('Os ids devem ser inteiros.');
         }
 
+        if (!$this->repositorioAssuntos->existeComId((int) $idAssunto)) {
+            throw new NaoEncontradoException('Assunto inexistente.');
+        }
         if (!$this->repositorioAlunos->existeComId((int) $idAluno)) {
-            throw new NaoEncontradoException('Aluno inexistente.');
+            throw new DominioException('Aluno inexistente.');
         }
     }
 
-    public function criarPergunta(PerguntaCadastroDTO $pergunta): void
+    public function criarPergunta(array $dados): void
     {
         $nomeImg = null;
+
+        if (! Validador::validarFormato($dados, TiposCampos::ARRAY)) {
+            throw new DominioException('Os dados devem ser enviados em forma de objeto JSON.');
+        }
+        $this->verificarEntradaCriarPergunta($dados);
+    
         try {
-            GerenciadorDeTransacao::iniciar();
+            $this->transacao->iniciar();
+
+            $perguntaDto = PerguntaCadastroDTO::deArray($dados);
+            $this->validarCriarPergunta($perguntaDto);
+            $pergunta = $perguntaDto->paraObjeto();
 
             $pergunta->validar();
-            $this->validarCriarPergunta($pergunta);
 
-            if (!is_null($pergunta->figuraBase64))
-                $nomeImg = $this->salvarFiguraBase64($pergunta->figuraBase64);
-
-            $perguntaObj = $pergunta->paraObjeto();
+            if (!is_null($perguntaDto->figuraBase64))
+                $nomeImg = $this->salvarFiguraBase64($perguntaDto->figuraBase64);
 
             if (!is_null($nomeImg))
-                $perguntaObj->setCaminhoImg($nomeImg);
+                $pergunta->setCaminhoImg($nomeImg);
 
-            $perguntaObj->setId($this->repositorioPerguntas->cadastrarPergunta($perguntaObj));
+            $pergunta->setId($this->repositorioPerguntas->cadastrarPergunta($pergunta));
 
-            foreach ($perguntaObj->getRespostas() as $r) {
-                $r->setPergunta($perguntaObj);
+            foreach ($pergunta->getRespostas() as $r) {
+                $r->setPergunta($pergunta);
                 $this->repositorioRespostas->cadastrarResposta($r);
             }
 
-            GerenciadorDeTransacao::confirmar();
+            $this->transacao->confirmar();
         } catch (Throwable $e) {
-            GerenciadorDeTransacao::reverter();
+            $this->transacao->reverter();
             if (!is_null($nomeImg))
                 $this->excluirFigura($nomeImg);
             throw $e;
         }
     }
 
+    /**
+     * @param array<string, mixed> $dados
+     *
+     * @throws DominioException
+     */
+    private function verificarEntradaCriarPergunta(array $dados): void
+    {
+        $problemas = [];
+
+        $formatoEsperado = [
+            'idAssunto' => [
+                'tipo' => TiposCampos::INT,
+                'obrigatorio' => true,
+            ],
+            'descricao' => [
+                'tipo' => TiposCampos::STRING,
+                'obrigatorio' => true,
+            ],
+            'dificuldade' => [
+                'tipo' => TiposCampos::ENUM,
+                'obrigatorio' => true,
+                'valoresEnum' => ['facil', 'medio', 'dificil'],
+            ],
+            'tempoSeg' => [
+                'tipo' => TiposCampos::INT,
+                'obrigatorio' => true,
+            ],
+            'figuraBase64' => [
+                'tipo' => TiposCampos::STRING,
+            ],
+            'respostas' => [
+                'tipo' => TiposCampos::ARRAY,
+                'obrigatorio' => true,
+                'subcampos' => [
+                    'ehCorreta' => [
+                        'tipo' => TiposCampos::BOOL,
+                        'obrigatorio' => true,
+                    ],
+                    'descricao' => [
+                        'tipo' => TiposCampos::STRING,
+                        'obrigatorio' => true,
+                    ],
+                ],
+            ],
+        ];
+        
+        $problemas = Validador::validarArraySchema($dados, $formatoEsperado);
+
+        if (!empty($problemas))
+            throw DominioException::comProblemas($problemas);
+    }
+    
     private function validarCriarPergunta(PerguntaCadastroDTO $pergunta): void
     {
         $idAssunto = $pergunta->idAssunto;
+        $figuraBase64 = $pergunta->figuraBase64 ?: null;
+        $dificuldade = $pergunta->dificuldade;
 
-        if (!$this->repositorioAssuntos->existeComId((int) $idAssunto)) {
+        $problemas = [];
+
+        $dificuldadesAceitas = ['facil', 'medio', 'dificil'];
+        if (!in_array(strtolower($dificuldade), $dificuldadesAceitas))
+            $problemas[] = "A dificuldade deve ser 'facil', 'medio' ou 'dificil'.";
+
+        if (!is_null($figuraBase64)) {
+            $imgData = base64_decode($figuraBase64);
+            $tamanhoImgKB = strlen($imgData) / 1024;
+
+            $infoImg = @getimagesizefromstring($imgData);
+            if ($infoImg === false) {
+                throw new DominioException('Figura inválida.');
+            }
+
+            [$width, $height, $tipo] = $infoImg;
+            if ($tipo != IMAGETYPE_PNG && $tipo != IMAGETYPE_JPEG) {
+                $problemas[] = 'A imagem deve estar nos formatos PNG ou JPEG.';
+            }
+            if ($tamanhoImgKB > 500) {
+                $problemas[] = 'A imagem deve possuir no máximo 500KB.';
+            }
+        }
+
+        if (!empty($problemas)) throw DominioException::comProblemas($problemas);
+        else if (!$this->repositorioAssuntos->existeComId((int) $idAssunto)) {
             throw new DominioException('Assunto inexistente.');
         }
     }

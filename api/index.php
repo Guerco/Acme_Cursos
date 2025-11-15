@@ -7,7 +7,6 @@ use function phputil\cors\cors;
 
 try {
     $pdo = criarConexao();
-    GerenciadorDeTransacao::definirConexao($pdo);
 } catch (PDOException $e) {
     http_response_code(500);
     die('Erro ao conectar com o banco de dados.');
@@ -166,8 +165,7 @@ $app->route('/perguntas')
 
         executaComTratamentoErros(function () use ($pdo, $req, $res) {
             $gestorPerguntas = criarGestor('perguntas');
-            $pergunta = PerguntaCadastroDTO::deArray(json_decode(json_encode($req->body()), true));
-            $gestorPerguntas->criarPergunta($pergunta);
+            $gestorPerguntas->criarPergunta(json_decode(json_encode($req->body()), true));
             $res->status(204)->end();
         }, $res);
 
@@ -209,19 +207,22 @@ function criarGestor(string $tipoGestor): GestorCursos|GestorAlunos|GestorCreden
         'alunos' => new GestorAlunos(
             new RepositorioAlunosEmBDR($pdo),
             new RepositorioPerguntasEmBDR($pdo),
-            new RepositorioCursosEmBDR($pdo)
+            new RepositorioCursosEmBDR($pdo),
+            new GerenciadorDeTransacoesEmBDR($pdo)
         ),
         'perguntas' => new GestorPerguntas(
             new RepositorioPerguntasEmBDR($pdo),
             new RepositorioAlunosEmBDR($pdo),
             new RepositorioAssuntosEmBDR($pdo),
-            new RepositorioRespostasPerguntaEmBDR($pdo)
+            new RepositorioRespostasPerguntaEmBDR($pdo),
+            new GerenciadorDeTransacoesEmBDR($pdo)
         ),
         'credenciais' => new GestorCredenciais(
             new RepositorioCredenciaisEmBDR($pdo),
             new RepositorioAlunosEmBDR($pdo),
             new RepositorioProfessoresEmBDR($pdo),
-            new RepositorioAdministradoresEmBDR($pdo)
+            new RepositorioAdministradoresEmBDR($pdo),
+            new GerenciadorDeTransacoesEmBDR($pdo)
         ),
         'professores' => new GestorProfessores(
             new RepositorioProfessoresEmBDR($pdo),
@@ -239,6 +240,8 @@ function executaComTratamentoErros (callable $callback, HttpResponse $res) {
     } catch (DominioException $e) {
         $res->status(400)->json(['erros' => $e->getProblemas()]);
     } catch (RepositorioException $e) {
+        $res->status(500)->json(['erros' => $e->getMessage()]);
+    } catch (RuntimeException $e) {
         $res->status(500)->json(['erros' => $e->getMessage()]);
     } catch (Throwable $e) {
         $res->status(500)->json(['erros' => 'Ocorreu um erro interno no servidor.']);
