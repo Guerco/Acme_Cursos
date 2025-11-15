@@ -12,8 +12,6 @@ window.addEventListener('error', () => {
     location.href = rotasPaginas.erro;
 });
 
-const visaoCabecalho = new VisaoCabecalhoDOM();
 const visao = new VisaoListagemPerguntasDOM();
 
-visaoCabecalho.iniciar();
 visao.iniciar();

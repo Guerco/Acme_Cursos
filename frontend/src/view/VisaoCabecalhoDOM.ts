@@ -24,7 +24,15 @@ const ELEMENTOS_MENU: ItemMenu[] = [
     {
         rota: rotasPaginas.cadastroPerguntas,
         descricao: '❓ Cadastro de Perguntas'
-    }
+    },
+    {
+        rota: rotasPaginas.listagemUsuarios,
+        descricao: '👥 Listagem de Usuários'
+    },
+    {
+        rota: rotasPaginas.cadastroUsuario,
+        descricao: '👤 Cadastro de usuário'
+    },
 ];
 
 

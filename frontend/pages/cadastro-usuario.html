@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastrar Usuário</title>
+    <link rel="icon" href="../img/favicon.ico" />
+    <script type="module" src="../src/scripts/cadastro-usuario.ts"></script>
+    <link rel="stylesheet" href="../style/menu.css" />
+    <script type="module" src="../src/scripts/menu.ts"></script>
+</head>
+
+<body>
+    <header>
+
+    </header>
+    <h1>Cadastro de Usuários</h1>
+    <div id="cadastro">
+        <h2>Preencha as informações do Usuário</h2>
+        <form>
+            <div class="info-usuario">
+                <label for="tipo-usuario">Tipo de Usuário:</label>
+                <select name="tipo-usuario" id="tipo-usuario" required>
+                    <option value="" hidden selected>Selecione um Tipo de Usuário</option>
+                    <option value="aluno">Aluno</option>
+                    <option value="professor">Professor</option>
+                    <option value="administrador">Administrador</option>
+                </select>
+
+                <label for="nome">Nome:</label>
+                <input type="text" id="nome"
+                required minlength="2" maxlength="100" placeholder="Preencha seu nome">
+
+                <label for="email">E-mail:</label>
+                <input type="email" id="email"
+                required minlength="3" maxlength="100" placeholder="Preencha seu email">
+
+                <label for="senha">Senha:</label>
+                <input type="password" id="senha"
+                required minlength="6" maxlength="200" placeholder="Mínimo de 6 dígitos">
+                <button type="button" id="exibir-senha">😑</button>
+            </div>
+            <div id="acoes">
+                <output id="mensagem-cadastro"></output>
+                <div  class="botoes">
+                    <a href="/listagem-usuario.html"><button type="button">Cancelar</button></a>
+                    <button type="submit" id="cadastrar">Cadastrar</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</body>
+
+</html>

@@ -20,6 +20,7 @@ export const rotasApi = {
     assuntosCurso: ( idCurso: number ) =>
         BASE_URL_API + 'cursos/' + idCurso + '/assuntos/',
     perguntas: BASE_URL_API+'perguntas/',
+    usuarios: BASE_URL_API+'usuarios/'
 };
 
 export const rotasPaginas = {
@@ -28,6 +29,8 @@ export const rotasPaginas = {
     erro: BASE_URL_WEB+'pages/erro.html',
     cadastroPerguntas: BASE_URL_WEB+'pages/cadastro-perguntas.html',
     listagemPerguntas: BASE_URL_WEB+'pages/listagem-perguntas.html',
+    listagemUsuarios: BASE_URL_WEB+'pages/listagem-usuario.html',
+    cadastroUsuario: BASE_URL_WEB+'pages/cadastro-usuario.html'
 };
 
 export const rotasJsonServer = {
