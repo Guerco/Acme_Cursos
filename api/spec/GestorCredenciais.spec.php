@@ -7,13 +7,13 @@ function criarUsuarioTeste($tipoUsuario = '', $nome = '', $email = ''): object{
     $credenciais->setEmail($email);
 
     switch ($tipoUsuario) {
-                case 'administrador':
+                case 'Administrador':
                     $usuario = new Administrador();
                     break;
-                case 'professor':
+                case 'Professor':
                     $usuario = new Professor();
                     break;
-                case 'aluno':
+                case 'Aluno':
                     $usuario = new Aluno();
                     break;
                 default:
@@ -64,9 +64,9 @@ describe('GestorCredenciais', function(): void{
 
         it('retorna um array de objetos de UsuarioListagemDTO', function():void{
             allow($this->repositorioTesteCredenciais)->toReceive('listarTodos')->andReturn([
-                criarUsuarioTeste('administrador','Usuario adm', 'adm@email.com'),
-                criarUsuarioTeste('aluno','Usuario aluno', 'aluno@email.com'),
-                criarUsuarioTeste('professor','Usuario professor', 'professor@email.com')
+                criarUsuarioTeste('Administrador','Usuario adm', 'adm@email.com'),
+                criarUsuarioTeste('Aluno','Usuario aluno', 'aluno@email.com'),
+                criarUsuarioTeste('Professor','Usuario professor', 'professor@email.com')
             ]);
 
             $resultado = $this->gestorCredenciais->listarUsuarios();
@@ -88,12 +88,12 @@ describe('GestorCredenciais', function(): void{
 
     describe('criarUsuario', function():void{
 
-        it('cria usuário do tipo Administrador', function():void{
+        it('envia usuário do tipo Administrador', function():void{
             $usuario = new UsuarioCadastroDTO(
                 'teste@email.com',
                 '123456',
                 'teste usuario',
-                'administrador');
+                ['administrador']);
 
             allow($this->repositorioTesteCredenciais)->toReceive('adicionar')->andReturn(1);
             allow($this->repositorioTesteAdministradores)->toReceive('adicionar')->andReturn(1);
@@ -104,12 +104,12 @@ describe('GestorCredenciais', function(): void{
             })->not->toThrow();
         });
 
-        it('cria um usuário do tipo Aluno', function():void{
+        it('envia um usuário do tipo Aluno', function():void{
             $usuario = new UsuarioCadastroDTO(
                 'teste@email.com',
                 '123456',
                 'teste usuario',
-                'aluno');
+                ['aluno']);
 
             allow($this->repositorioTesteCredenciais)->toReceive('adicionar')->andReturn(1);
             allow($this->repositorioTesteAlunos)->toReceive('adicionar')->andReturn(1);
@@ -120,12 +120,12 @@ describe('GestorCredenciais', function(): void{
             })->not->toThrow();
         });
 
-        it('cria um usuário do tipo Professor', function():void{
+        it('envia um usuário do tipo Professor', function():void{
             $usuario = new UsuarioCadastroDTO(
                 'teste@email.com',
                 '123456',
                 'teste usuario',
-                'professor');
+                ['professor']);
 
             allow($this->repositorioTesteCredenciais)->toReceive('adicionar')->andReturn(1);
             allow($this->repositorioTesteProfessores)->toReceive('adicionar')->andReturn(1);
@@ -141,14 +141,14 @@ describe('GestorCredenciais', function(): void{
                 'teste@email.com',
                 '123456',
                 'teste usuario',
-                'desconhecido');
+                ['desconhecido']);
 
             allow($this->repositorioTesteCredenciais)->toReceive('adicionar')->andReturn(1);
             allow($this->repositorioTesteCredenciais)->toReceive('buscarPorEmail')->andReturn(false);
 
             expect(function () use ($usuario) {
                 $this->gestorCredenciais->criarUsuario($usuario);
-            })->toThrow(new DominioException('Tipo usuario desconhecido.'));
+            })->toThrow(new DominioException('Tipo de usuário desconhecido.'));
         });
 
         it('lança uma exceção ao informar um email que já existe', function():void{
@@ -156,7 +156,7 @@ describe('GestorCredenciais', function(): void{
                 'teste@email.com',
                 '123456',
                 'teste usuario',
-                'administrador');
+                ['administrador']);
 
             allow($this->repositorioTesteCredenciais)->toReceive('buscarPorEmail')->andReturn(true);
 
@@ -170,7 +170,7 @@ describe('GestorCredenciais', function(): void{
                 '',
                 '123456',
                 'teste usuario',
-                'administrador');
+                ['administrador']);
 
             allow($this->repositorioTesteCredenciais)->toReceive('buscarPorEmail')->andReturn(false);
 
@@ -184,7 +184,7 @@ describe('GestorCredenciais', function(): void{
                 'teste@email.com',
                 '',
                 'teste usuario',
-                'administrador');
+                ['administrador']);
 
             allow($this->repositorioTesteCredenciais)->toReceive('buscarPorEmail')->andReturn(false);
 
@@ -198,7 +198,7 @@ describe('GestorCredenciais', function(): void{
                 'teste.com',
                 '123456',
                 'teste usuario',
-                'administrador');
+                ['administrador']);
 
             allow($this->repositorioTesteCredenciais)->toReceive('buscarPorEmail')->andReturn(false);
 
@@ -213,7 +213,7 @@ describe('GestorCredenciais', function(): void{
                 $emailInvalido,
                 '123456',
                 'teste usuario',
-                'administrador');
+                ['administrador']);
 
             allow($this->repositorioTesteCredenciais)->toReceive('buscarPorEmail')->andReturn(false);
 
@@ -227,7 +227,7 @@ describe('GestorCredenciais', function(): void{
                 'teste@email.com',
                 '12345',
                 'teste usuario',
-                'administrador');
+                ['administrador']);
 
             allow($this->repositorioTesteCredenciais)->toReceive('buscarPorEmail')->andReturn(false);
 
@@ -242,7 +242,7 @@ describe('GestorCredenciais', function(): void{
                 'teste@email.com',
                 $senhaInvalida,
                 'teste usuario',
-                'administrador');
+                ['administrador']);
 
             allow($this->repositorioTesteCredenciais)->toReceive('buscarPorEmail')->andReturn(false);
 
@@ -257,7 +257,7 @@ describe('GestorCredenciais', function(): void{
                 'teste@email.com',
                 '123456',
                 '',
-                'administrador');
+                ['administrador']);
 
             allow($this->repositorioTesteCredenciais)->toReceive('buscarPorEmail')->andReturn(false);
 
@@ -271,7 +271,7 @@ describe('GestorCredenciais', function(): void{
                 'teste@email.com',
                 '123456',
                 'T',
-                'administrador');
+                ['administrador']);
 
             allow($this->repositorioTesteCredenciais)->toReceive('buscarPorEmail')->andReturn(false);
 
