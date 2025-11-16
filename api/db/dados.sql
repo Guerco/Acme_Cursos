@@ -83,5 +83,6 @@ INSERT INTO resposta_aluno(id, id_aluno, id_pergunta, resposta_correta) VALUES (
 
 -- Administrador
 INSERT INTO administrador (id, id_credenciais, nome) VALUES
-    (1, 10,'Roberto Rodrigues de Paula');
+    (1, 10,'Roberto Rodrigues de Paula'),
+    (2, 6, 'Rosa Maria da Silva');
 

@@ -33,11 +33,13 @@ class UsuarioListagemDTO{
         $classe = get_class($usuario);
     
         if (strpos($classe, 'Aluno') !== false) {
-            return 'aluno';
+            return 'Aluno';
+        } else if (strpos($classe, 'ProfessorAdministrador') !== false) {
+            return 'Professor-Administrador';
         } else if (strpos($classe, 'Professor') !== false) {
-            return 'professor';
+            return 'Professor';
         } else if (strpos($classe, 'Administrador') !== false) {
-            return 'administrador';
+            return 'Administrador';
         } else {
             throw new NaoEncontradoException('Tipo usuario desconhecido');
         }

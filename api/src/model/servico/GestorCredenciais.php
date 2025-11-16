@@ -47,35 +47,39 @@ class GestorCredenciais
             $idCredenciais = $this->repositorioCredenciais->adicionar($credenciais);
             $credenciais->setId($idCredenciais);
 
-            switch ($usuario->tipoUsuario) {
-                case 'aluno':
-                    $aluno = new Aluno(
-                        0,
-                        $usuario->nome,
-                        0,
-                        $credenciais
-                    );
-                    $resultado = $this->repositorioAluno->adicionar($aluno);
-                    break;
+            foreach ($usuario->tiposUsuario as $tipo) {
+                switch ($tipo) {
+                    case 'aluno':
+                        $aluno = new Aluno(
+                            0,
+                            $usuario->nome,
+                            0,
+                            $credenciais
+                        );
+                        $resultado = $this->repositorioAluno->adicionar($aluno);
+                        break;
 
-                case 'professor':
-                    $professor = new Professor(
-                        0,
-                        $usuario->nome,
-                        $credenciais
-                    );
-                    $resultado = $this->repositorioProfessor->adicionar(professor: $professor);
-                    break;
+                    case 'professor':
+                        $professor = new Professor(
+                            0,
+                            $usuario->nome,
+                            $credenciais
+                        );
+                        $resultado = $this->repositorioProfessor->adicionar(professor: $professor);
+                        break;
 
-                case 'administrador':
-                    $administrador = new Administrador(
-                        0,
-                        $usuario->nome,
-                        $credenciais
-                    );
-                    $resultado = $this->repositorioAdministrador->adicionar($administrador);
-                    break;
+                    case 'administrador':
+                        $administrador = new Administrador(
+                            0,
+                            $usuario->nome,
+                            $credenciais
+                        );
+                        $resultado = $this->repositorioAdministrador->adicionar($administrador);
+                        break;
+                }
             }
+
+            
             $this->transacao->confirmar();
 
         } catch (Throwable $e){
@@ -87,8 +91,10 @@ class GestorCredenciais
     private function validarUsuario(UsuarioCadastroDTO $usuario): array {
         $problemas = [];
 
-        if (!in_array($usuario->tipoUsuario, ['aluno', 'professor', 'administrador'])) {
-            $problemas[] = 'Tipo usuario desconhecido.';
+        foreach ($usuario->tiposUsuario as $tipo) {
+            if (!in_array($tipo, ['aluno', 'professor', 'administrador'])) {
+                $problemas[] = "Tipo de usuário desconhecido.";
+            }
         }
 
         if (!$usuario->email) {

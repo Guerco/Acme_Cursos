@@ -49,9 +49,10 @@ class RepositorioCredenciaisEmBDR implements RepositorioCredenciais{
             $ps = $this->pdo->prepare(
                 'select 
                     case 
-                        when a.id is not null then "aluno"
-                        when p.id is not null then "professor"
-                        when adm.id is not null then "administrador"	
+                       when a.id is not null then "Aluno"
+				       when p.id is not null and adm.id is not null then "Professor-Administrador"
+				       when p.id is not null then "Professor"
+				       when adm.id is not null then "Administrador"
                     end as tipo_usuario,
                     case
                         when a.nome is not null then a.nome
@@ -78,23 +79,23 @@ class RepositorioCredenciaisEmBDR implements RepositorioCredenciais{
 
     private function criarUsuarios(array $usuarios):array{
         $usuariosCriados = [];
-        $adm = null;
-        $professor = null;
-        $aluno = null;
         
         foreach ($usuarios as $u){
             $credenciais = new Credenciais();
             $credenciais->setEmail($u['email']);
 
             switch ($u['tipo_usuario']) {
-                case 'administrador':
+                case 'Administrador':
                     $usuario = new Administrador();
                     break;
-                case 'professor':
+                case 'Professor':
                     $usuario = new Professor();
                     break;
-                case 'aluno':
+                case 'Aluno':
                     $usuario = new Aluno();
+                    break;
+                case 'Professor-Administrador':
+                    $usuario = new ProfessorAdministrador();
                     break;
                 default:
                     throw new RepositorioException('O tipo de usuário não existe.');

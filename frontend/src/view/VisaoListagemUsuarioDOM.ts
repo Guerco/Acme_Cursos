@@ -36,14 +36,16 @@ export class VisaoListagemUsuarioDOM implements VisaoListagemUsuario{
         let cargo = '';
 
         for (const u of usuarios) {
+            console.log(cargo);
+            console.log(u.tipoUsuario);
             if(cargo != u.tipoUsuario) {
                 const trTitulo = UtilDOM.criaComClasses('tr', [classes.tituloCargo]);
 
                 const titulos: Record<string, string> = {
-                    'aluno': '👨‍🎓 Alunos',
-                    'professor': '👨‍🏫 Professores',
-                    'administrador': '⚡ Administradores',
-                    'professor-administrador': '🛠️👔 Professores-administradores'
+                    'Aluno': '👨‍🎓 Alunos',
+                    'Professor': '👨‍🏫 Professores',
+                    'Administrador': '⚡ Administradores',
+                    'Professor-Administrador': '🛠️👔 Professores-administradores'
                 };
 
                 const titulo = titulos[u.tipoUsuario] ?? 'Cargo Desconhecido';

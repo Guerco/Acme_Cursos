@@ -6,7 +6,7 @@ class UsuarioCadastroDTO{
         public ?string $email = '',
         public ?string $senha = '',
         public ?string $nome = '',
-        public ?string $tipoUsuario = ''
+        public ?array $tiposUsuario = []
     ){}
 
     
