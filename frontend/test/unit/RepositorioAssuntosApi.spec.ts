@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeAll } from 'vitest';
+import { describe, it, expect, beforeAll, vi} from 'vitest';
 import { RepositorioAssuntosApi } from '../../src/model/repositorio/RepositorioAssuntosApi';
 import { AssuntoListagem } from '../../src/model/dto/AssuntoListagem';
 
@@ -26,6 +26,22 @@ describe(RepositorioAssuntosApi.name, () => {
             await expect( async () => 
                 await repositorio.buscarPorIdCurso(idCurso)
             ).rejects.toThrow();
+        });
+
+        it('Lança uma exceção se a API estiver fora', async () => {
+
+            const fetchMock = vi.spyOn(globalThis, 'fetch').mockResolvedValue({
+                ok: false,
+                status: 500
+            } as Response);
+
+            const idCurso = 1;
+
+            await expect(async () =>
+                await repositorio.buscarPorIdCurso( idCurso)
+            ).rejects.toThrow('Não foi possível buscar os assuntos.');
+
+            fetchMock.mockRestore();
         });
 
     });

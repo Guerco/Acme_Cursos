@@ -12,9 +12,9 @@ test.describe('Cadastro de Usuário', () => {
 
     // Cenário: Mostra a lista de tipos de usuários
     test('Preenche a lista de tipos de usuários', async () => {
-        // Quando visualizo a tela
+        // Quando clico no tipo usuario
         // Então lista o tipo de usuário Aluno, Professor e Administrador
-        await tela.deveListarTiposUsuario();
+        await tela.listarTiposUsuario();
     });
 
     // Cenário: Mostra a senha
@@ -40,36 +40,47 @@ test.describe('Cadastro de Usuário', () => {
     // Cenário: Cadastro exige um tamanho mínimo para o nome
     test('Tamanho mínimo do nome', async () => {
         // Quando tento preencher o nome com menos de 2 caracteres
+        await tela.preencherNome('A');
+        // E clico no botão enviar
+        await tela.clicarBotaoEnviar();
         // Então o campo não vai aceitar essa quantidade.
-        await tela.nomeTamanhoMinimo('A');
+        await tela.nomeTamanhoMinimo();
     });
 
     // Cenário: Cadastro exige um tamanho máximo para o nome
     test('Tamanho máximo do nome', async () => {
         // Quando tento preencher o nome com mais de 100 caracteres
+        await tela.preencherNome('A'.repeat(101));
         // Então o campo não vai aceitar essa quantidade.
-        await tela.nomeTamanhoMaximo('A'.repeat(101));
+        await tela.nomeTamanhoMaximo();
     });
 
     // Cenário: Cadastro exige um tamanho mínimo para o email
     test('Tamanho mínimo do email', async () => {
         //  Quando tento preencher o email com menos de 3 caracteres
+        await tela.preencherEmail('a@');
+        // E clico no botão enviar
+        await tela.clicarBotaoEnviar();
         // Então o campo não vai aceitar essa quantidade.
-        await tela.emailTamanhoMinimo('a@');
+        await tela.emailTamanhoMinimo();
     });
 
     // Cenário: Cadastro exige um tamanho máximo para o email
     test('Tamanho máximo do email', async () => {
         // Quando tento preencher o email com mais de 100 caracteres
+        await tela.preencherEmail('a'.repeat(101));
         // Então o campo não vai aceitar essa quantidade.
-        await tela.emailTamanhoMaximo('a'.repeat(101));
+        await tela.emailTamanhoMaximo();
     });
 
     // Cenário: Cadastro exige um tamanho mínimo para a senha
     test('Tamanho mínimo da senha', async () => {
         // Quando tento preencher uma senha com menos de 6 caracteres
+        await tela.preencherSenha('12345');
+        // E clico no botão enviar
+        await tela.clicarBotaoEnviar();
         // Então o campo não vai aceitar essa quantidade.
-        await tela.senhaTamanhoMinimo('12345');
+        await tela.senhaTamanhoMinimo();
     });
 
 });

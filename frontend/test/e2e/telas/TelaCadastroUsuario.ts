@@ -21,57 +21,88 @@ export class TelaCadastroUsuario {
         await botaoCadastrar.click();
     }
 
+    async preencherNome(texto: string){
+        const nome = await this.buscarNome();
+        await nome.fill(texto);
+    }
+
+    async preencherEmail(texto: string){
+        const email = await this.buscarEmail();
+        await email.fill(texto);
+    }
+
+    async preencherSenha(texto: string){
+        const senha = await this.buscarSenha();
+        await senha.fill(texto);
+    }
+
     // Expects
-    async deveListarTiposUsuario() {
-        const tipo = await this.page.locator(idsCss.tipoUsuario);
+    async listarTiposUsuario() {
+        const tipo = await this.buscarTipoUsuario();
         await expect(tipo).toHaveText(/Aluno/);
         await expect(tipo).toHaveText(/Professor/);
         await expect(tipo).toHaveText(/Administrador/);
     }
 
     async deveMostrarSenha() {
-        const senha = this.page.locator(idsCss.senha);
+        const senha = await this.buscarSenha();
         await expect(senha).toHaveAttribute('type', 'text');
     }
 
     async deveEsconderSenha() {
-        const senha = this.page.locator(idsCss.senha);
+        const senha = await this.buscarSenha();
         await expect(senha).toHaveAttribute('type', 'password');
     }
 
-    async nomeTamanhoMinimo(texto: string) {
-        const nome = await this.page.locator(idsCss.nome);
-        await nome.fill(texto);
-        await this.clicarBotaoEnviar();
-        const mensagem = this.page.locator(idsCss.mensagem);
-        await expect(mensagem).toContainText('O nome deve ter de 2 a 100 caracteres');
+    async nomeTamanhoMinimo() {
+        const nome = await this.buscarNome();
+        await expect(nome).toHaveJSProperty('validity.valid', false);
+        await expect(nome).toHaveJSProperty('validity.tooShort', true);
     }
 
-    async nomeTamanhoMaximo(texto: string) {
-        const nome = await this.page.locator(idsCss.nome);
-        await nome.fill(texto);
-        await expect(nome).toHaveValue(texto.substring(0, 100));
+    async nomeTamanhoMaximo() {
+        const nome = await this.buscarNome();
+        const valor = await nome.inputValue();
+        expect(valor.length).toBe(100);
     }
 
-    async emailTamanhoMinimo(texto: string) {
-        const email = await this.page.locator(idsCss.email);
-        await email.fill(texto);
-        await this.clicarBotaoEnviar();
-        const mensagem = this.page.locator(idsCss.mensagem);
-        await expect(mensagem).toContainText('Formato do email inválido.');
+    async emailTamanhoMinimo() {
+        const email = await this.buscarEmail();
+        await expect(email).toHaveJSProperty('validity.valid', false);
+        await expect(email).toHaveJSProperty('validity.tooShort', true);
     }
 
-    async emailTamanhoMaximo(texto: string) {
-        const email = await this.page.locator(idsCss.email);
-        await email.fill(texto);
-        await expect(email).toHaveValue(texto.substring(0, 100));
+    async emailTamanhoMaximo() {
+        const email = await this.buscarEmail();
+        const valor = await email.inputValue();
+        expect(valor.length).toBe(100);
     }
 
-    async senhaTamanhoMinimo(texto: string) {
+    async senhaTamanhoMinimo() {
+        const senha = await this.buscarSenha();
+        await expect(senha).toHaveJSProperty('validity.valid', false);
+        await expect(senha).toHaveJSProperty('validity.tooShort', true);
+    }
+
+    // Auxiliar
+
+    async buscarTipoUsuario(){
+        const tipo = await this.page.locator(idsCss.tipoUsuario);
+        return tipo;
+    }
+
+    async buscarSenha(){
         const senha = this.page.locator(idsCss.senha);
-        await senha.fill(texto);
-        await this.clicarBotaoEnviar();
-        const mensagem = this.page.locator(idsCss.mensagem);
-        await expect(mensagem).toContainText('A senha deve conter no mínimo 6 caracteres');
+        return senha;
+    }
+
+    async buscarNome(){
+        const nome = await this.page.locator(idsCss.nome);
+        return nome;
+    }
+
+    async buscarEmail(){
+        const email = await this.page.locator(idsCss.email);
+        return email;
     }
 }

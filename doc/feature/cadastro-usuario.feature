@@ -22,6 +22,7 @@ Funcionalidade: Cadastro de usuário
     Cenário: Cadastro exige um tamanho mínimo para o nome
         Dado que acesso a tela cadastro de usuário
         Quando tento preencher o nome com menos de 2 caracteres
+        E clico no botão enviar
         Então o campo não vai aceitar essa quantidade.
 
     Cenário: Cadastro exige um tamanho máximo para o nome
@@ -32,6 +33,7 @@ Funcionalidade: Cadastro de usuário
     Cenário: Cadastro exige um tamanho mínimo para o email
         Dado que acesso a tela cadastro de usuário
         Quando tento preencher o email com menos de 3 caracteres
+        E clico no botão enviar
         Então o campo não vai aceitar essa quantidade.
 
     Cenário: Cadastro exige um tamanho máximo para o email
@@ -42,6 +44,7 @@ Funcionalidade: Cadastro de usuário
     Cenário: Cadastro exige um tamanho mínimo para a senha
         Dado que acesso a tela cadastro de usuário
         Quando tento preencher uma senha com menos de 6 caracteres
+        E clico no botão enviar
         Então o campo não vai aceitar essa quantidade.
     
 

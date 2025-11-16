@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeAll } from 'vitest';
+import { describe, it, expect, beforeAll, vi } from 'vitest';
 import { RepositorioAlunosAPI } from '../../src/model/repositorio/RepositorioAlunosApi';
 import { Credenciais } from '../../src/model/dto/Credenciais';
 import { AlunoListagem } from '../../src/model/dto/AlunoListagem';
@@ -35,6 +35,24 @@ describe(RepositorioAlunosAPI.name, () => {
             await expect( async() => 
                 await repositorio.verificarCredenciais(credenciais)
             ).rejects.toThrow(DominioException);
+        });
+
+        it('Lança uma exceção se a API estiver fora', async () => {
+
+            const fetchMock = vi.spyOn(globalThis, 'fetch').mockResolvedValue({
+                ok: false,
+                status: 500
+            } as Response);
+            const credenciais = new Credenciais(
+                'aluno@email.com',
+                '123'
+            );
+
+            await expect(async () =>
+                await repositorio.verificarCredenciais(credenciais)
+            ).rejects.toThrow('Não foi possível verificar as crecenciais.');
+
+            fetchMock.mockRestore();
         });
 
     });
