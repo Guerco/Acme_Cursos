@@ -20,6 +20,7 @@ export const classes = {
   botaoVoltar: 'botao-voltar',
   containerSucesso: 'container-sucesso',
   labelCorreta: 'label-resposta-correta',
+  destaque: 'destaque',
 };
 
 export const names = {

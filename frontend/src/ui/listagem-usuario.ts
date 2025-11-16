@@ -3,7 +3,9 @@ export const ids = {
 };
 
 export const classes = {
-    
+    infoUsuario: 'info-usuario',
+    emailUsuario: 'email-usuario',
+    tituloCargo: 'titulo-cargo',
 }
 
 export const classesCss = Object.fromEntries(

@@ -36,7 +36,7 @@ export class RepositorioPerguntasApi implements RepositorioPerguntas {
     }
 
     async enviarPergunta(pergunta: PerguntaCadastro) {
-        try {
+        try {            
             const response = await fetch(rotasApi.perguntas, {
                 method: 'POST',
                 headers: {
@@ -56,7 +56,7 @@ export class RepositorioPerguntasApi implements RepositorioPerguntas {
                 throw error;
             }
             
-            throw new Error('Não foi possível salvar a resposta.');
+            throw new Error('Não foi possível salvar a pergunta.');
         }
     }
 

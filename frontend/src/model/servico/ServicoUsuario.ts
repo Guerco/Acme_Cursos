@@ -16,10 +16,6 @@ export class ServicoUsuario{
     }
 
     async cadastrarUsuario(usuario: UsuarioCadastro) : Promise<void> {
-        try{
-            await this.repositorio.adicionar(usuario);
-        } catch(err : any) {
-            throw new Error(err.message);
-        }
+        await this.repositorio.adicionar(usuario);
     }
 }

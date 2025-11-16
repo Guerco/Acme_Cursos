@@ -16,6 +16,7 @@
     width: 80vw;
     margin: auto;
     padding: 5px;
+    margin-top: 20px;
 }
 
 #mensagem:empty {
@@ -37,13 +38,23 @@ h2 {
     margin-left: 10px;
 }
 
+.titulo-assunto {
+    background: #820ec059;
+    padding-left: 8px;
+    font-weight: bold;
+    color: #ffffff;
+    text-shadow: 2px 2px 4px #820ec0;
+    line-height: 40px;
+    border-radius: 12px;
+    margin-left: 0;
+}
+
 #secao-perguntas {
     display: flex;
     flex-direction: column;
     gap: 20px;
     width: 80vw;
-    margin: auto;
-    margin-bottom: 20px;
+    margin: 20px auto;
 }
 
 /* Card de Pergunta  */
@@ -168,7 +179,7 @@ h2 {
     #secao-perguntas {
         gap: 0.4vh;
         width: 98%;
-        margin-top: 65px;
+        margin-top: 10px;
     }
 
     .card-pergunta {

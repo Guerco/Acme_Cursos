@@ -14,15 +14,11 @@ export class VisaoCadastroUsuarioDOM implements VisaoCadastroUsuario{
     }
     
     iniciar(){
-         const botaoExibir = document.getElementById(ids.exibirSenha);
-         botaoExibir!.addEventListener('click', this.alternarVisibilidadeSenha);
-
-         const botaoCadastrar = document.getElementById(ids.cadastro);
-         botaoCadastrar!.addEventListener('click', (event) => {
+         const form = document.getElementById(ids.form);
+         form!.addEventListener('submit', (event) => {
             event.preventDefault(); 
             this.controladora.cadastrarUsuario()
          });
-
     }
     
     //entrada
@@ -30,40 +26,44 @@ export class VisaoCadastroUsuarioDOM implements VisaoCadastroUsuario{
       const nome = (document.getElementById(ids.nome) as HTMLInputElement).value;
       const email = (document.getElementById(ids.email) as HTMLInputElement).value;
       const senha = (document.getElementById(ids.senha) as HTMLInputElement).value;
-      const tipoUsuario = (document.getElementById(ids.tipoUsuario) as HTMLInputElement).value;
+      const tipo = (document.getElementById(ids.tipoUsuario) as HTMLInputElement).value;
+      const tipoUsuario = (tipo == 'professor-administrador') ? ['professor', 'administrador'] : tipo;
 
       const usuario = new UsuarioCadastro(email, senha, nome, tipoUsuario);
       return usuario;
     }
 
-    //saída
-    alternarVisibilidadeSenha(): void{
-        const inputSenha = document.getElementById(ids.senha) as HTMLInputElement;
-        const botaoExibir = document.getElementById(ids.exibirSenha);
-        const oculta = (botaoExibir!.innerText == '😑');
-        botaoExibir!.innerText = oculta ? '😐':'😑';
-        inputSenha!.type = oculta ? 'text' : 'password';
+    exibirMensagem(mensagens: string[]): void {
+        const mensagemErro = document.getElementById(ids.mensagem);
+        
+        mensagemErro!.innerHTML = '';
+        mensagemErro!.classList.add(classes.destaque);
+        setTimeout(() => {
+            mensagemErro!.classList.remove(classes.destaque);
+        }, 500);
+
+        for (const m of mensagens) {
+            const liMensagem = UtilDOM.criaComTexto('li', m);
+
+            mensagemErro!.appendChild(liMensagem);
+        }
     }
 
-    exibirMensagem(mensagem : string): void {
-        const outMensagem = document.getElementById(ids.mensagem);
-        outMensagem!.innerText = mensagem;
-    }
 
     exibirMensagemSucesso(): void{
         const container = UtilDOM.criaComClasses('div', [classes.containerSucesso]);
         const mensagem = UtilDOM.criaComTextoEClasses('h3', 'Usuário cadastrado com sucesso!', [classes.mensagemSucesso]);
-        const botaoVoltar = UtilDOM.criaComTextoEClasses('button', 'Voltar para Cursos 🏡', [classes.botaoVoltar]);
+        const botaoVoltar = UtilDOM.criaComTextoEClasses('button', 'Ir para Cursos 🏡', [classes.botaoVoltar]);
         botaoVoltar.onclick = () => {
             window.location.href = rotasPaginas.listagemCursos;
         };
-        const botaoCadastrarNova = UtilDOM.criaComTextoEClasses('button', 'Cadastrar Nova 🆕', [classes.botaoCadastrarNova]);
-                botaoCadastrarNova.onclick = () => {
-                    window.location.href = rotasPaginas.cadastroUsuario;
-                };
-                const divCadastro = document.getElementById(ids.cadastro) as HTMLDivElement;
-                container.append(mensagem, botaoVoltar, botaoCadastrarNova);
-                divCadastro.innerHTML = '';
-                divCadastro.append(container)
+        const botaoCadastrarNova = UtilDOM.criaComTextoEClasses('button', 'Cadastrar Novo 🆕', [classes.botaoCadastrarNova]);
+        botaoCadastrarNova.onclick = () => {
+            window.location.href = rotasPaginas.cadastroUsuario;
+        };
+        const divCadastro = document.getElementById(ids.cadastro) as HTMLDivElement;
+        container.append(mensagem, botaoVoltar, botaoCadastrarNova);
+        divCadastro.innerHTML = '';
+        divCadastro.append(container)
     }
 }

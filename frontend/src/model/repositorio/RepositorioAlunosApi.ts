@@ -71,7 +71,7 @@ export class RepositorioAlunosAPI implements RespositorioAlunos {
             
             return body.respostaCorreta;
         } catch(error){
-            throw new Error('Não foi possível salvar a resposta.');
+            throw error;
         }
     }
         

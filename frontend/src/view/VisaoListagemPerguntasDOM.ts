@@ -40,9 +40,7 @@ export class VisaoListagemPerguntasDOM implements VisaoListagemPerguntas {
         if (!perguntas || perguntas.length === 0) {
             this.exibirMensagem(['Não há perguntas para se listar.']);
         } else {
-            const titulo = (assunto !== null) ? 'Perguntas sobre '+assunto : 'Listagem de Perguntas';
-
-            const h1Titulo = UtilDOM.criaComTexto('h1', titulo);
+            const h1Titulo = UtilDOM.criaComTexto('h1', 'Listagem de Perguntas');
             
             const cardsPerguntas = this.perguntasParaCards(perguntas);
 
@@ -71,7 +69,7 @@ export class VisaoListagemPerguntasDOM implements VisaoListagemPerguntas {
 
             if (p.descricaoAssunto != assunto) {
                 assunto = p.descricaoAssunto;
-                const h2Titulo = UtilDOM.criaComTexto('h2', 'Perguntas sobre '+ assunto);
+                const h2Titulo = UtilDOM.criaComTextoEClasses('h2', 'Perguntas sobre '+ assunto, ['titulo-assunto']);
                 cards.push(h2Titulo);
             }
 

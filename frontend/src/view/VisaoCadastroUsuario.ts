@@ -8,8 +8,7 @@ export interface VisaoCadastroUsuario{
     buscaDadosUsuario(): UsuarioCadastro;
 
     //saida
-    alternarVisibilidadeSenha(): void;
-    exibirMensagem(mensagem : string): void;
+    exibirMensagem(mensagem : string[]): void;
     exibirMensagemSucesso(): void;
 
 }

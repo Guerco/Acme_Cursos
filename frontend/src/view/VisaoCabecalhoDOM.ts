@@ -31,7 +31,7 @@ const ELEMENTOS_MENU: ItemMenu[] = [
     },
     {
         rota: rotasPaginas.cadastroUsuario,
-        descricao: '👤 Cadastro de usuário'
+        descricao: '👤 Cadastro de usuários'
     },
 ];
 
@@ -71,6 +71,10 @@ export class VisaoCabecalhoDOM {
             }
         });
 
+        if (! this.header) {
+            this.header = UtilDOM.cria('header');
+            document.body.prepend(this.header);
+        }
         this.header.prepend(divCabecalho, menuLateral, fundoEscuro);
     }
 

@@ -4,49 +4,62 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cadastrar Usuário</title>
+    <title>Quiz - Cadastro de Usuário</title>
     <link rel="icon" href="../img/favicon.ico" />
+
+    <script type="module" src="../src/scripts/elementos/menu.ts"></script>
     <script type="module" src="../src/scripts/cadastro-usuario.ts"></script>
-    <link rel="stylesheet" href="../style/menu.css" />
-    <script type="module" src="../src/scripts/menu.ts"></script>
+    <script type="module" src="../src/scripts/elementos/senha.ts"></script>
+
+    <link rel="stylesheet" href="../style/elementos/menu.css" />
+    <link rel="stylesheet" href="../style/cadastro.css" />
+    <link rel="stylesheet" href="../style/elementos/senha.css" />
 </head>
 
 <body>
-    <header>
-
-    </header>
-    <h1>Cadastro de Usuários</h1>
     <div id="cadastro">
-        <h2>Preencha as informações do Usuário</h2>
-        <form>
-            <div class="info-usuario">
-                <label for="tipo-usuario">Tipo de Usuário:</label>
-                <select name="tipo-usuario" id="tipo-usuario" required>
-                    <option value="" hidden selected>Selecione um Tipo de Usuário</option>
-                    <option value="aluno">Aluno</option>
-                    <option value="professor">Professor</option>
-                    <option value="administrador">Administrador</option>
-                </select>
+        <h2>Cadastro de Usuários</h2>
+        <p class="mensagem-campos-obrigatorios">Campos marcados com * são obrigatórios.</p>
+        <form id="form-cadastro">
+            <div class="info-cadastro" id="info-cadastro">
+                <div class="container-campos">
+                    <label for="tipo-usuario">🏷️ Tipo de Usuário *</label>
+                    <select name="tipo-usuario" id="tipo-usuario" required>
+                        <option value="" hidden selected>Selecione um Tipo de Usuário</option>
+                        <option value="aluno">Aluno</option>
+                        <option value="professor">Professor</option>
+                        <option value="administrador">Administrador</option>
+                        <option value="professor-administrador">Professor-Administrador</option>
+                    </select>
+                </div>
 
-                <label for="nome">Nome:</label>
-                <input type="text" id="nome"
-                required minlength="2" maxlength="100" placeholder="Preencha seu nome">
+                <div class="container-campos">
+                    <label for="nome">👤 Nome *</label>
+                    <input type="text" id="nome"
+                    required minlength="2" maxlength="100" placeholder="Preencha o nome">
+                </div>
 
-                <label for="email">E-mail:</label>
-                <input type="email" id="email"
-                required minlength="3" maxlength="100" placeholder="Preencha seu email">
+                <div class="container-campos">
+                    <label for="email">✉ E-mail *</label>
+                    <input type="email" id="email"
+                    required minlength="5" maxlength="100" placeholder="Preencha o e-mail">
+                </div>
 
-                <label for="senha">Senha:</label>
-                <input type="password" id="senha"
-                required minlength="6" maxlength="200" placeholder="Mínimo de 6 dígitos">
-                <button type="button" id="exibir-senha">😑</button>
+                <div class="container-campos">
+                    <label for="senha">🔑 Senha *</label>
+                    <div class="container-senha">
+                        <input type="password" id="senha"
+                        required minlength="6" maxlength="200" placeholder="Preencha a senha">
+                        <button type="button" id="botao-exibir-senha">🙈</button>
+                    </div>
+                </div>
             </div>
             <div id="acoes">
-                <output id="mensagem-cadastro"></output>
                 <div  class="botoes">
-                    <a href="/listagem-usuario.html"><button type="button">Cancelar</button></a>
-                    <button type="submit" id="cadastrar">Cadastrar</button>
+                    <a href="/listagem-usuario.html" id="botao-cancelar"><button type="button">Cancelar</button></a>
+                    <button type="submit" id="botao-cadastrar">Cadastrar</button>
                 </div>
+                <ul id="mensagem-cadastro"></ul>
             </div>
         </form>
     </div>

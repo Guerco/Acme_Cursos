@@ -231,9 +231,9 @@ export class VisaoCadastroPerguntasDOM implements VisaoCadastroPerguntas {
 
     exibirMensagemErro(mensagens: string[]): void {
         this.mensagemErro.innerHTML = '';
-        this.mensagemErro.classList.add('destaque');
+        this.mensagemErro.classList.add(classes.destaque);
         setTimeout(() => {
-            this.mensagemErro.classList.remove('destaque');
+            this.mensagemErro.classList.remove(classes.destaque);
         }, 500);
 
         for (const m of mensagens) {
@@ -243,11 +243,10 @@ export class VisaoCadastroPerguntasDOM implements VisaoCadastroPerguntas {
         }
     }
 
-
     exibirMensagemSucesso(): void {
         const container = UtilDOM.criaComClasses('div', [classes.containerSucesso]);
         const mensagem = UtilDOM.criaComTextoEClasses('h3', 'Pergunta cadastrada com sucesso!', [classes.mensagemSucesso]);
-        const botaoVoltar = UtilDOM.criaComTextoEClasses('button', 'Voltar para Cursos 🏡', [classes.botaoVoltar]);
+        const botaoVoltar = UtilDOM.criaComTextoEClasses('button', 'Ir para Cursos 🏡', [classes.botaoVoltar]);
         botaoVoltar.onclick = () => {
             window.location.href = rotasPaginas.listagemCursos;
         };

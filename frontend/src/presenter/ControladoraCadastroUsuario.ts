@@ -2,6 +2,7 @@ import { ServicoUsuario } from "../model/servico/ServicoUsuario";
 import { RepositorioCredenciaisApi } from "../model/repositorio/RepositorioCredenciaisApi";
 import { UsuarioCadastro } from "../model/dto/UsuarioCadastro";
 import { VisaoCadastroUsuario } from "../view/VisaoCadastroUsuario";
+import { DominioException } from "../model/exception/DominioException";
 
 export class ControladoraCadastroUsuario{
     private servico : ServicoUsuario;
@@ -20,7 +21,9 @@ export class ControladoraCadastroUsuario{
                     await this.servico.cadastrarUsuario(usuario);
                     this.visao.exibirMensagemSucesso();
                 } catch(err : any) {
-                    this.visao.exibirMensagem(err.message);
+                    if (err instanceof DominioException) {
+                        this.visao.exibirMensagem(err.getProblemas());
+                    } else throw err;
                 }
             }
         )();

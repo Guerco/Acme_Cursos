@@ -1,19 +1,21 @@
 export const ids = {
     senha: 'senha',
-    exibirSenha: 'exibir-senha',
-    cadastro: 'cadastrar',
+    exibirSenha: 'botao-exibir-senha',
+    cadastro: 'cadastro',
     tipoUsuario: 'tipo-usuario',
     nome: 'nome',
     email: 'email',
     mensagem: 'mensagem-cadastro',
-    cadastrar: 'cadastrar'
+    cadastrar: 'botao-cadastrar',
+    form: 'form-cadastro'
 };
 
 export const classes = {
     botaoCadastrarNova: 'botao-cadastrar-nova',
     mensagemSucesso: 'mensagem-sucesso',
     botaoVoltar: 'botao-voltar',
-    containerSucesso: 'container-sucesso'
+    containerSucesso: 'container-sucesso',
+    destaque: 'destaque',
 }
 
 export const idsCss = Object.fromEntries(

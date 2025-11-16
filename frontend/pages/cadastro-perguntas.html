@@ -5,21 +5,22 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Quiz - Cadastro de Perguntas</title>
-
     <link rel="icon" href="../img/favicon.ico" />
+    
+    <script type="module" src="../src/scripts/elementos/menu.ts"></script>
     <script type="module" src="../src/scripts/cadastro-perguntas.ts"></script>
-    <link rel="stylesheet" href="../style/menu.css" />
+    
+    <link rel="stylesheet" href="../style/elementos/menu.css" />
+    <link rel="stylesheet" href="../style/cadastro.css" />
     <link rel="stylesheet" href="../style/cadastro-perguntas.css" />
-    <script type="module" src="../src/scripts/menu.ts"></script>
 </head>
 
 <body>
-    <header></header>
     <div id="cadastro">
         <h2>Cadastro de Pergunta</h2>
         <p class="mensagem-campos-obrigatorios">Campos marcados com * são obrigatórios.</p>
         <form id="form-cadastro">
-            <div id="info-pergunta">
+            <div id="info-cadastro">
                 <div class="container-campos">
                     <label for="professor">👨‍🏫 Professor *</label>
                     <select name="professor" id="professor" required>

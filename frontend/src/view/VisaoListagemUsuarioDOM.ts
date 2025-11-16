@@ -2,7 +2,7 @@ import { UsuarioListagem } from "../model/dto/UsuarioListagem";
 import { ControladoraListagemUsuarios } from "../presenter/ControladoraListagemUsuarios";
 import { VisaoListagemUsuario } from "./VisaoListagemUsuario";
 import { UtilDOM } from "../util/UtilDOM";
-import { ids } from "../ui/listagem-usuario.ts";
+import { ids, classes } from "../ui/listagem-usuario.ts";
 
 export class VisaoListagemUsuarioDOM implements VisaoListagemUsuario{
     private controladora: ControladoraListagemUsuarios;
@@ -32,8 +32,31 @@ export class VisaoListagemUsuarioDOM implements VisaoListagemUsuario{
     //Métodos Auxiliares
 
     private desenharUsuarios( usuarios: UsuarioListagem [] ) {
-    
-        const elementos = usuarios.map(u => this.criarTabela(u));
+        let elementos = [];
+        let cargo = '';
+
+        for (const u of usuarios) {
+            if(cargo != u.tipoUsuario) {
+                const trTitulo = UtilDOM.criaComClasses('tr', [classes.tituloCargo]);
+
+                const titulos: Record<string, string> = {
+                    'aluno': '👨‍🎓 Alunos',
+                    'professor': '👨‍🏫 Professores',
+                    'administrador': '⚡ Administradores',
+                    'professor-administrador': '🛠️👔 Professores-administradores'
+                };
+
+                const titulo = titulos[u.tipoUsuario] ?? 'Cargo Desconhecido';
+                const tdTitulo = UtilDOM.criaComTexto('td', titulo) as HTMLTableCellElement;
+                trTitulo.appendChild(tdTitulo);
+
+                elementos.push(trTitulo);
+            }
+
+            cargo = u.tipoUsuario;
+
+            elementos.push(this.criarTabela(u));
+        }
         const frag = UtilDOM.criaFragmentoComElementos(elementos);
         const tbody = document.querySelector('tbody') as HTMLElement;
         tbody.innerHTML = "";
@@ -42,17 +65,20 @@ export class VisaoListagemUsuarioDOM implements VisaoListagemUsuario{
 
     private criarTabela( u: UsuarioListagem ): HTMLElement {
         const tr = UtilDOM.cria('tr');
+        tr.title = u.tipoUsuario;
 
-        const tdTipoUsuario = UtilDOM.cria( 'td' );
-        tdTipoUsuario.textContent = u.tipoUsuario?.toString() || '';
+        const nome = u.nome.toString() || 'Sem nome';
+        const email = u.email.toString() || 'Sem email';
 
-        const tdNome = UtilDOM.cria( 'td' );
-        tdNome.textContent = u.nome.toString() || '';
+        const td = UtilDOM.cria('td');
+        const ul = UtilDOM.criaComClasses( 'ul', [classes.infoUsuario] );
 
-        const tdEmail = UtilDOM.cria( 'td' );
-        tdEmail.textContent = u.email.toString() || '';
+        const liNome = UtilDOM.criaComTexto('li', nome);
+        const liEmail = UtilDOM.criaComTextoEClasses('li', email, [classes.emailUsuario]);
 
-        tr.append( tdTipoUsuario, tdNome, tdEmail);
+        ul.append(liNome, liEmail);
+        td.appendChild(ul);
+        tr.appendChild( td );
         return tr;
     }
 }
