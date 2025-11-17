@@ -8,7 +8,8 @@ class GestorCredenciais
         private RepositorioAlunos $repositorioAluno,
         private RepositorioProfessores $repositorioProfessor,
         private RepositorioAdministradores $repositorioAdministrador,
-        private GerenciadorDeTransacoes $transacao
+        private GerenciadorDeTransacoes $transacao,
+        private GerenciadorDeSenha $gerenciadorDeSenha
     ) {}
 
     /**
@@ -32,13 +33,14 @@ class GestorCredenciais
         if (!empty($problemas)) {
             throw DominioException::comProblemas($problemas);
         }
-        $salSenha = $this->criarSalSenha();
+
+        $hash = $this->gerenciadorDeSenha->criarHash($usuario->senha);
 
         $credenciais = new Credenciais(
             0,
             $usuario->email,
-            $usuario->senha,
-            $salSenha
+            $hash['senha'],
+            $hash['sal']
         );
 
         $this->transacao->iniciar();
@@ -127,7 +129,4 @@ class GestorCredenciais
         return $problemas;
     }
 
-    private function criarSalSenha(): string {
-        return '';
-    }
 }

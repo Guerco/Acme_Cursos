@@ -26,8 +26,8 @@ export class VisaoCadastroUsuarioDOM implements VisaoCadastroUsuario{
       const nome = (document.getElementById(ids.nome) as HTMLInputElement).value;
       const email = (document.getElementById(ids.email) as HTMLInputElement).value;
       const senha = (document.getElementById(ids.senha) as HTMLInputElement).value;
-      const tipo = (document.getElementById(ids.tipoUsuario) as HTMLInputElement).value;
-      const tipoUsuario = (tipo == 'professor-administrador') ? ['professor', 'administrador'] : tipo;
+      const tipo = [(document.getElementById(ids.tipoUsuario) as HTMLInputElement).value];
+      const tipoUsuario = (tipo [0] == 'professor-administrador') ? ['professor', 'administrador'] : tipo;
 
       const usuario = new UsuarioCadastro(email, senha, nome, tipoUsuario);
       return usuario;

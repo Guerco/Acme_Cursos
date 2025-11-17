@@ -1,5 +1,9 @@
 <?php
 require_once 'vendor/autoload.php';
+
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+$dotenv->safeLoad();
+
 require_once './src/config/conexao.php';
 
 use phputil\router\{Router, HttpRequest, HttpResponse};
@@ -222,7 +226,8 @@ function criarGestor(string $tipoGestor): GestorCursos|GestorAlunos|GestorCreden
             new RepositorioAlunosEmBDR($pdo),
             new RepositorioProfessoresEmBDR($pdo),
             new RepositorioAdministradoresEmBDR($pdo),
-            new GerenciadorDeTransacoesEmBDR($pdo)
+            new GerenciadorDeTransacoesEmBDR($pdo),
+            new GerenciadorDeSenha()
         ),
         'professores' => new GestorProfessores(
             new RepositorioProfessoresEmBDR($pdo),
