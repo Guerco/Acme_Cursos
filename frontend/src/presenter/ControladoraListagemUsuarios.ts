@@ -18,7 +18,7 @@ export class ControladoraListagemUsuarios{
                     const usuarios = await this.servico.listarTodos(); 
                     this.visao.exibirUsuarios(usuarios);
                 } catch(err : any) {
-                    this.visao.exibirMensagem(err.message);
+                    throw err;
                 }
             }
         )();

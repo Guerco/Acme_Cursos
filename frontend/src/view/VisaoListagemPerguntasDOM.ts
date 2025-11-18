@@ -17,10 +17,10 @@ export class VisaoListagemPerguntasDOM implements VisaoListagemPerguntas {
         this.controladora = new ControladoraListagemPerguntas(this);
     }
 
-    iniciar() {
+    async iniciar() {
         this.carregarElementos();
 
-        this.controladora.listarPerguntas();
+        await this.controladora.listarPerguntas();
     }
 
     // Métodos de Entrada

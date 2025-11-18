@@ -27,16 +27,17 @@ export const rotasPaginas = {
     listagemCursos: BASE_URL_WEB,
     quiz: BASE_URL_WEB+'pages/quiz.html',
     erro: BASE_URL_WEB+'pages/erro.html',
+    rankingAlunos: BASE_URL_WEB+'pages/ranking-alunos.html',
+    cadastroUsuario: BASE_URL_WEB+'pages/cadastro-usuario.html',
+    listagemUsuarios: BASE_URL_WEB+'pages/listagem-usuario.html',
     cadastroPerguntas: BASE_URL_WEB+'pages/cadastro-perguntas.html',
     listagemPerguntas: BASE_URL_WEB+'pages/listagem-perguntas.html',
-    listagemUsuarios: BASE_URL_WEB+'pages/listagem-usuario.html',
-    cadastroUsuario: BASE_URL_WEB+'pages/cadastro-usuario.html'
 };
 
 export const rotasJsonServer = {
     index: BASE_URL_JSON_SERVER,
     cursos: BASE_URL_JSON_SERVER+'cursos/',
-    professores: BASE_URL_JSON_SERVER+'professores/',
     perguntas: BASE_URL_JSON_SERVER+'perguntas/',
+    professores: BASE_URL_JSON_SERVER+'professores/',
     perguntasListagem: BASE_URL_JSON_SERVER+'perguntasListagem/'
 }

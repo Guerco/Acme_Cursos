@@ -1,5 +1,4 @@
 import { VisaoCadastroPerguntasDOM } from "../view/VisaoCadastroPerguntasDOM";
-import { VisaoCabecalhoDOM } from "../view/VisaoCabecalhoDOM.ts";
 import { rotasPaginas } from "../rotas";
 
 window.addEventListener('unhandledrejection', (event: PromiseRejectionEvent) => {
@@ -14,4 +13,4 @@ window.addEventListener('error', () => {
 
 const visao = new VisaoCadastroPerguntasDOM();
 
-await visao.iniciar();
+visao.iniciar();

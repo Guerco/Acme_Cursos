@@ -43,7 +43,6 @@ body {
 }
 
 #form-busca {
-    border-radius: 12px;
     overflow: hidden;
     height: 25px;
     display: flex;

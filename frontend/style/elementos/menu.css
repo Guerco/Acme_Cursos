@@ -47,29 +47,34 @@ header {
     border: none;
     padding: 4px 8px;
     cursor: pointer;
-    height: 30px;
+    height: 20px;
     font-size: larger;
 }
 
 /* ========================================================== */
 /* Estilos do Menu Lateral */
+body:has(.menu-lateral.visivel) {
+    overflow: hidden;
+    height: 100vh;
+}
+
 .menu-lateral {
     position: fixed;
     top: 0;
     right: -300px;
     width: 300px;
-    height: 100%;
     background-color: #820ec0;
     color: white;
     padding: 20px;
+    padding: 0 10px;
     transition: 0.2s;
     display: flex;
     flex-direction: column;
-    gap: 10px;
     overflow-x: hidden;
     overflow-y: auto;
     scrollbar-color: #ffffff18 transparent;
     z-index: 2;
+    height: 100%;
 }
 
 .menu-lateral .logotipo {
@@ -77,23 +82,37 @@ header {
     width: auto;
     cursor: pointer;
     margin: 0 auto;
+    margin-top: 20px;
 }
 
 .menu-lateral.visivel {
     right: 0;
 }
 
-.menu-lateral a {
+/* ========================================================== */
+/* Estilos dositens do menu */
+.itens-menu {
+    max-height: 100%;
+    overflow-y: auto;
+}
+
+.menu-lateral a,
+.menu-lateral .sub-menu a {
     text-decoration: none;
     color: white;
     padding: 5px 10px;
     border-radius: 5px;
     display: block;
     transition: 0.3s;
+    margin: 5px 10px;
+    text-align: right;
+    font-size: 15px;
 }
 
-.menu-lateral a:hover {
+.menu-lateral a:hover,
+.menu-lateral .sub-menu a:hover {
     background-color: #ffffff10;
+    cursor: pointer;
 }
 
 body.menu-aberto {
@@ -122,6 +141,38 @@ body.menu-aberto {
 }
 
 /* ========================================================== */
+/* Estilo da linha */
+.linha-menu{
+    border-bottom: 2px solid #630994;
+    margin: 15px 20px;
+    padding: 0;
+    border-radius: 1px;
+}
+
+/* ========================================================== */
+/* Estilo do Submenu */
+.menu-lateral .sub-menu {
+    background-color: #630994;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    max-height: 0px;
+    overflow: hidden;
+    transition: .3s linear;
+    margin: 0 10px;
+    border-radius: 6px;
+}
+
+.menu-lateral .sub-menu.visivel {
+    padding: 0;
+    max-height: 300px;
+}
+
+.scroll {
+    overflow-y: auto;
+}
+
+/* ========================================================== */
 /* Estilos específicos para telas menores */
 @media (max-width: 575px) {
     .cabecalho {
@@ -137,19 +188,20 @@ body.menu-aberto {
         height: 30px;
     }
 
-    .menu-lateral {
-        gap: 20px;
-    }
-
     .menu-lateral.visivel {
         width: 100%;
         color: white;
-        padding: 20px 50px;
+        padding: 20px 30px;
     }
 
     .menu-lateral .logotipo {
-        margin-bottom: 30px;
+        margin-bottom: 0;
         height: 100px;
+        margin-top: 0;
     }
 
+    .menu-lateral a,
+    .menu-lateral .sub-menu a {
+        margin: 10px 0;
+    }
 }

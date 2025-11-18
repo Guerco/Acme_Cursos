@@ -3,6 +3,7 @@ export const classes = {
     logo: 'logotipo',
     icon: 'icone',
     visivel: 'visivel',
+    scroll: 'scroll',
     menuLateral: 'menu-lateral',
     fundoEscuro: 'fundo-escuro',
 };

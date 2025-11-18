@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz - Ranking de Alunos</title>
+    <link rel="icon" href="../img/favicon.ico" />
+    
+    <script type="module" src="../src/scripts/elementos/menu.ts"></script>
+    <script type="module" src="../src/scripts/ranking-alunos.ts"></script>
+
+    <link rel="stylesheet" href="../style/elementos/menu.css" />
+    <link rel="stylesheet" href="../style/ranking-alunos.css" />
+</head>
+<body>
+    <div id="secao-relatorio">
+        <h1>Ranking de Alunos</h1>
+
+        <div class="opcoes-relatorio">
+            <div class="container-tipo-ranking">
+                <label for="tipo-ranking">🏆</label>
+                <select name="tipo-ranking" id="tipo-ranking">
+                    <option value="pontuacao-geral" selected>Pontuação Geral</option>
+                    <option value="pontuacao-curso">Pontuação Curso</option>
+                </select>
+            </div>
+
+            <form id="form-busca">
+                <input type="search" id="input-busca" placeholder="Buscar aluno" />
+                <button id="botao-buscar">🔍</button>
+            </form>
+        </div>
+
+        <div class="container-relatorio">
+            <table id="tabela-relatorio">
+            </table>
+        </div>
+        
+    </div>
+</body>
+</html>

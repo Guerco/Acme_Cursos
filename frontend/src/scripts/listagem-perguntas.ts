@@ -1,6 +1,5 @@
 import { VisaoListagemPerguntasDOM } from "../view/VisaoListagemPerguntasDOM.ts";
 import { rotasPaginas } from "../rotas";
-import { VisaoCabecalhoDOM } from "../view/VisaoCabecalhoDOM.ts";
 
 window.addEventListener('unhandledrejection', (event: PromiseRejectionEvent) => {
     const mensagem = event.reason.message;

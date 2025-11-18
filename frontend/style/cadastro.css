@@ -12,7 +12,6 @@ html, body {
 /* Estilo do Cadastro */
 #cadastro {
     width: 70vw;
-    
     margin: 20px auto;
     border: 2px solid #d6d6d6;
     border-radius: 20px;
@@ -145,8 +144,11 @@ html, body {
     #cadastro {
         width: 100%;
         padding: 10px;
+        height: 100%;
+        margin: 0px;
+        border: none;
     }
-
+    
     #form-cadastro {
         padding: 10px;
     }
@@ -164,6 +166,11 @@ html, body {
         text-align: center;
         font-size: 11px;
         padding: 0;
+    }
+
+    .botoes button {
+        height: 25px;
+        border-radius: 5px;
     }
 }
 

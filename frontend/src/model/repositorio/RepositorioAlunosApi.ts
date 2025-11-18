@@ -4,6 +4,8 @@ import { AlunoListagem } from "../dto/AlunoListagem";
 import { Credenciais } from "../dto/Credenciais";
 import { RespostaAlunoCadastro } from "../dto/RespostaAlunoCadastro";
 import { DominioException } from "../exception/DominioException";
+import { AlunoRel } from "../dto/relatorio/AlunoRel";
+import { AlunoCursoRel } from "../dto/relatorio/AlunoCursoRel";
 
 export class RepositorioAlunosAPI implements RespositorioAlunos {
 
@@ -74,5 +76,12 @@ export class RepositorioAlunosAPI implements RespositorioAlunos {
             throw error;
         }
     }
-        
+
+    async buscarRankingAlunos() : Promise<AlunoRel[]> {
+        return [];
+    } 
+
+    async buscarRankingAlunosCurso() : Promise<AlunoCursoRel[]> {
+        return [];
+    } 
 }

@@ -213,4 +213,8 @@ h2 {
     .container-respostas.aberto {
         max-height: 100px;
     }
+
+    .titulo-assunto {
+        text-align: center;
+    }
 }

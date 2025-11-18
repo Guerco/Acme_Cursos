@@ -1,5 +1,5 @@
 export const ids = {
-    mensagem: '#mensagem'
+    mensagem: 'mensagem'
 };
 
 export const classes = {

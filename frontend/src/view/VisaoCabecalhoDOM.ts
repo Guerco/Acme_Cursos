@@ -8,31 +8,50 @@ const SRC_LOGO = DIR_IMG + '/logotipo.png';
 const SRC_ICONE = DIR_IMG + '/menu.png';
 
 type ItemMenu = {
-    rota: string;
-    descricao: string;
+    rota?: string;
+    descricao?: string;
+    linha?: boolean;
+    subMenu?: ItemMenu[];
 };
 
 const ELEMENTOS_MENU: ItemMenu[] = [
+    { linha:true },
     {
         rota: rotasPaginas.listagemCursos,
-        descricao: '🎓 Cursos'
+        descricao: 'Listagem de Cursos 🎓'
     },
     {
         rota: rotasPaginas.listagemPerguntas,
-        descricao: '❔ Listagem de Perguntas'
-    },
-    {
-        rota: rotasPaginas.cadastroPerguntas,
-        descricao: '❓ Cadastro de Perguntas'
+        descricao: 'Listagem de Perguntas ❔'
     },
     {
         rota: rotasPaginas.listagemUsuarios,
-        descricao: '👥 Listagem de Usuários'
+        descricao: 'Listagem de Usuários 👥'
+    },
+    { linha: true },
+    {
+        rota: rotasPaginas.cadastroPerguntas,
+        descricao: 'Cadastro de Perguntas ❓'
     },
     {
         rota: rotasPaginas.cadastroUsuario,
-        descricao: '👤 Cadastro de usuários'
+        descricao: 'Cadastro de Usuários 👤'
     },
+    { linha: true },
+    {
+        descricao: 'Relatórios 📊',
+        subMenu: [
+            {
+                rota: rotasPaginas.rankingAlunos,
+                descricao: 'Top Alunos 🏅'
+            },
+            {
+                rota: rotasPaginas.listagemCursos,
+                descricao: 'Alunos por Curso 📚'
+            }
+        ]
+    },
+    { linha:true }
 ];
 
 
@@ -94,19 +113,62 @@ export class VisaoCabecalhoDOM {
         logo.title = 'Fechar Menu';
         logo.addEventListener('click', () => this.alternarVisibilideMenu());
 
-        const itens = this.criaItensMenu();
-        menu.append(logo, ...itens);
+        const itens = UtilDOM.criaComClasses('div', ['itens-menu']);
+        itens.append(...this.criaItensMenu());
+        menu.append(logo, itens);
 
         this.menuLateral = menu;
         return menu;
     }
 
-    private criaItensMenu(): HTMLAnchorElement[] {
-        return ELEMENTOS_MENU.map(e => UtilDOM.criaAncoraComTexto(e.descricao, e.rota));
+    private criaItensMenu(): HTMLElement[] {
+        return ELEMENTOS_MENU.map(e => this.criaItemMenu(e)) as HTMLElement[];
+    }
+
+    private criaItemMenu(e : ItemMenu): HTMLElement|DocumentFragment|null {
+        let item = null;
+        
+        if (e.rota && e.descricao) {
+            item = UtilDOM.criaAncoraComTexto(e.descricao, e.rota) as HTMLAnchorElement;
+        } 
+        else if (e.descricao && e.subMenu) {
+            const botao = UtilDOM.criaComTexto('a', e.descricao);
+            const subMenu = UtilDOM.criaComClasses('ul', ['sub-menu']) as HTMLUListElement;
+            const subitens = e.subMenu.map(se => this.criaItemMenu(se)) as HTMLElement[];
+
+            botao.onclick = (e) =>  {
+                e.preventDefault();
+                this.alternarVisibilideSubMenu(subMenu);
+            }
+
+            subMenu.append(...subitens);
+
+            item = UtilDOM.criaFragmentoComElementos([botao, subMenu]);
+        }
+        else if (e.linha) {
+            item = UtilDOM.criaComClasses('div', ['linha-menu']) as HTMLDivElement;
+        }
+
+        return item;
     }
 
     private alternarVisibilideMenu() {
         this.menuLateral.classList.toggle(classes.visivel);
+    }
+
+    private alternarVisibilideSubMenu(subMenu : HTMLUListElement) {
+        if (! subMenu.classList.contains(classes.visivel)) {
+            subMenu.classList.add(classes.visivel);
+            subMenu.classList.remove(classes.scroll);
+
+            const adicionarScroll = () => {
+                subMenu.classList.add(classes.scroll);
+                subMenu.removeEventListener('transitionend', adicionarScroll);
+            }
+            subMenu!.addEventListener('transitionend', adicionarScroll);
+        } else {
+            subMenu!.classList.remove(classes.visivel, classes.scroll);
+        }
     }
 
     private criarFundoEscuro() : HTMLDivElement {
