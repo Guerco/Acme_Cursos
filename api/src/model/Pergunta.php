@@ -84,7 +84,11 @@ class Pergunta{
         $this->ultimaAtualizacao = $ultimaAtualizacao;
     }
 
-    public function validar() {
+    /**
+     * @return void
+     * @throws DominioException
+     */
+    public function validar():void {
         $problemas = [];
 
         $tamanhoDescricao = strlen($this->descricao);

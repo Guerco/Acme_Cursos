@@ -176,7 +176,7 @@ class RepositorioAlunosEmBDR implements RepositorioAlunos{
             ]);
             $idAluno = $this->pdo->lastInsertId();
 
-            return $idAluno;
+            return (int) $idAluno;
         } catch (PDOException $e){
             throw new RepositorioException ($e->getMessage());
         }    

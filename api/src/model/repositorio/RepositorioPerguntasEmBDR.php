@@ -169,7 +169,7 @@ class RepositorioPerguntasEmBDR implements RepositorioPerguntas {
                 'dificuldade' => $pergunta->getDificuldade()->paraString(),
             ]);
 
-            return $this->pdo->lastInsertId();
+            return (int) $this->pdo->lastInsertId();
         } catch (PDOException $e) {
             throw new RepositorioException('Não foi possível cadastrar a pergunta.');
         }

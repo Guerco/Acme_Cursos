@@ -15,7 +15,7 @@ class CursoListagemResumoDTO{
 
     /**
      * @param Curso[] $cursos
-     * @return CursoListagemDTO[]
+     * @return CursoListagemResumoDTO[]
      */
     public static function deObjetos(array $cursos): array{
         $cursosDTO = [];

@@ -15,7 +15,7 @@ class ProfessorListagemDTO{
     }
 
     /**
-     * @param Professor[] $alunos
+     * @param Professor[] $professores
      * @return ProfessorListagemDTO[]
      */
     public static function deObjetos(array $professores): array {

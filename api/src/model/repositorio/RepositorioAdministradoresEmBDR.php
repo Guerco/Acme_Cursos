@@ -18,7 +18,7 @@ class RepositorioAdministradoresEmBDR implements RepositorioAdministradores{
             ]);
             $idAdministrador = $this->pdo->lastInsertId();
 
-            return $idAdministrador;
+            return (int) $idAdministrador;
         } catch (PDOException $e){
             throw new RepositorioException ($e->getMessage());
         }    

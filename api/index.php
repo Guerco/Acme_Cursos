@@ -13,8 +13,16 @@ try {
     $pdo = criarConexao();
 } catch (PDOException $e) {
     http_response_code(500);
-    die('Erro ao conectar com o banco de dados.');
+    header('Content-Type: application/json');
+    echo json_encode(['erros' => 'Erro ao conectar com o banco de dados.']);
+    exit;
+} catch (ServidorException $e) {
+    http_response_code(500);
+    header('Content-Type: application/json');
+    echo json_encode(['erros' => 'Ocorreu um erro interno no servidor.']);
+    exit;
 }
+
 
 $app = new Router();
 $app->use(cors());
@@ -227,7 +235,7 @@ function criarGestor(string $tipoGestor): GestorCursos|GestorAlunos|GestorCreden
             new RepositorioProfessoresEmBDR($pdo),
             new RepositorioAdministradoresEmBDR($pdo),
             new GerenciadorDeTransacoesEmBDR($pdo),
-            new GerenciadorDeSenha()
+            new GerenciadorDeSenhaEnv()
         ),
         'professores' => new GestorProfessores(
             new RepositorioProfessoresEmBDR($pdo),
@@ -246,6 +254,8 @@ function executaComTratamentoErros (callable $callback, HttpResponse $res) {
         $res->status(400)->json(['erros' => $e->getProblemas()]);
     } catch (RepositorioException $e) {
         $res->status(500)->json(['erros' => $e->getMessage()]);
+    } catch (ServidorException $e) {
+        $res->status(500)->json(['erros' => 'Ocorreu um erro interno no servidor.']);
     } catch (RuntimeException $e) {
         $res->status(500)->json(['erros' => $e->getMessage()]);
     } catch (Throwable $e) {

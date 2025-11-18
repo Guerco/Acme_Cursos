@@ -32,7 +32,7 @@ class Credenciais{
     }
 
     public function getSalSenha(): string{
-        return $this->senha;
+        return $this->salSenha;
     }
     public function setSalSenha(string $senha): void{
         $this->senha = $senha;

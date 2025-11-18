@@ -4,23 +4,18 @@ class Validador {
     /**
      * Valida um array de dados baseado em um esquema
      *
-     * @param array<string|mixed> $dados Dados enviados
+     * @param array<string,mixed> $dados
      * 
-     * @param array{
-     *  campo: array{
+     * @param array<
+     *  string, array{
      *      tipo: string|TiposCampos,
      *      obrigatorio?: bool,
      *      subcampos?: array<string, mixed>,
      *      valoresEnum?: string[],
      *      tipoArray?: string|TiposCampos,
-     *  } $schema
+     *  }
+     * > $schema
      * 
-     * @return string[]
-     */
-    /**
-     * Valida um array de dados baseado em um esquema
-     * @param array $dados
-     * @param array $schema
      * @return string[]
      */
     public static function validarArraySchema(array $dados, array $schema): array {
@@ -28,7 +23,7 @@ class Validador {
         
         foreach ($schema as $campo => $opcoes) {
             $obrigatorio = $opcoes['obrigatorio'] ?? false;
-            $tipo = $opcoes['tipo'] ?? '';
+            $tipo = $opcoes['tipo'];
             if ($tipo instanceof TiposCampos) $tipo = $tipo->value;
             $tipoArray = $opcoes['tipoArray'] ?? '';
             if ($tipoArray instanceof TiposCampos) $tipoArray = $tipoArray->value;
@@ -160,6 +155,11 @@ class Validador {
         };
     }
 
+    /**
+     * @param mixed[] $array
+     * @param string|TiposCampos $tipo
+     * @return bool
+     */
     public static function validarFormatoArray(array $array, string|TiposCampos $tipo): bool {
         foreach ($array as $valor) {
             if (!self::validarFormato($valor, $tipo)) {

@@ -46,6 +46,12 @@ class GestorPerguntas
         }
     }
 
+    /**
+     * Summary of criarPergunta
+     * @param array<string, mixed> $dados
+     * @throws \DominioException
+     * @return void
+     */
     public function criarPergunta(array $dados): void
     {
         $nomeImg = null;
@@ -212,7 +218,7 @@ class GestorPerguntas
         return PerguntaListagemDTO::deObjetos($perguntas);
     }
 
-    private function validarListarPerguntasOuPorAssunto(?int $idAssunto)
+    private function validarListarPerguntasOuPorAssunto(?int $idAssunto): void
     {
         if (!is_null($idAssunto))
             if (!$this->repositorioAssuntos->existeComId((int) $idAssunto)) {

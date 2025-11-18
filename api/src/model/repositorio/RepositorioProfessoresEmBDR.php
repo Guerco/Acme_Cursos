@@ -38,7 +38,7 @@ class RepositorioProfessoresEmBDR implements RepositorioProfessores {
             ]);
             $idProfessor = $this->pdo->lastInsertId();
 
-            return $idProfessor;
+            return (int) $idProfessor;
         } catch (PDOException $e) {
             throw new RepositorioException($e->getMessage());
         }

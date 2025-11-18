@@ -6,10 +6,18 @@ class UsuarioCadastroDTO{
         public ?string $email = '',
         public ?string $senha = '',
         public ?string $nome = '',
-        public ?array $tiposUsuario = []
+        public ?string $tipoUsuario = ''
     ){}
 
     
+    /**
+     * @param array{
+     *     email: string,
+     *     senha: string,
+     *     nome: string,
+     *     tipoUsuario: string
+     * } $dados
+     */
     public static function deArray(array $dados): UsuarioCadastroDTO{
         return new self(
             $dados['email'],
@@ -19,6 +27,16 @@ class UsuarioCadastroDTO{
         );
     }
 
+    /**
+     * @param array{
+     *     email: string,
+     *     senha: string,
+     *     nome: string,
+     *     tipoUsuario: string
+     * }[] $dados
+     * 
+     * @return UsuarioCadastroDTO[]
+     */
     public static function deArrays(array $dados): array{
         $respostas = [];
 

@@ -37,8 +37,6 @@ class RepositorioCredenciaisEmBDR implements RepositorioCredenciais{
             $resultado = $ps->fetch();
 
             return $resultado !== false;
-
-            return false;
         } catch (PDOException $e){
             throw new RepositorioException ($e->getMessage());
         } 
@@ -77,6 +75,11 @@ class RepositorioCredenciaisEmBDR implements RepositorioCredenciais{
         }
     }
 
+    /**
+     * @param array{nome: string, email: string, tipo_usuario: string}[] $usuarios
+     * @throws \RepositorioException
+     * @return array<Administrador|Aluno|Professor|ProfessorAdministrador>
+     */
     private function criarUsuarios(array $usuarios):array{
         $usuariosCriados = [];
         

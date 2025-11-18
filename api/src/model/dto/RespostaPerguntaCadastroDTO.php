@@ -24,6 +24,8 @@ class RespostaPerguntaCadastroDTO {
      *     ehCorreta: bool,
      *     descricao: string
      * }[] $dados
+     * 
+     * @return RespostaPerguntaCadastroDTO[]
      */
     public static function deArrays(array $dados): array{
         $respostas = [];

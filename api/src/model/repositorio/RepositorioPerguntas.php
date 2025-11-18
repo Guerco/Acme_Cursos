@@ -37,7 +37,7 @@ interface RepositorioPerguntas {
     /**
      * Cadastra uma pergunta e retorna o id cadastrado.
      * @param Pergunta $pergunta
-     * @return void
+     * @return int
      */
     public function cadastrarPergunta(Pergunta $pergunta): int;
 

@@ -8,7 +8,7 @@ class UsuarioListagemDTO{
         public string $email
     ){}
 
-    public static function deObjetoParaDTO($objeto): UsuarioListagemDTO{
+    public static function deObjetoParaDTO(object $objeto): UsuarioListagemDTO{
         $tipo = self::tipoUsuario($objeto);
         return new Self(
             $tipo,
@@ -17,6 +17,10 @@ class UsuarioListagemDTO{
         );
     }
 
+    /**
+     * @param object[] $usuarios
+     * @return UsuarioListagemDTO[]
+     */
     public static function deObjetosParaDTO(array $usuarios): array{
         $usuariosDTO = [];
 
@@ -28,7 +32,7 @@ class UsuarioListagemDTO{
         return $usuariosDTO;
     }
 
-    private static function tipoUsuario($usuario){
+    private static function tipoUsuario(object $usuario): string{
 
         $classe = get_class($usuario);
     
@@ -41,7 +45,7 @@ class UsuarioListagemDTO{
         } else if (strpos($classe, 'Administrador') !== false) {
             return 'Administrador';
         } else {
-            throw new NaoEncontradoException('Tipo usuario desconhecido');
+            throw new DominioException('Tipo usuario desconhecido');
         }
     }
 }
