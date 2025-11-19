@@ -27,7 +27,7 @@ class GestorCursos{
         $this->validarBuscarAssuntosCurso($idCurso);
 
         $assuntos = [];
-        $assuntos = $this->repoAssuntos->buscarPorIdCurso($idCurso);
+        $assuntos = $this->repoAssuntos->buscarPorIdCurso((int) $idCurso);
         
         return AssuntoListagemDTO::deObjetos($assuntos);
     }

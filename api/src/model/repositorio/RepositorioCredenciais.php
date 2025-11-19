@@ -10,15 +10,22 @@ interface RepositorioCredenciais{
     public function adicionar(Credenciais $credenciais): int;
 
     /**
-     * Verifica se um email já existe
+     * Verifica se um email existe e retorna salSenha se existir
      * @param string $email
-     * @return bool
+     * @return bool|string
      */
-    public function buscarPorEmail(string $email) :bool;
+    public function buscarPorEmail(string $email) :bool|string;
 
     /**
      * Retorna todos os usuários
-     * @return array<Professor|Aluno|Administrador>
+     * @return array<Professor|Aluno|Administrador|ProfessorAdministrador>
      */
     public function listarTodos(): array;
+
+    /**
+     * Retorna o usuário de determinadas credenciais
+     * 
+     * @return Professor|Aluno|Administrador|ProfessorAdministrador|false
+     */
+    public function verificarCredenciais(Credenciais $credenciais): Professor|Aluno|Administrador|ProfessorAdministrador|false;
 }

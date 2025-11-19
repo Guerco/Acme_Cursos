@@ -24,7 +24,7 @@ class GestorProfessores{
         $this->validarBuscarCursosProfessor($idProfessor);
 
         $cursos = [];
-        $cursos = $this->repoCursos->buscarPorIdProfessor($idProfessor);
+        $cursos = $this->repoCursos->buscarPorIdProfessor((int) $idProfessor);
         
         return CursoListagemResumoDTO::deObjetos($cursos);
     }

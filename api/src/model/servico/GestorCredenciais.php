@@ -126,7 +126,7 @@ class GestorCredenciais
             $problemas[] = 'A senha deve ser preenchida.';
         }
 
-        if ($this->repositorioCredenciais->buscarPorEmail($usuario->email)) {
+        if ($this->repositorioCredenciais->buscarPorEmail($usuario->email) !== false) {
             $problemas[] = 'Este e-mail já está cadastrado.';
         }
 

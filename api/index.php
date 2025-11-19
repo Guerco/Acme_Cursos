@@ -199,51 +199,97 @@ $app->route('/perguntas')
 
     });
 
+// Rotas de Perguntas
+$app->route('/login')
+
+    ->post('/', function (HttpRequest $req, HttpResponse $res) use ($pdo) {
+        
+        executaComTratamentoErros(function () use ($pdo, $req, $res) {
+            $gestorLogin = criarGestor('login');
+            $usuario = $gestorLogin->entrar((array) $req->body());
+            $res->status(200)->json($usuario);
+        }, $res);
+
+    })
+
+    ->delete('/', function (HttpRequest $req, HttpResponse $res) use ($pdo) {
+
+        executaComTratamentoErros(function () use ($pdo, $req, $res) {
+            $gestorLogin = criarGestor('login');
+            $gestorLogin->sair();
+            $res->status(204)->end();
+        }, $res);
+
+    });
+
 $app->listen();
 
 /**
  * Instancia um gestor de determinado tipo e seus repositórios.
  * 
- * @param 'cursos'|'alunos'|'perguntas'|'credenciais'|'professores' $tipoGestor
+ * @param 'cursos'|'alunos'|'perguntas'|'credenciais'|'professores'|'login' $tipoGestor
  * @return void
  */
-function criarGestor(string $tipoGestor): GestorCursos|GestorAlunos|GestorCredenciais|GestorPerguntas|GestorProfessores|null
-{
+function criarGestor(string $tipoGestor): GestorCursos|GestorAlunos|GestorCredenciais|GestorPerguntas|GestorProfessores|GestorLogin|null {
     global $pdo;
 
-    return match (strtolower($tipoGestor)) {
-        'cursos' => new GestorCursos(
-            new RepositorioCursosEmBDR($pdo),
-            new RepositorioAssuntosEmBDR($pdo)
-        ),
-        'alunos' => new GestorAlunos(
-            new RepositorioAlunosEmBDR($pdo),
-            new RepositorioPerguntasEmBDR($pdo),
-            new RepositorioCursosEmBDR($pdo),
-            new GerenciadorDeTransacoesEmBDR($pdo)
-        ),
-        'perguntas' => new GestorPerguntas(
-            new RepositorioPerguntasEmBDR($pdo),
-            new RepositorioAlunosEmBDR($pdo),
-            new RepositorioAssuntosEmBDR($pdo),
-            new RepositorioRespostasPerguntaEmBDR($pdo),
-            new GerenciadorDeTransacoesEmBDR($pdo)
-        ),
-        'credenciais' => new GestorCredenciais(
-            new RepositorioCredenciaisEmBDR($pdo),
-            new RepositorioAlunosEmBDR($pdo),
-            new RepositorioProfessoresEmBDR($pdo),
-            new RepositorioAdministradoresEmBDR($pdo),
-            new GerenciadorDeTransacoesEmBDR($pdo),
-            new GerenciadorDeSenhaEnv()
-        ),
-        'professores' => new GestorProfessores(
-            new RepositorioProfessoresEmBDR($pdo),
-            new RepositorioCursosEmBDR($pdo)
-        ),
-        default => null,
-    };
+    switch (strtolower($tipoGestor)) {
+
+        case 'cursos':
+            return new GestorCursos(
+                new RepositorioCursosEmBDR($pdo),
+                new RepositorioAssuntosEmBDR($pdo)
+            );
+
+        case 'alunos':
+            return new GestorAlunos(
+                new RepositorioAlunosEmBDR($pdo),
+                new RepositorioPerguntasEmBDR($pdo),
+                new RepositorioCursosEmBDR($pdo),
+                new GerenciadorDeTransacoesEmBDR($pdo)
+            );
+
+        case 'perguntas':
+            return new GestorPerguntas(
+                new RepositorioPerguntasEmBDR($pdo),
+                new RepositorioAlunosEmBDR($pdo),
+                new RepositorioAssuntosEmBDR($pdo),
+                new RepositorioRespostasPerguntaEmBDR($pdo),
+                new GerenciadorDeTransacoesEmBDR($pdo)
+            );
+
+        case 'credenciais':
+            return new GestorCredenciais(
+                new RepositorioCredenciaisEmBDR($pdo),
+                new RepositorioAlunosEmBDR($pdo),
+                new RepositorioProfessoresEmBDR($pdo),
+                new RepositorioAdministradoresEmBDR($pdo),
+                new GerenciadorDeTransacoesEmBDR($pdo),
+                new GerenciadorDeSenhaEnv()
+            );
+
+        case 'professores':
+            return new GestorProfessores(
+                new RepositorioProfessoresEmBDR($pdo),
+                new RepositorioCursosEmBDR($pdo)
+            );
+
+        case 'login':
+            $repoCredenciais = new RepositorioCredenciaisEmBDR($pdo);
+
+            return new GestorLogin(
+                new AutentificacaoEmArquivo(
+                    new GerenciadorDeSenhaEnv(),
+                    $repoCredenciais
+                ),
+                $repoCredenciais
+            );
+
+        default:
+            return null;
+    }
 }
+
 
 function executaComTratamentoErros (callable $callback, HttpResponse $res) {
     try {
@@ -255,7 +301,7 @@ function executaComTratamentoErros (callable $callback, HttpResponse $res) {
     } catch (RepositorioException $e) {
         $res->status(500)->json(['erros' => $e->getMessage()]);
     } catch (ServidorException $e) {
-        $res->status(500)->json(['erros' => 'Ocorreu um erro interno no servidor.']);
+        $res->status(500)->json(['erros' => $e->getMessage()]);
     } catch (RuntimeException $e) {
         $res->status(500)->json(['erros' => $e->getMessage()]);
     } catch (Throwable $e) {

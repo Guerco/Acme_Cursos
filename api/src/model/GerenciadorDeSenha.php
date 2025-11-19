@@ -9,5 +9,6 @@ interface GerenciadorDeSenha {
      * }
      */
     public function criarHash(string $senha): array;
+    public function gerarHashComSal(string $senha, string $sal): string;
     public function verificarSenha(string $senha, string $sal, string $hashSenha) : bool;
 }

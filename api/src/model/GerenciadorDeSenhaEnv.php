@@ -27,6 +27,14 @@ class GerenciadorDeSenhaEnv implements GerenciadorDeSenha {
         return ['senha' => $hashSenha, 'sal' => $sal];
     }
 
+    public function gerarHashComSal(string $senha, string $sal): string {
+        $senhaApimentada = $this->pimentaInicio . $sal . $senha . $this->pimentaFim;
+        $hashSenha = hash('sha512', $senhaApimentada);
+
+        return $hashSenha;
+    }
+
+
     public function verificarSenha(string $senha, string $sal, string $hashSenha): bool {
         $senhaMontada = $this->pimentaInicio . $sal . $senha . $this->pimentaFim;
         $hashCalculado = hash('sha512', $senhaMontada);

@@ -26,7 +26,7 @@ enum Dificuldade: string{
         return match($this) {
             self::FACIL => 'facil',
             self::MEDIO => 'medio',
-            self::DIFICIL => 'dificil5',
+            self::DIFICIL => 'dificil',
         };
     }
 }
