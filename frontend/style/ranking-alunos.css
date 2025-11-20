@@ -25,7 +25,7 @@ html, body {
 }
 
 #tipo-ranking {
-    width: 150px;
+    width: 130px;
     height: 30px;
     border-radius: 12px;
     border: none;
@@ -236,7 +236,7 @@ h1 {
     }
 
     #tipo-ranking {
-        width: 120px;
+        width: 110px;
         height: 25px;
         font-size: 11px;
     }
@@ -252,8 +252,8 @@ h1 {
 
     #botao-buscar {
         height: 25px;
-        width: 20px; 
-        font-size: 10px;
+        width: 30px; 
+        font-size: 11px;
     }
 
 }

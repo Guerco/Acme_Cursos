@@ -7,24 +7,24 @@ export class VisaoSenhaDOM {
 
 
     iniciar() {
-        this.carregarElementos();
+        const botoesExibir = document.getElementsByClassName('botao-exibir-senha');
 
-        this.botaoExibir!.addEventListener('click', () => this.alternarVisibilidadeSenha());
+        for(const b of botoesExibir) {
+            b!.addEventListener('click', (e) => this.alternarVisibilidadeSenha(e));
+        }
     }
 
     // Métodos de Entrada
 
     // Métodos de Saída
-    alternarVisibilidadeSenha(): void{
-        const oculta = (this.botaoExibir!.innerText == '🙈');
+    alternarVisibilidadeSenha(e : Event): void{
+        const botao = e.target as HTMLButtonElement;
+        const input = botao.parentElement!.querySelector('.input-senha') as HTMLInputElement;
 
-        this.botaoExibir!.innerText = oculta ? '🐵':'🙈';
-        this.inputSenha!.type = oculta ? 'text' : 'password';
-    }
+        const oculta = (botao!.innerText == '🙈');
 
-    // Auxiliares
-    private carregarElementos() {
-        this.inputSenha = document.getElementById(ids.input) as HTMLInputElement;
-        this.botaoExibir = document.getElementById(ids.botao) as HTMLButtonElement;
+        botao!.innerText = oculta ? '🐵':'🙈';
+        botao!.title = oculta ? 'Ocultar Senha':'Exibir Senha';
+        input!.type = oculta ? 'text' : 'password';
     }
 }

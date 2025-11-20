@@ -23,6 +23,7 @@ export const rotasApi = {
     usuarios: BASE_URL_API+'usuarios/',
     usuariosBusca: ( busca: string ) =>
         BASE_URL_API+'usuarios/?busca=' + busca,
+    login: BASE_URL_API+'login/',
 };
 
 export const rotasPaginas = {

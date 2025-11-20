@@ -62,7 +62,7 @@ class AutentificacaoEmArquivo implements Autentificacao {
             session_name('sid');
 
             session_set_cookie_params(
-                60*60, 
+                0, 
                 '', 
                 '', 
                 false,

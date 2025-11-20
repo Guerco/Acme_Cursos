@@ -86,3 +86,22 @@ INSERT INTO administrador (id, id_credenciais, nome) VALUES
     (1, 10,'Roberto Rodrigues de Paula'),
     (2, 6, 'Rosa Maria da Silva');
 
+-- Login
+UPDATE 
+    credenciais 
+SET 
+    senha = "76d67a0ded0f3cdfd978ef3a03ed4b1876c03f076bfe657b9430b55e4c56e6668e2405fd4da7b4254ce82b23f49d433de5b413f98f01cad7d2487ea57d8ee8cc" 
+    , salSenha = "2eb08fa75b58fc31c28c8c063753b6ca"
+where 1;
+
+UPDATE credenciais
+SET 
+    email = "adm@email.com"
+WHERE id = 10;
+
+UPDATE administrador
+SET
+    nome = "Adm da Silva"
+WHERE id = 1;
+
+
