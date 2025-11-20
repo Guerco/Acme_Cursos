@@ -124,7 +124,9 @@ $app->route('/usuarios')
 
         executaComTratamentoErros(function () use ($pdo, $req, $res) {
             $gestorCredenciais = criarGestor('credenciais');
-            $resultado = $gestorCredenciais->listarUsuarios();
+            $filtro = $_GET['busca'] ?? '';
+
+            $resultado = $gestorCredenciais->listarUsuarios($filtro);
             $res->status(200)->json($resultado);
         }, $res);
 

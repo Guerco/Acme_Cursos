@@ -28,6 +28,28 @@ export class RepositorioCredenciaisApi implements RepositorioCredenciais {
         }
     }
 
+    async buscarPorNome(nome: string) : Promise<UsuarioListagem[]>{
+        try {
+            const response = await fetch(rotasApi.usuariosBusca(nome));
+
+            if (!response.ok){
+                throw new Error();
+            }
+            const resposta = await response.json();
+
+            const usuarios = resposta.map((usuario: any) => 
+                new UsuarioListagem(
+                    usuario.tipoUsuario,
+                    usuario.nome,
+                    usuario.email
+                )
+            );
+            return usuarios;
+        } catch(err) {
+            throw new Error('Não foi possível buscar os usuários.');
+        }
+    }
+
     async adicionar(usuario: UsuarioCadastro): Promise<void> {
         try {
 

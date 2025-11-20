@@ -17,10 +17,10 @@ interface RepositorioCredenciais{
     public function buscarPorEmail(string $email) :bool|string;
 
     /**
-     * Retorna todos os usuários
+     * Retorna todos os usuários ou filtrados pelo nome;
      * @return array<Professor|Aluno|Administrador|ProfessorAdministrador>
      */
-    public function listarTodos(): array;
+    public function listarTodos(string $filtro): array;
 
     /**
      * Retorna o usuário de determinadas credenciais

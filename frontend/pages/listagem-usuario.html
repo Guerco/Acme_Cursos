@@ -15,6 +15,25 @@
 <body>
     <div id="secao-usuarios">
         <h1>Usuários</h1>
+
+        <div class="opcoes-listagem">
+            <div class="container-tipo-usuario">
+                <label for="tipo-usuario">🏷️</label>
+                <select name="tipo-usuario" id="tipo-usuario">
+                    <option value="" selected>Todos Cargos</option>
+                    <option value="aluno">Alunos</option>
+                    <option value="professor">Professores</option>
+                    <option value="administrador">Administradores</option>
+                    <option value="professor-administrador">Professores-Administradores</option>
+                </select>
+            </div>
+
+            <form id="form-busca">
+                <input type="search" id="input-busca" placeholder="Buscar usuário" />
+                <button id="botao-buscar">🔍</button>
+            </form>
+        </div>
+
         <output id="mensagem"></output>
         <div class="container-usuarios">
             <table>

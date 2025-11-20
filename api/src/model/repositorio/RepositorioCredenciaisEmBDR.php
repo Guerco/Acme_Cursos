@@ -43,29 +43,44 @@ class RepositorioCredenciaisEmBDR implements RepositorioCredenciais{
         } 
     }
 
-    public function listarTodos(): array{
+    public function listarTodos(string $filtro): array{
         try{
-            $ps = $this->pdo->prepare(
-                'select 
-                    case 
-                       when a.id is not null then "Aluno"
-				       when p.id is not null and adm.id is not null then "Professor-Administrador"
-				       when p.id is not null then "Professor"
-				       when adm.id is not null then "Administrador"
-                    end as tipo_usuario,
-                    case
-                        when a.nome is not null then a.nome
-                        when p.nome is not null then p.nome
-                        when adm.nome is not null then adm.nome
-                    end as nome,
+            $sql = <<<'SQL'
+                SELECT 
+                    CASE 
+                        WHEN a.id IS NOT NULL THEN 'Aluno'
+                        WHEN p.id IS NOT NULL AND adm.id IS NOT NULL THEN 'Professor-Administrador'
+                        WHEN p.id IS NOT NULL THEN 'Professor'
+                        WHEN adm.id IS NOT NULL THEN 'Administrador'
+                    END AS tipo_usuario,
+                    
+                    CASE
+                        WHEN a.nome IS NOT NULL THEN a.nome
+                        WHEN p.nome IS NOT NULL THEN p.nome
+                        WHEN adm.nome IS NOT NULL THEN adm.nome
+                    END AS nome,
+                    
                     c.email 
-                    from credenciais c
-                    left join aluno a on (c.id = a.id_credenciais)
-                    left join professor p on (c.id = p.id_credenciais)
-                    left join administrador adm on (c.id = adm.id_credenciais) 
-                    order by tipo_usuario, nome' 
-            );
-            $ps->execute();
+                FROM credenciais c
+                LEFT JOIN aluno a ON c.id = a.id_credenciais
+                LEFT JOIN professor p ON c.id = p.id_credenciais
+                LEFT JOIN administrador adm ON c.id = adm.id_credenciais
+                WHERE 
+                    LOWER(a.nome) LIKE LOWER(:filtro_aluno) 
+                    OR LOWER(p.nome) LIKE LOWER(:filtro_professor) 
+                    OR LOWER(adm.nome) LIKE LOWER(:filtro_adm)
+                ORDER BY tipo_usuario, nome;
+
+            SQL;
+            $ps = $this->pdo->prepare($sql);
+
+            $filtro = '%'.trim($filtro).'%';
+
+            $ps->execute([
+                'filtro_aluno' => $filtro,
+                'filtro_professor' => $filtro,
+                'filtro_adm' => $filtro,
+            ]);
 
             $dados = $ps->fetchAll();
             $usuarios = $this->criarUsuarios($dados);

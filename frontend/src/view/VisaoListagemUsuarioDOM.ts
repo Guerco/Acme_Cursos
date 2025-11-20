@@ -12,9 +12,28 @@ export class VisaoListagemUsuarioDOM implements VisaoListagemUsuario{
     }
 
     iniciar(): void {
-      this.controladora.listarUsuarios();
+        this.controladora.listarUsuarios();
+
+        const selectCargo = document.getElementById(ids.tipoUsuario) as HTMLSelectElement;
+        selectCargo.addEventListener('change', (e) => {
+            this.controladora.filtrarCargo(e);
+        });
+
+        const busca = document.getElementById(ids.formBusca) as HTMLFormElement;
+        busca.addEventListener('submit', (e) => {
+            e.preventDefault();
+            selectCargo.selectedIndex = 0;
+            this.controladora.buscar();
+        });
     }
 
+    // Métodos de Entrada
+    public buscarTextoBusca () : string {
+        const inputBusca = document.getElementById(ids.inputBusca) as HTMLInputElement;
+        return inputBusca.value;
+    }
+    
+    // Métodos de Saída
     exibirUsuarios(usuarios: UsuarioListagem []): void {            
         if (!usuarios || usuarios.length === 0) {
             this.exibirMensagem('Não há usuarios para listar.');
@@ -25,6 +44,8 @@ export class VisaoListagemUsuarioDOM implements VisaoListagemUsuario{
     }
 
     exibirMensagem(mensagem : string): void {
+        const tbody = document.querySelector('tbody') as HTMLElement;
+        tbody.innerHTML = "";
         const outMensagem = document.getElementById(ids.mensagem);
         outMensagem!.innerText = mensagem;
     }
@@ -35,9 +56,8 @@ export class VisaoListagemUsuarioDOM implements VisaoListagemUsuario{
         let elementos = [];
         let cargo = '';
 
+        
         for (const u of usuarios) {
-            console.log(cargo);
-            console.log(u.tipoUsuario);
             if(cargo != u.tipoUsuario) {
                 const trTitulo = UtilDOM.criaComClasses('tr', [classes.tituloCargo]);
 
@@ -60,6 +80,8 @@ export class VisaoListagemUsuarioDOM implements VisaoListagemUsuario{
             elementos.push(this.criarTabela(u));
         }
         const frag = UtilDOM.criaFragmentoComElementos(elementos);
+        const outMensagem = document.getElementById(ids.mensagem);
+        outMensagem!.innerText = '';
         const tbody = document.querySelector('tbody') as HTMLElement;
         tbody.innerHTML = "";
         tbody.append(frag);

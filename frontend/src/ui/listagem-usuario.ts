@@ -1,5 +1,8 @@
 export const ids = {
-    mensagem: 'mensagem'
+    mensagem: 'mensagem',
+    tipoUsuario: 'tipo-usuario',
+    formBusca: 'form-busca',
+    inputBusca: 'input-busca',
 };
 
 export const classes = {

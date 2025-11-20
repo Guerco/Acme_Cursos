@@ -16,11 +16,11 @@ class GestorCredenciais
     /**
      * @return UsuarioListagemDTO[]
      */
-    public function listarUsuarios(): array {
+    public function listarUsuarios(string $filtro): array {
         $usuarios = [];
         $resultado = [];
 
-        $usuarios = $this->repositorioCredenciais->listarTodos();
+        $usuarios = $this->repositorioCredenciais->listarTodos($filtro);
 
         $resultado = UsuarioListagemDTO::deObjetosParaDTO($usuarios);
 

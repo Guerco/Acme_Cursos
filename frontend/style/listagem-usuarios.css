@@ -44,7 +44,7 @@ h2 {
     margin: auto;
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 10px;
     width: 70vw;
     height: calc(100% - 40px);
     margin: 20px auto;
@@ -62,6 +62,7 @@ h2 {
     background-color: #f9f9f9;
     border-radius: 12px;
     padding: 20px;
+    height: 100%;
 }
 
 #secao-usuarios table {
@@ -100,11 +101,11 @@ tr:not(.titulo-cargo) td {
 }
 
 .titulo-cargo td {
-    background: #820ec059;
+    background: #6cbf4594;
     padding-left: 8px;
     font-weight: bold;
-    color: #ffffff;
-    text-shadow: 2px 2px 4px #820ec0;
+    color: #820ec0;
+    text-shadow: 2px 2px 4px #6CBF45;
 }
 
 .info-usuario {
@@ -114,6 +115,69 @@ tr:not(.titulo-cargo) td {
 
 .email-usuario {
     color: #820ec0;
+}
+
+/* ========================================================== */
+/* Estilo das Opções */
+.opcoes-listagem {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+
+.container-tipo-usuario {
+    width: auto;
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+    align-items: center;
+}
+
+#tipo-usuario {
+    width: 130px;
+    height: 30px;
+    border-radius: 12px;
+    border: none;
+    padding: 5px;
+    font-weight: bold;
+    background: #820ec059;
+    color: #ffffff;
+    text-shadow: 2px 2px 4px #820ec0;
+}
+
+#form-busca {
+    width: 100%;
+    overflow: hidden;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    border-radius: 12px;
+    width: 100%;
+    border: 2px solid #d6d6d6;
+}
+
+#form-busca #input-busca {
+    flex-grow: 1; 
+    width: 100%; 
+    padding: 0 10px; 
+    border: none;
+    height: 100%;
+    font-size: small;
+}
+
+#botao-buscar {
+    height: 30px;
+    width: 40px; 
+    flex-shrink: 0; 
+    border: none;
+    background-color: #ffffff00;
+    cursor: pointer;
+    font-size: 15px;
+}
+
+#form-busca #input-busca:focus {
+  outline: none;
+  box-shadow: none;
 }
 
 /* ========================================================== */
@@ -137,5 +201,30 @@ tr:not(.titulo-cargo) td {
 
     .container-usuarios {
         padding: 5px;
+    }
+
+    label[for="tipo-usuario"] {
+        display: none;
+    }
+
+    #tipo-usuario {
+        width: 110px;
+        height: 25px;
+        font-size: 11px;
+    }
+    
+    #form-busca {
+        height: 25px;
+    }
+    
+    #form-busca #input-busca {
+        height: 25px;
+        font-size: 11px;
+    }
+
+    #botao-buscar {
+        height: 25px;
+        width: 30px; 
+        font-size: 11px;
     }
 }

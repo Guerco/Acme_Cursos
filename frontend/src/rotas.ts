@@ -20,7 +20,9 @@ export const rotasApi = {
     assuntosCurso: ( idCurso: number ) =>
         BASE_URL_API + 'cursos/' + idCurso + '/assuntos/',
     perguntas: BASE_URL_API+'perguntas/',
-    usuarios: BASE_URL_API+'usuarios/'
+    usuarios: BASE_URL_API+'usuarios/',
+    usuariosBusca: ( busca: string ) =>
+        BASE_URL_API+'usuarios/?busca=' + busca,
 };
 
 export const rotasPaginas = {
