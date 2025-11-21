@@ -18,6 +18,7 @@ export interface VisaoCadastroPerguntas {
     preencherListaCursos(cursos: CursoListagemResumo[]): void;
     habilitarSelecaoCursos(): void;
     preencherListaAssuntos(assuntos: AssuntoListagem[]): void;
+    limparListaAssuntos(): void;
     habilitarSelecaoAssuntos(): void;
     desabilitarSelecaoAssuntos(): void;
     habilitarProximaResposta(): void;

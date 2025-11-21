@@ -7,16 +7,20 @@ import { RepositorioLogin } from "./RepositorioLogin";
 export class RepositorioLoginAPI implements RepositorioLogin {
     async entrar(credenciais: Credenciais): Promise<UsuarioSessao>{
         try {
-            const response = await fetch(rotasApi.login, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(credenciais)
-            });
+            const response = await fetch(rotasApi.login, 
+                {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    credentials: 'include',
+                    body: JSON.stringify(credenciais)
+                }
+            );
 
             if (response.status >= 400 && response.status < 500) {
                 throw new DominioException('Credenciais Inválidas.');
+
             }
             else if (!response.ok) {
                 throw new Error();
@@ -40,7 +44,10 @@ export class RepositorioLoginAPI implements RepositorioLogin {
     async sair(): Promise<void>{
         try {
             const response = await fetch(rotasApi.login, 
-                { method: 'DELETE' }
+                { 
+                    method: 'DELETE', 
+                    credentials: 'include' 
+                }
             );
 
             if (!response.ok) {

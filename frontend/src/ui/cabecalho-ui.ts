@@ -18,6 +18,9 @@ export const classes = {
     tipoUsuario: 'tipo-usuario-menu',
     botaoEntrar: 'botao-entrar',
     botaoSair: 'botao-sair',
+    acoesUsuario: 'acoes-usuario',
+    nomeUsuarioHeader: 'nome-usuario-header',
+    entrarCabecalho: 'botao-entrar-cabecalho',
 };
 
 export const ids = {
@@ -30,3 +33,7 @@ export const ids = {
     botaoCancelar: 'botao-cancelar-login',
     mensagemLogin: 'mensagem-login',
 }
+
+export const idsCss = Object.fromEntries(
+    Object.entries(ids).map(([c, id]) => [c, `#${id}`])
+);

@@ -3,6 +3,7 @@ import { RepositorioLoginAPI } from "../model/repositorio/RepositorioLoginAPI";
 import { ServicoLogin } from "../model/servico/ServicoLogin";
 import { Sessao } from "../model/sessao/Sessao";
 import { rotasPaginas } from "../rotas";
+import { ELEMENTOS_MENU } from "../scripts/elementos/itens-menu";
 import { VisaoCabecalho } from "../view/VisaoCabecalho";
 
 
@@ -17,10 +18,13 @@ export class ControladoraCabecalho{
         this.servico = new ServicoLogin(repositorio, sessao);
     }
 
+    exibirCabecalho() {
+        this.visao.montarCabecalho(ELEMENTOS_MENU);
+    }
+
     async entrar() {
         try {
             const credenciais = this.visao.buscarCredenciais();
-            console.log(credenciais);
     
             await this.servico.login(credenciais);
             location.reload();

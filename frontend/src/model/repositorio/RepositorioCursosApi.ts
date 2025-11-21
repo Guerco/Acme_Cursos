@@ -52,8 +52,13 @@ export class RepositorioCursosApi implements RepositorioCursos  {
 
     async buscarResumidoPorIdProfessor(idProfessor : number) : Promise<CursoListagemResumo[]>{
         try {
-            const response = await fetch(rotasApi.cursosProfessor(idProfessor));
-        
+            const response = await fetch(rotasApi.cursosProfessor(idProfessor), 
+                { 
+                    method: 'GET', 
+                    credentials: 'include' 
+                }
+            );
+
             if (!response.ok){
                 throw new Error();
             }

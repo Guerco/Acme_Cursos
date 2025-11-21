@@ -51,7 +51,7 @@ export class ControladoraCadastroPerguntas {
     }
 
     limparAssuntos(): void {
-        this.visao.preencherListaAssuntos([]);
+        this.visao.limparListaAssuntos();
         this.visao.desabilitarSelecaoAssuntos();
     }
 

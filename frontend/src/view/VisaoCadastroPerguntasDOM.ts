@@ -10,6 +10,8 @@ import { Base64 } from "../util/Base64";
 import { RespostaPerguntaCadastro } from "../model/dto/RespostaPerguntaCadastro.ts";
 import { rotasPaginas } from "../rotas.ts";
 import { DominioException } from "../model/exception/DominioException.ts";
+import { Sessao } from "../model/sessao/Sessao.ts";
+import { TipoUsuario } from "../model/TipoUsuario.ts";
 
 export class VisaoCadastroPerguntasDOM implements VisaoCadastroPerguntas {
     private controladora: ControladoraCadastroPerguntas;
@@ -28,21 +30,32 @@ export class VisaoCadastroPerguntasDOM implements VisaoCadastroPerguntas {
     private divCadastro!: HTMLDivElement;
     private inputTempoSeg!: HTMLInputElement;
 
-    constructor() {
+    constructor(
+        private sessao: Sessao
+    ) {
         this.controladora = new ControladoraCadastroPerguntas(this);
     }
 
     async iniciar(): Promise<void> {
         this.carregarElementos();
 
-        await this.controladora.carregarProfessores();
+        if (
+            this.sessao.estaLogado()
+            && this.sessao.buscarTipoUsuario() == TipoUsuario.PROFESSOR
+        ) {
+            this.exibirProfessorLogado();
+            await this.controladora.carregarCursos();
+        }
+        else {
+            await this.controladora.carregarProfessores();
 
-        this.selectProfessor.addEventListener('change', async () => {
-            if (this.selectProfessor.value) {
-                this.controladora.limparAssuntos();
-                await this.controladora.carregarCursos();
-            }
-        });
+            this.selectProfessor.addEventListener('change', async () => {
+                if (this.selectProfessor.value) {
+                    this.controladora.limparAssuntos();
+                    await this.controladora.carregarCursos();
+                }
+            });
+        }
 
         this.selectCurso.addEventListener('change', async () => {
             if (this.selectCurso.value)
@@ -130,6 +143,7 @@ export class VisaoCadastroPerguntasDOM implements VisaoCadastroPerguntas {
     // Métodos de Saída
     preencherListaProfessores(professores: ProfessorListagem[]): void {
         const opcaoPadrao = this.selectProfessor.querySelector('option[value=""]') as HTMLOptionElement;
+        if (professores.length === 0) opcaoPadrao.innerText = 'Não há Professores.';
 
         const opcoesProfessor = [opcaoPadrao!];
         for (const p of professores) {
@@ -143,7 +157,7 @@ export class VisaoCadastroPerguntasDOM implements VisaoCadastroPerguntas {
 
     preencherListaCursos(cursos: CursoListagemResumo[]): void {
         const opcaoPadrao = this.selectCurso.querySelector('option[value=""]') as HTMLOptionElement;
-        opcaoPadrao.innerText = 'Selecione um Curso';
+        opcaoPadrao.innerText = (cursos.length === 0) ? 'Este professor não possui nenhum curso.' : 'Selecione um Curso';
 
         const opcoesCurso = [opcaoPadrao!];
         for (const c of cursos) {
@@ -162,7 +176,7 @@ export class VisaoCadastroPerguntasDOM implements VisaoCadastroPerguntas {
 
     preencherListaAssuntos(assuntos: AssuntoListagem[]): void {
         const opcaoPadrao = this.selectAssunto.querySelector('option[value=""]') as HTMLOptionElement;
-        opcaoPadrao.innerText = (assuntos.length == 0) ? 'Selecione primeiro um Curso' : 'Selecione um Assunto';
+        opcaoPadrao.innerText = (assuntos.length == 0) ? 'Este curso não possui nenhum assunto.' : 'Selecione um Assunto';
 
         const opcoesAssunto = [opcaoPadrao!];
         for (const c of assuntos) {   
@@ -172,6 +186,14 @@ export class VisaoCadastroPerguntasDOM implements VisaoCadastroPerguntas {
 
         this.selectAssunto.innerHTML = '';
         this.selectAssunto.appendChild(frag);
+    }
+
+    limparListaAssuntos(): void {
+        const opcaoPadrao = this.selectAssunto.querySelector('option[value=""]') as HTMLOptionElement;
+        opcaoPadrao.innerText = 'Selecione primeiro um Curso';
+
+        this.selectAssunto.innerHTML = '';
+        this.selectAssunto.appendChild(opcaoPadrao);
     }
 
     habilitarSelecaoAssuntos(): void {
@@ -275,5 +297,19 @@ export class VisaoCadastroPerguntasDOM implements VisaoCadastroPerguntas {
         this.mensagemErro = document.getElementById(ids.mensagemCadastro) as HTMLOutputElement;
         this.divCadastro = document.getElementById(ids.cadastro) as HTMLDivElement;
         this.inputTempoSeg = document.getElementById(ids.inputTempoSeg) as HTMLInputElement;
+    }
+
+    private exibirProfessorLogado() {
+        const nomeProfessor = this.sessao.buscarNomeUsuario();
+
+        this.selectProfessor.innerHTML = '';
+
+        const optionProfessor = UtilDOM.cria('option') as HTMLOptionElement;
+        optionProfessor.value = '0';
+        optionProfessor.innerText = nomeProfessor;
+
+        this.selectProfessor.appendChild(optionProfessor);
+
+        this.selectProfessor.disabled = true;
     }
 }

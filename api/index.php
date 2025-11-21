@@ -23,9 +23,16 @@ try {
     exit;
 }
 
+$options = [
+    'origin' => ['http://localhost:5173', 'http://127.0.0.1:5173'],
+    'credentials' => true,
+    'allowedHeaders' => ['Content-Type', 'Authorization', 'Accept'],
+    'methods' => ['GET', 'POST', 'DELETE'],
+    'maxAge' => 3600
+];
 
 $app = new Router();
-$app->use(cors());
+$app->use(cors( $options ));
 
 // Rotas
 // Rotas de Cursos
@@ -273,7 +280,11 @@ function criarGestor(string $tipoGestor): GestorCursos|GestorAlunos|GestorCreden
         case 'professores':
             return new GestorProfessores(
                 new RepositorioProfessoresEmBDR($pdo),
-                new RepositorioCursosEmBDR($pdo)
+                new RepositorioCursosEmBDR($pdo),
+                new AutentificacaoEmArquivo(
+                    new GerenciadorDeSenhaEnv(),
+                    new RepositorioCredenciaisEmBDR($pdo)
+                )
             );
 
         case 'login':

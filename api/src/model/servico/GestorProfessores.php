@@ -4,7 +4,8 @@ class GestorProfessores{
         
     public function __construct(
         private RepositorioProfessores $repoProfessores,
-        private RepositorioCursos $repoCursos
+        private RepositorioCursos $repoCursos,
+        private Autentificacao $autentificacao
     ) { }
 
     /**
@@ -21,6 +22,13 @@ class GestorProfessores{
      * @return CursoListagemResumoDTO[]
      */
     public function buscarCursosProfessor(string|int $idProfessor): array{
+        if ( 
+            $this->autentificacao->estaLogado() 
+            && $this->autentificacao->buscarTipoUsuario() === TipoUsuario::PROFESSOR->value
+        ) {
+            $idProfessor = $this->autentificacao->buscaridUsuario();
+        } 
+        
         $this->validarBuscarCursosProfessor($idProfessor);
 
         $cursos = [];

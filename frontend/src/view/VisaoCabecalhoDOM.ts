@@ -1,100 +1,16 @@
 import { rotasPaginas } from "../rotas.ts";
 import { UtilDOM } from "../util/UtilDOM.ts";
-import { classes, ids } from "../ui/cabecalho-ui.ts";
+import { classes, ids, idsCss } from "../ui/cabecalho-ui.ts";
 import { ControladoraCabecalho } from "../presenter/ControladoraCabecalho.ts";
 import { VisaoCabecalho } from "./VisaoCabecalho.ts";
 import { Credenciais } from "../model/dto/Credenciais.ts";
 import { Sessao } from "../model/sessao/Sessao.ts";
-import { TipoUsuario } from "../model/TipoUsuario.ts";
+import { ItemMenu } from "../scripts/elementos/itens-menu.ts";
 
 
 const DIR_IMG = '/img/';
 const SRC_LOGO = DIR_IMG + 'logotipo.png';
 const SRC_ICONE = DIR_IMG + 'menu.png';
-
-type ItemMenu = {
-    rota?: string;
-    descricao?: string;
-    linha?: boolean;
-    subMenu?: ItemMenu[];
-    autorizados?: string[];
-    logado?: boolean;
-};
-
-const ELEMENTOS_MENU: ItemMenu[] = [
-    { linha:true },
-    {
-        rota: rotasPaginas.listagemCursos,
-        descricao: 'Listagem de Cursos 🎓'
-    },
-    {
-        rota: rotasPaginas.listagemPerguntas,
-        descricao: 'Listagem de Perguntas ❔',
-        autorizados: [
-            TipoUsuario.ADMINISTRADOR,
-            TipoUsuario.PROFESSOR,
-            TipoUsuario.PROFESSOR_ADMINISTRADOR,
-        ]
-    },
-    {
-        rota: rotasPaginas.listagemUsuarios,
-        descricao: 'Listagem de Usuários 👥',
-        autorizados: [
-            TipoUsuario.ADMINISTRADOR,
-            TipoUsuario.PROFESSOR,
-            TipoUsuario.PROFESSOR_ADMINISTRADOR,
-        ]
-    },
-    { linha: true,
-        autorizados: [
-            TipoUsuario.ADMINISTRADOR,
-            TipoUsuario.PROFESSOR,
-            TipoUsuario.PROFESSOR_ADMINISTRADOR,
-        ] },
-    {
-        rota: rotasPaginas.cadastroPerguntas,
-        descricao: 'Cadastro de Perguntas ❓',
-        autorizados: [
-            TipoUsuario.ADMINISTRADOR,
-            TipoUsuario.PROFESSOR,
-            TipoUsuario.PROFESSOR_ADMINISTRADOR,
-        ]
-    },
-    {
-        rota: rotasPaginas.cadastroUsuario,
-        descricao: 'Cadastro de Usuários 👤',
-        autorizados: [
-            TipoUsuario.ADMINISTRADOR,
-            TipoUsuario.PROFESSOR_ADMINISTRADOR,
-        ]
-    },
-    { linha: true, logado: true, autorizados: [
-            TipoUsuario.ADMINISTRADOR,
-            TipoUsuario.PROFESSOR,
-            TipoUsuario.PROFESSOR_ADMINISTRADOR,
-        ]},
-    {
-        logado: true,
-        descricao: 'Relatórios 📊',
-        subMenu: [
-            {
-                rota: rotasPaginas.rankingAlunos,
-                descricao: 'Top Alunos 🏅'
-            },
-            {
-                rota: rotasPaginas.listagemCursos,
-                descricao: 'Total Alunos Curso 📚',
-                autorizados: [
-                    TipoUsuario.ADMINISTRADOR,
-                    TipoUsuario.PROFESSOR,
-                    TipoUsuario.PROFESSOR_ADMINISTRADOR,
-                ] 
-            }
-        ]
-    },
-    { linha:true }
-];
-
 
 export class VisaoCabecalhoDOM implements VisaoCabecalho {
     private header! : HTMLElement;
@@ -113,18 +29,29 @@ export class VisaoCabecalhoDOM implements VisaoCabecalho {
             this.sessao
         );
     }
-    
 
     iniciar() {
         this.carregarElementos();
 
-        this.montarCabecalho();
+        this.controladora.exibirCabecalho();
 
-        this.caixaLogin.addEventListener('submit', async (event) => {
-            event.preventDefault();
+        if (this.caixaLogin) {
+            this.caixaLogin.addEventListener("close", (event) => {
+                const dialog = event.target as HTMLDialogElement;
 
-            await this.controladora.entrar();
-        });
+                const email = dialog.querySelector(idsCss.email) as HTMLInputElement;
+                const senha = dialog.querySelector(idsCss.senha) as HTMLInputElement;
+
+                email.value = "";
+                senha.value = "";
+            });
+            
+            this.caixaLogin.addEventListener('submit', async (event) => {
+                event.preventDefault();
+
+                await this.controladora.entrar();
+            });
+        }
     }
 
     // Métodos de Entrada
@@ -140,19 +67,44 @@ export class VisaoCabecalhoDOM implements VisaoCabecalho {
         this.mensagemLogin.innerText = mensagem;
     }
 
-    private montarCabecalho() {
+    montarCabecalho(itensMenu : ItemMenu[]) {
         const divCabecalho = UtilDOM.criaComClasses('div', [classes.cabecalho]);
 
         const logo = UtilDOM.criaImgComClasses(SRC_LOGO, 'Logotipo do Site', [classes.logo]);
         logo.addEventListener('click', this.irParaPaginaInicial);
+        logo.title = 'Voltar ao Início';
+
+        const acoesUsuario = UtilDOM.criaComClasses('div', [classes.acoesUsuario])
+        
         const icone = UtilDOM.criaImgComClasses(SRC_ICONE, 'Icone Menu', [classes.icon]);
         icone.title = 'Abrir Menu';
+        
+        if ( ! this.sessao.estaLogado() ) {
+            this.caixaLogin = this.criarCaixaLogin();
+            
+            const h3Entrar = UtilDOM.criaComTextoEClasses(
+                'h3',
+                '🚪 Entrar',
+                [classes.entrarCabecalho]
+            );
+            
+            h3Entrar.onclick = () => this.caixaLogin.showModal();
+            acoesUsuario.appendChild(h3Entrar);
+        } else {
+            const nome = ((this.sessao.buscarNomeUsuario().trim()).split(' '))[0];
+            const h3Nome = UtilDOM.criaComTextoEClasses(
+                'h3',
+                'Olá, '+nome+'!',
+                [classes.nomeUsuarioHeader]
+            );
 
-        divCabecalho.append(logo, icone);
+            acoesUsuario.appendChild(h3Nome);
+        }
+        acoesUsuario.appendChild(icone);
 
-        this.caixaLogin = this.criarCaixaLogin();
+        divCabecalho.append(logo, acoesUsuario);
 
-        const menuLateral = this.criaMenuLateral();
+        const menuLateral = this.criaMenuLateral(itensMenu);
 
         const fundoEscuro = this.criarFundoEscuro();
 
@@ -169,7 +121,16 @@ export class VisaoCabecalhoDOM implements VisaoCabecalho {
             document.body.prepend(this.header);
         }
 
-        this.header.prepend(divCabecalho, menuLateral, fundoEscuro, this.caixaLogin);
+        const frag = UtilDOM.criaFragmentoComElementos([
+            divCabecalho,
+            menuLateral,
+            fundoEscuro
+        ]);
+
+        if ( ! this.sessao.estaLogado() )
+            frag.appendChild(this.caixaLogin);
+
+        this.header.prepend(frag);
     }
 
     // Auxiliares
@@ -181,7 +142,7 @@ export class VisaoCabecalhoDOM implements VisaoCabecalho {
         location.href = rotasPaginas.listagemCursos;
     }
 
-    private criaMenuLateral(): HTMLDivElement {
+    private criaMenuLateral(itensMenu : ItemMenu[]): HTMLDivElement {
         const menu = UtilDOM.criaComClasses('div', [classes.menuLateral]) as HTMLDivElement;
 
         const logo = UtilDOM.criaImgComClassesEId(SRC_LOGO, 'Logotipo do Site', [classes.logo], ids.logoMenu);
@@ -190,7 +151,7 @@ export class VisaoCabecalhoDOM implements VisaoCabecalho {
 
         const itens = UtilDOM.criaComClasses('div', [classes.itensMenu]);
 
-        itens.append(...this.criaItensMenu());
+        itens.append(...this.criaItensMenu(itensMenu));
 
         menu.appendChild(logo);
         let botao = null;
@@ -229,9 +190,9 @@ export class VisaoCabecalhoDOM implements VisaoCabecalho {
             }) as HTMLAnchorElement;
             botao.classList.add(classes.botaoEntrar);
     
-            botao.addEventListener('click', async (e) => {
+            botao.addEventListener('click', (e) => {
                 e.preventDefault();
-                await this.caixaLogin.showModal();
+                this.caixaLogin.showModal();
             });
         }
 
@@ -241,8 +202,8 @@ export class VisaoCabecalhoDOM implements VisaoCabecalho {
         return menu;
     }
 
-    private criaItensMenu(): HTMLElement[] {
-        return ELEMENTOS_MENU.map(e => this.criaItemMenu(e)).filter(e => e!==null) as HTMLElement[];
+    private criaItensMenu(itensMenu : ItemMenu[]): HTMLElement[] {
+        return itensMenu.map(e => this.criaItemMenu(e)).filter(e => e!==null) as HTMLElement[];
     }
 
     private criaItemMenu(e : ItemMenu): HTMLElement|DocumentFragment|null {

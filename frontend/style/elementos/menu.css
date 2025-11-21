@@ -44,6 +44,33 @@ header {
     cursor: pointer;
 }
 
+.acoes-usuario {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 20px;
+}
+
+.nome-usuario-header {
+    max-width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.botao-entrar-cabecalho {
+    cursor: pointer;
+    border-radius:5px;
+    padding: 5px;
+    font-size: 18px;
+    background-color: #ffffff2c;
+}
+
+.botao-entrar-cabecalho:hover {
+    background-color: #ffffff44;
+    text-shadow: 2px 2px 4px #6CBF45;
+}
+
 .botao-menu {
     background-color: #ffffff6b;
     border-radius: 5px;
@@ -137,6 +164,7 @@ body:has(.menu-lateral.visivel) {
 .menu-lateral p.tipo-usuario-menu{
     font-size: 13px;
     color: #ffffff9a;
+    text-transform: capitalize;
 }
 
 .menu-lateral a:hover,
@@ -242,5 +270,13 @@ body.menu-aberto {
     .menu-lateral a,
     .menu-lateral .sub-menu a {
         margin: 10px 0;
+    }
+
+    .acoes-usuario {
+        gap: 10px;
+    }
+
+    .nome-usuario-header {
+        max-width: 130px;
     }
 }

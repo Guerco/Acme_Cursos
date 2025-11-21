@@ -50,6 +50,18 @@ class AutentificacaoEmArquivo implements Autentificacao {
         session_destroy();
     }
 
+    public function buscarIdUsuario() : int {
+        $this->iniciarSessao();
+
+        return $_SESSION['id_usuario'];
+    }
+
+    public function buscarTipoUsuario() : string {
+        $this->iniciarSessao();
+
+        return $_SESSION['tipo_usuario'];
+    }
+
     public function estaLogado(): bool {
         $this->iniciarSessao();
 
@@ -63,7 +75,7 @@ class AutentificacaoEmArquivo implements Autentificacao {
 
             session_set_cookie_params(
                 0, 
-                '', 
+                '/', 
                 '', 
                 false,
                 true
