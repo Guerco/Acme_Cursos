@@ -23,6 +23,8 @@
                 "src/config/",
                 "src/model/",
                 "src/model/dto/",
+                "src/model/dto/relatorio",
+                "src/model/vo/",
                 "src/model/exception/",
                 "src/model/repositorio/",
                 "src/model/servico/",

@@ -21,6 +21,14 @@ function criarCursoTeste($id = 0, $descricao = "", $nomeProfessor = ""): Curso{
     return $curso;
 }
 
+function criarListagem($descricao = "", $quantidade = 0): CursoQtdAlunoRelVO {
+    return new CursoQtdAlunoRelVO(
+                $descricao,
+                $quantidade
+            );
+
+}
+
 describe('GestorCursos', function(): void{
 
     beforeEach(function(): void{
@@ -45,6 +53,21 @@ describe('GestorCursos', function(): void{
             expect($resultado)->toBeAn('array');
             expect(count($resultado))->not->toBe(0);
             expect($resultado[0]?? null)->toBeAnInstanceOf(CursoListagemDTO::class);
+        });
+    });
+
+    describe('listarNumeroDeAlunosPorCurso', function():void{
+
+        it('retorna um array de value object de CursoQtdAlunoRelDTO', function():void{
+            allow($this->repositorioCursos)->toReceive('numeroDeAlunosPorCurso')->andReturn([
+                criarListagem('Curso teste 1', 50),
+                criarListagem('CUrso teste 2', 42)
+            ]);
+
+            $resultado = $this->gestorCursos->listarNumeroDeAlunosPorCurso();
+            expect($resultado)->toBeAn('array');
+            expect(count($resultado))->not->toBe(0);
+            expect($resultado[0]?? null)->toBeAnInstanceOf(CursoQtdAlunoRelDTO::class);
         });
     });
       

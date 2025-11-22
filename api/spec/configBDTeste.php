@@ -234,6 +234,19 @@
 
             INSERT INTO administrador (id, id_credenciais, nome) VALUES
                 (1, 10,'Roberto Rodrigues de Paula');
+            
+            UPDATE aluno SET pontuacao_geral = 207 WHERE id = 1;
+            UPDATE aluno SET pontuacao_geral = 223 WHERE id = 2;
+            UPDATE aluno SET pontuacao_geral = 108 WHERE id = 3;
+            UPDATE aluno SET pontuacao_geral = 179 WHERE id = 4;
+            UPDATE aluno SET pontuacao_geral = 33 WHERE id = 5;
+
+            INSERT INTO pontuacao (id_aluno, id_curso, pontuacao) VALUES
+            (1, 1, 80), (2, 1, 18), (3, 1, 22), (4, 1, 45), (5, 1, 1),
+            (3, 2, 30), (4, 2, 45), (5, 2, 15), (1, 3, 7), (2, 3, 18), 
+            (3, 3, 22), (4, 3, 44), (5, 3, 10), (1, 4, 50), (2, 4, 99), 
+            (3, 4, 10), (1, 5, 55), (2, 5, 18), (3, 5, 24), (4, 5, 45), 
+            (5, 5, 7),(1, 6, 5), (2, 6, 70);
         SQL;
 
         $ps = $pdo->prepare($sql);

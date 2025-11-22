@@ -51,6 +51,18 @@ describe('RepositorioCursosEmBDR', function (){
 
     });
 
+    describe('numeroDeAlunosPorCurso', function(){
+
+        it('retorna uma listagem com o número de alunos por curso', function():void{
+            $resultado = $this->repo->numeroDeAlunosPorCurso();
+            expect($resultado)->toBeAn('array');
+            expect(count($resultado))->not->toBe(0);
+            expect($resultado[0] ?? null)->toBeAnInstanceOf(CursoQtdAlunoRelVO::class);
+
+        });
+       
+    });
+
     afterAll(function(){
 
         excluirBDTestes($this->pdo);

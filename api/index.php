@@ -215,6 +215,42 @@ $app->route('/login')
 
     });
 
+// Rotas de Relatórios
+$app->route('/relatorios')
+
+    ->get('/rankingPorPontuacaoGeral', function (HttpRequest $req, HttpResponse $res) use ($pdo) {
+
+        executaComTratamentoErros(function () use ($pdo, $req, $res) {
+            $gestorAlunos = criarGestor('alunos');
+    
+            $filtro = $_GET['busca'] ?? '';
+            $resultado = $gestorAlunos->listarRankingPorPontuacaoGeral($filtro);
+    
+            $res->status(200)->json($resultado);
+        }, $res);
+    })
+
+    ->get('/rankingAlunosPorCurso', function (HttpRequest $req, HttpResponse $res) use ($pdo) {
+
+        executaComTratamentoErros(function () use ($pdo, $req, $res) {
+            $gestorAlunos = criarGestor('alunos');
+    
+            $filtro = $_GET['busca'] ?? '';
+            $resultado = $gestorAlunos->listarRankingAlunosPorCurso($filtro);
+            $res->status(200)->json($resultado);
+        }, $res);
+    })
+
+    ->get('/numeroDeAlunosPorCurso', function (HttpRequest $req, HttpResponse $res) use ($pdo) {
+
+        executaComTratamentoErros(function () use ($pdo, $req, $res) {
+            $gestorCursos = criarGestor('cursos');
+    
+            $resultado = $gestorCursos->listarNumeroDeAlunosPorCurso();
+            $res->status(200)->json($resultado);
+        }, $res);
+    });  
+
 $app->listen();
 
 /**

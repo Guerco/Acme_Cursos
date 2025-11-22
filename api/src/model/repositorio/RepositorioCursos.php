@@ -22,6 +22,12 @@ interface RepositorioCursos{
      * @return Curso[]
      */
     public function buscarPorIdProfessor(int $idProfessor):array;
+
+    /**
+     * Retorna a quantidade de alunos por curso
+     * @return CursoQtdAlunoRelVO[]
+     */
+    public function numeroDeAlunosPorCurso():array;
 }
 
 

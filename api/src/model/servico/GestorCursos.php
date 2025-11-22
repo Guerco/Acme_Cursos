@@ -47,4 +47,19 @@ class GestorCursos{
             throw new DominioException('Curso inexistente.');
         }
     }
+
+    /**
+     * @return CursoQtdAlunoRelDTO[]
+     */
+    public function listarNumeroDeAlunosPorCurso(): array{
+        $dados = [];
+        $resultado = [];
+
+        $dados = $this->repoCursos->numeroDeAlunosPorCurso();
+        $resultado = CursoQtdAlunoRelDTO::deVOS($dados);
+
+        return $resultado;
+    }
+
+
 }

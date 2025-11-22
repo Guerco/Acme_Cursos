@@ -124,6 +124,44 @@ class RepositorioCursosEmBDR implements RepositorioCursos{
             throw new RepositorioException('Não foi possível buscar os cursos.');
         }
     }
+
+    public function numeroDeAlunosPorCurso(): array{
+        try{
+            $ps = $this->pdo->prepare(
+                'select
+                    c.descricao,
+                    COUNT(a.id) as quantidade
+                from
+                    pontuacao p
+                join curso c on
+                    (c.id = p.id_curso)
+                join aluno a on
+                    (a.id = p.id_aluno)
+                group by
+                    c.descricao;');
+            $ps->execute();
+
+            $dados = $ps->fetchAll();
+            
+            return $this->criarNumeroDeAlunosPorCurso($dados);
+
+        }catch (PDOException $e){
+            throw new RepositorioException($e->getMessage());
+        }
+    }
+
+    private function criarNumeroDeAlunosPorCurso(array $dados):array {
+        $relatorio = [];
+        foreach($dados as $d) {
+            $cursoQtd = new CursoQtdAlunoRelVO(
+                $d['descricao'],
+                (int)$d['quantidade']
+            );
+            $relatorio[] = $cursoQtd;
+        }
+
+        return $relatorio;
+    }
 }
 
 ?>
