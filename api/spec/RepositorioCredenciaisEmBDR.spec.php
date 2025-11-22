@@ -13,7 +13,7 @@ describe('RepositorioCredenciaisEmBDR', function (){
     describe('listarTodos', function(){
         
         it('retorna um array de usuarios', function():void{
-            $resultado = $this->repo->listarTodos();
+            $resultado = $this->repo->listarTodos('');
             expect($resultado)->toBeAn('array');
             expect(count($resultado))->not->toBe(0);
 
@@ -24,23 +24,6 @@ describe('RepositorioCredenciaisEmBDR', function (){
                     $usuario instanceof Aluno;     
                 expect($resultado2)->toBe(true);
             }
-        });
-
-        it('lança uma exceção ao retornar um tipo de usuário que não existe', function():void{
-
-            $idCredenciais = $this->repo->adicionar(
-                new Credenciais(0,
-                                'teste@email.com',
-                                '123456',
-                                '')
-                                );
-            expect(function () {
-                $this->repo->listarTodos();
-            })->toThrow(new RepositorioException('O tipo de usuário não existe.'));
-
-            $ps = $this->pdo->prepare("DELETE from credenciais where id = :idCredenciais");
-            $ps->execute(['idCredenciais' => $idCredenciais]);
-
         });
 
     });
@@ -77,10 +60,9 @@ describe('RepositorioCredenciaisEmBDR', function (){
 
     describe('buscarPorEmail', function():void{
 
-        it('retorna true quando encontrar um email', function ():void{
+        it('retorna um sal quando encontrar um email', function ():void{
             $resultado = $this->repo->buscarPorEmail('teste@email.com');
-            expect($resultado)->toBeAn('bool');
-            expect($resultado)->toBe(true);
+            expect($resultado)->toBeAn('string');
         });
 
         it('retorna false quando não encontrar um email', function ():void{

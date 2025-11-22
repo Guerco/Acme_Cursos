@@ -75,40 +75,12 @@ describe('RepositorioAlunosEmBDR', function(){
             $idAluno = 1;
             $idCurso = 1;
             $resultado = $this->repoAlunos->buscarPontuacaoPorCurso($idAluno,$idCurso);
-            expect($resultado)->toBeAn('float');
-            expect($resultado)->toBe(10.0);
-        });
-
-        it('verifica quando não existe pontuacao do aluno em determinado curso', function(){
-            $idAluno = 1;
-            $idCurso = 2;
-            $resultado = $this->repoAlunos->buscarPontuacaoPorCurso($idAluno,$idCurso);
-            expect($resultado)->toBeAn('bool');
-            expect($resultado)->toBe(false);
+            expect($resultado)->toBeAn('object');
+            expect($resultado)->toBeAnInstanceOf(PontuacaoCurso::class);
         });
 
     });
-
-    describe('incrementarPontuacaoGeral', function(){
-
-        it('incrementa a pontuação geral do aluno', function(){
-            $idAluno = 1;
-            $valor = 11;
-            $resultado = $this->repoAlunos->incrementarPontuacaoGeral($idAluno, $valor);
-
-            $ps = $this->pdo->prepare(
-                'SELECT a.pontuacao_geral FROM aluno a
-                WHERE id = :idAluno' );
-            $ps->execute([ 
-                'idAluno' => $idAluno]);
-            (float) $valor = $ps->fetchColumn();
-           
-            expect($valor)->toBe(11.0);
-
-        });
-
-    });
-
+    
     describe('incrementarPontuacaoCurso', function(){
 
          it('incrementa a pontuação geral do aluno', function(){

@@ -267,7 +267,12 @@ function criarGestor(string $tipoGestor): GestorCursos|GestorAlunos|GestorCreden
         case 'cursos':
             return new GestorCursos(
                 new RepositorioCursosEmBDR($pdo),
-                new RepositorioAssuntosEmBDR($pdo)
+                new RepositorioAssuntosEmBDR($pdo),
+                new AutorizacaoEmArquivo(),
+                new AutentificacaoEmArquivo(
+                    new GerenciadorDeSenhaEnv(),
+                    new RepositorioCredenciaisEmBDR($pdo)
+                )
             );
 
         case 'alunos':
@@ -280,7 +285,8 @@ function criarGestor(string $tipoGestor): GestorCursos|GestorAlunos|GestorCreden
                 new AutentificacaoEmArquivo(
                     new GerenciadorDeSenhaEnv(),
                     new RepositorioCredenciaisEmBDR($pdo)
-                )
+                ),
+                new AutorizacaoEmArquivo()
             );
 
         case 'perguntas':
@@ -293,17 +299,25 @@ function criarGestor(string $tipoGestor): GestorCursos|GestorAlunos|GestorCreden
                 new AutentificacaoEmArquivo(
                     new GerenciadorDeSenhaEnv(),
                     new RepositorioCredenciaisEmBDR($pdo)
-                )
+                ),
+                new AutorizacaoEmArquivo()
             );
 
         case 'credenciais':
+            $repoCredenciais = new RepositorioCredenciaisEmBDR($pdo);
+            $senhaEnv = new GerenciadorDeSenhaEnv();
             return new GestorCredenciais(
-                new RepositorioCredenciaisEmBDR($pdo),
+                $repoCredenciais,
                 new RepositorioAlunosEmBDR($pdo),
                 new RepositorioProfessoresEmBDR($pdo),
                 new RepositorioAdministradoresEmBDR($pdo),
                 new GerenciadorDeTransacoesEmBDR($pdo),
-                new GerenciadorDeSenhaEnv()
+                $senhaEnv,
+                new AutentificacaoEmArquivo(
+                    $senhaEnv,
+                    $repoCredenciais
+                ),
+                new AutorizacaoEmArquivo()
             );
 
         case 'professores':
@@ -313,7 +327,8 @@ function criarGestor(string $tipoGestor): GestorCursos|GestorAlunos|GestorCreden
                 new AutentificacaoEmArquivo(
                     new GerenciadorDeSenhaEnv(),
                     new RepositorioCredenciaisEmBDR($pdo)
-                )
+                ),
+                new AutorizacaoEmArquivo()
             );
 
         case 'login':
@@ -336,6 +351,8 @@ function criarGestor(string $tipoGestor): GestorCursos|GestorAlunos|GestorCreden
 function executaComTratamentoErros (callable $callback, HttpResponse $res) {
     try {
         $callback();
+    } catch (NaoAutorizadoException $e) {
+        $res->status(401)->json(['erros' => $e->getMessage()]);
     } catch (NaoEncontradoException $e) {
         $res->status(404)->json(['erros' => $e->getProblemas()]);
     } catch (DominioException $e) {

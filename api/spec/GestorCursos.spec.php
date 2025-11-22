@@ -35,9 +35,21 @@ describe('GestorCursos', function(): void{
         $this->repositorioCursos = Double::instance(['implements' => RepositorioCursos::class]);
         $this->repositorioAssuntos = Double::instance(['implements' => RepositorioAssuntos::class]);
 
+        $this->autentificacao = Double::instance([
+            'implements' => Autentificacao::class
+        ]);
+        allow($this->autentificacao)->toReceive('estaLogado')->andReturn(true);
+        
+        $this->autorizacao = Double::instance([
+            'implements' => Autorizacao::class
+        ]);
+        allow($this->autorizacao)->toReceive('verificarAutorizacao')->andReturn(true);
+
         $this->gestorCursos = new GestorCursos( 
             $this->repositorioCursos,
-            $this->repositorioAssuntos
+            $this->repositorioAssuntos,
+            $this->autorizacao,
+            $this->autentificacao
         );
     });
 

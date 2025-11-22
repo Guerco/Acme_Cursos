@@ -4,8 +4,28 @@ class GestorCursos{
         
     public function __construct(
         private RepositorioCursos $repoCursos,
-        private RepositorioAssuntos $repoAssuntos
+        private RepositorioAssuntos $repoAssuntos,
+        private Autorizacao $autorizacao,
+        private Autentificacao $autentificacao
     ) { }
+
+    /**
+     * @param TipoUsuario[] $autorizados
+     * @throws NaoAutorizadoException
+     */
+    private function autorizar (array $autorizados): void {
+        $usuariosAutorizados = array_map(
+            fn(TipoUsuario $tipo) => $tipo->value,
+            $autorizados
+        );
+
+        $estaAutorizado = (
+            $this->autentificacao->estaLogado() &&
+            $this->autorizacao->verificarAutorizacao($usuariosAutorizados)
+        );
+
+        if (! $estaAutorizado) throw new NaoAutorizadoException('Não possui acesso a este recurso.');
+    }
 
     /**
      * @return CursoListagemDTO[]
@@ -24,6 +44,14 @@ class GestorCursos{
      * @return AssuntoListagemDTO[]
      */
     public function buscarAssuntosCurso(string|int $idCurso): array{
+        $this->autorizar(
+            [
+                TipoUsuario::ADMINISTRADOR,
+                TipoUsuario::PROFESSOR,
+                TipoUsuario::PROFESSOR_ADMINISTRADOR
+            ]
+        );
+        
         $this->validarBuscarAssuntosCurso($idCurso);
 
         $assuntos = [];
@@ -52,6 +80,14 @@ class GestorCursos{
      * @return CursoQtdAlunoRelDTO[]
      */
     public function listarNumeroDeAlunosPorCurso(): array{
+        $this->autorizar(
+            [
+                TipoUsuario::ADMINISTRADOR,
+                TipoUsuario::PROFESSOR,
+                TipoUsuario::PROFESSOR_ADMINISTRADOR
+            ]
+        );
+        
         $dados = [];
         $resultado = [];
 

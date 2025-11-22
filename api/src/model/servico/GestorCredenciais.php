@@ -10,13 +10,40 @@ class GestorCredenciais
         private RepositorioAdministradores $repositorioAdministrador,
         private GerenciadorDeTransacoes $transacao,
         private GerenciadorDeSenha $GerenciadorDeSenha,
-    ) {
+        private Autentificacao $autentificacao,
+        private Autorizacao $autorizacao
+    ) { }
+
+    /**
+     * @param TipoUsuario[] $autorizados
+     * @throws NaoAutorizadoException
+     */
+    private function autorizar (array $autorizados): void {
+        $usuariosAutorizados = array_map(
+            fn(TipoUsuario $tipo) => $tipo->value,
+            $autorizados
+        );
+
+        $estaAutorizado = (
+            $this->autentificacao->estaLogado() &&
+            $this->autorizacao->verificarAutorizacao($usuariosAutorizados)
+        );
+
+        if (! $estaAutorizado) throw new NaoAutorizadoException('Não possui acesso a este recurso.');
     }
 
     /**
      * @return UsuarioListagemDTO[]
      */
     public function listarUsuarios(string $filtro): array {
+        $this->autorizar(
+            [
+                TipoUsuario::PROFESSOR,
+                TipoUsuario::ADMINISTRADOR,
+                TipoUsuario::PROFESSOR_ADMINISTRADOR,
+            ]
+        );
+
         $usuarios = [];
         $resultado = [];
 
@@ -28,6 +55,12 @@ class GestorCredenciais
     }
 
     public function criarUsuario(UsuarioCadastroDTO $usuario): void {
+        $this->autorizar(
+            [
+                TipoUsuario::ADMINISTRADOR,
+                TipoUsuario::PROFESSOR_ADMINISTRADOR,
+            ]
+        );
 
         $problemas = $this->validarUsuario($usuario);
 

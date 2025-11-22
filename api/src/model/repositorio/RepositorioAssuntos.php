@@ -19,10 +19,17 @@ interface RepositorioAssuntos
 
     /**
      * Retorna o assunto de determinado id.
-     * @param int $idAssunto
+     * @param int $id
      * @return Assunto
      */
     public function buscarPeloId(int $id): bool|Assunto;
+
+    /**
+     * Retorna o id do professor de um assunto de determinado id.
+     * @param int $id
+     * @return Assunto
+     */
+    public function buscarIdProfessor(int $id): bool|int;
 }
 
 

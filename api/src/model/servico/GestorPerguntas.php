@@ -10,15 +10,39 @@ class GestorPerguntas
         private RepositorioAssuntos $repositorioAssuntos,
         private RepositorioRespostasPergunta $repositorioRespostas,
         private GerenciadorDeTransacoes $transacao,
-        private Autentificacao $autentificacao
+        private Autentificacao $autentificacao,
+        private Autorizacao $autorizacao
     ) {
+    }
+
+    /**
+     * @param TipoUsuario[] $autorizados
+     * @throws NaoAutorizadoException
+     */
+    private function autorizar (array $autorizados): void {
+        $usuariosAutorizados = array_map(
+            fn(TipoUsuario $tipo) => $tipo->value,
+            $autorizados
+        );
+
+        $estaAutorizado = (
+            $this->autentificacao->estaLogado() &&
+            $this->autorizacao->verificarAutorizacao($usuariosAutorizados)
+        );
+
+        if (! $estaAutorizado) throw new NaoAutorizadoException('Não possui acesso a este recurso.');
     }
 
     /**
      * @return PerguntaListagemQuizDTO[]
      */
-    public function buscarPerguntasAluno(string|int $idAssunto): array
-    {
+    public function buscarPerguntasAluno(string|int $idAssunto): array {
+        $this->autorizar(
+            [
+                TipoUsuario::ALUNO
+            ]
+        );
+
         $idAluno = 0;
 
         if ( 
@@ -62,14 +86,21 @@ class GestorPerguntas
      * @throws \DominioException
      * @return void
      */
-    public function criarPergunta(array $dados): void
-    {
+    public function criarPergunta(array $dados): void {
         $nomeImg = null;
 
         if (! Validador::validarFormato($dados, TiposCampos::ARRAY)) {
             throw new DominioException('Os dados devem ser enviados em forma de objeto JSON.');
         }
         $this->verificarEntradaCriarPergunta($dados);
+
+        $this->autorizar(
+            [
+                TipoUsuario::PROFESSOR,
+                TipoUsuario::ADMINISTRADOR,
+                TipoUsuario::PROFESSOR_ADMINISTRADOR,
+            ]
+        );
     
         try {
             $this->transacao->iniciar();
@@ -162,6 +193,16 @@ class GestorPerguntas
 
         $problemas = [];
 
+        if ( 
+            $this->autentificacao->estaLogado() 
+            && $this->autentificacao->buscarTipoUsuario() === TipoUsuario::PROFESSOR->value
+        ) {
+            $idProfessorAssunto = $this->repositorioAssuntos->buscarIdProfessor($idAssunto);
+
+            if ($idProfessorAssunto !== $this->autentificacao->buscaridUsuario())
+                throw new DominioException('O assunto informado não é do professor logado.');
+        } 
+
         $dificuldadesAceitas = ['facil', 'medio', 'dificil'];
         if (!in_array(strtolower($dificuldade), $dificuldadesAceitas))
             $problemas[] = "A dificuldade deve ser 'facil', 'medio' ou 'dificil'.";
@@ -219,8 +260,15 @@ class GestorPerguntas
     /**
      * @return PerguntaListagemDTO[]
      */
-    public function listarPerguntasOuPorAssunto(?int $idAssunto): array
-    {
+    public function listarPerguntasOuPorAssunto(?int $idAssunto): array {
+        $this->autorizar(
+            [
+                TipoUsuario::PROFESSOR,
+                TipoUsuario::ADMINISTRADOR,
+                TipoUsuario::PROFESSOR_ADMINISTRADOR,
+            ]
+        );
+
         $this->validarListarPerguntasOuPorAssunto($idAssunto);
 
         $perguntas = $this->repositorioPerguntas->listarTodosOuPorAssunto($idAssunto);

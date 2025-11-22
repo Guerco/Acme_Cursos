@@ -7,8 +7,27 @@ class GestorAlunos {
         private RepositorioCursos $repositorioCursos,
         private GerenciadorDeTransacoes $transacao,
         private RepositorioAssuntos $repositorioAssuntos,
-        private Autentificacao $autentificacao
-    ){}
+        private Autentificacao $autentificacao,
+        private Autorizacao $autorizacao
+    ) { }
+
+    /**
+     * @param TipoUsuario[] $autorizados
+     * @throws NaoAutorizadoException
+     */
+    private function autorizar (array $autorizados): void {
+        $usuariosAutorizados = array_map(
+            fn(TipoUsuario $tipo) => $tipo->value,
+            $autorizados
+        );
+
+        $estaAutorizado = (
+            $this->autentificacao->estaLogado() &&
+            $this->autorizacao->verificarAutorizacao($usuariosAutorizados)
+        );
+
+        if (! $estaAutorizado) throw new NaoAutorizadoException('Não possui acesso a este recurso.');
+    }
 
     /**
      * @param array<string|mixed> $resposta
@@ -16,6 +35,12 @@ class GestorAlunos {
      * @return bool
      */
     public function salvarResposta(array $resposta): bool{ 
+        $this->autorizar(
+            [
+                TipoUsuario::ALUNO
+            ]
+        );
+
         $this->verificarEntradaSalvarResposta($resposta);
         
         try {
@@ -130,6 +155,12 @@ class GestorAlunos {
     }
 
     public function buscarPontuacoes(mixed $idAssunto) {
+        $this->autorizar(
+            [
+                TipoUsuario::ALUNO
+            ]
+        );
+
         $idAluno = 0;
 
         if ( 
@@ -187,6 +218,15 @@ class GestorAlunos {
      * @return AlunoRelDTO[]
      */
     public function listarRankingPorPontuacaoGeral(string $nome): array{
+        $this->autorizar(
+            [
+                TipoUsuario::ALUNO,
+                TipoUsuario::ADMINISTRADOR,
+                TipoUsuario::PROFESSOR,
+                TipoUsuario::PROFESSOR_ADMINISTRADOR
+            ]
+        );
+        
         $dados = [];
         $resultado = [];
 
@@ -201,6 +241,15 @@ class GestorAlunos {
      * @return AlunoCursoRelDTO[]
      */
     public function listarRankingAlunosPorCurso(string $nome): array{
+        $this->autorizar(
+            [
+                TipoUsuario::ALUNO,
+                TipoUsuario::ADMINISTRADOR,
+                TipoUsuario::PROFESSOR,
+                TipoUsuario::PROFESSOR_ADMINISTRADOR
+            ]
+        );
+        
         $dados = [];
         $resultado = [];
 

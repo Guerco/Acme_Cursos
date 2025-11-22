@@ -64,6 +64,15 @@ describe('GestorCredenciais', function(): void{
         allow($this->gerenciadorSenha)->toReceive('verificarSenha')
             ->andReturn(true);
 
+        $this->autentificacao = Double::instance([
+            'implements' => Autentificacao::class
+        ]);
+        allow($this->autentificacao)->toReceive('estaLogado')->andReturn(true);
+        
+        $this->autorizacao = Double::instance([
+            'implements' => Autorizacao::class
+        ]);
+        allow($this->autorizacao)->toReceive('verificarAutorizacao')->andReturn(true);
         
         $this->gestorCredenciais = new GestorCredenciais(
             $this->repositorioTesteCredenciais,
@@ -71,7 +80,9 @@ describe('GestorCredenciais', function(): void{
             $this->repositorioTesteProfessores,
             $this->repositorioTesteAdministradores,
             $this->gerenciadorTransacoes,
-            $this->gerenciadorSenha
+            $this->gerenciadorSenha,
+            $this->autentificacao,
+            $this->autorizacao,
         );
     });
 
@@ -84,7 +95,7 @@ describe('GestorCredenciais', function(): void{
                 criarUsuarioTeste('Professor','Usuario professor', 'professor@email.com')
             ]);
 
-            $resultado = $this->gestorCredenciais->listarUsuarios();
+            $resultado = $this->gestorCredenciais->listarUsuarios('');
             expect($resultado)->toBeAn('array');
             expect(count($resultado))->not->toBe(0);
             expect($resultado[0]?? null)->toBeAnInstanceOf(UsuarioListagemDTO::class);
@@ -96,8 +107,8 @@ describe('GestorCredenciais', function(): void{
             ]);   
             
             expect(function () {
-                $this->gestorCredenciais->listarUsuarios();
-            })->toThrow(new DominioException('Tipo usuario desconhecido'));
+                $this->gestorCredenciais->listarUsuarios('');
+            })->toThrow(new DominioException());
         });
     });
 

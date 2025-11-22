@@ -55,16 +55,33 @@ describe('GestorPerguntas', function(): void{
         allow($this->gerenciadorTransacoes)->toReceive('confirmar');
         allow($this->gerenciadorTransacoes)->toReceive('reverter');
 
+        $this->autentificacao = Double::instance([
+            'implements' => Autentificacao::class
+        ]);
+        allow($this->autentificacao)->toReceive('estaLogado')->andReturn(true);
+        
+        $this->autorizacao = Double::instance([
+            'implements' => Autorizacao::class
+        ]);
+        allow($this->autorizacao)->toReceive('verificarAutorizacao')->andReturn(true);
+
         $this->gestorPerguntas = new GestorPerguntas(
             $this->repositorioTestePerguntas,
             $this->repositorioTesteAlunos,
             $this->repositorioAssuntos,
             $this->repositorioRespostas,
-            $this->gerenciadorTransacoes
+            $this->gerenciadorTransacoes,
+            $this->autentificacao,
+            $this->autorizacao,
         );
     });
 
     describe('buscarPerguntasAluno', function():void{
+
+        beforeEach(function(): void{
+            allow($this->autentificacao)->toReceive('buscarTipoUsuario')->andReturn('aluno');
+            allow($this->autentificacao)->toReceive('buscaridUsuario')->andReturn(1);
+        });
 
         it('retorna um array de objetos de PerguntaListagemQuizDTO', function():void{
             allow($this->repositorioTestePerguntas)->toReceive('buscarPorAssuntoEAluno')->andReturn([
@@ -74,29 +91,27 @@ describe('GestorPerguntas', function(): void{
             allow($this->repositorioTesteAlunos)->toReceive('existeComId')->andReturn(true);
             allow($this->repositorioAssuntos)->toReceive('existeComId')->andReturn(true);
 
-            $resultado = $this->gestorPerguntas->buscarPerguntasAluno(1, 1);
+            $resultado = $this->gestorPerguntas->buscarPerguntasAluno(1);
             expect($resultado)->toBeAn('array');
             expect(count($resultado))->not->toBe(0);
             expect($resultado[0]?? null)->toBeAnInstanceOf(PerguntaListagemQuizDTO::class);
         });
 
-        it('lança uma exceção ao não informar id de assunto e aluno', function():void{
+        it('lança uma exceção ao não informar id de assunto', function():void{
             
             $idAssunto = '';
-            $idAluno = '';
 
-            expect(function () use ($idAssunto, $idAluno): void {
-                $this->gestorPerguntas->buscarPerguntasAluno($idAssunto, $idAluno);
-            })->toThrow(new DominioException('Informe assunto e aluno.'));
+            expect(function () use ($idAssunto): void {
+                $this->gestorPerguntas->buscarPerguntasAluno($idAssunto);
+            })->toThrow(new DominioException());
         });
 
-        it('lança uma exceção ao informar id de assunto e aluno não inteiro', function():void{
+        it('lança uma exceção ao informar id de assunto não inteiro', function():void{
             
             $idAssunto = 'id_nao_numerico';
-            $idAluno = 'id_nao_numerico';
 
-            expect(function () use ($idAssunto, $idAluno): void {
-                $this->gestorPerguntas->buscarPerguntasAluno($idAssunto, $idAluno);
+            expect(function () use ($idAssunto): void {
+                $this->gestorPerguntas->buscarPerguntasAluno($idAssunto);
             })->toThrow(new DominioException('Os ids devem ser inteiros.'));
         });
         
@@ -105,27 +120,15 @@ describe('GestorPerguntas', function(): void{
             allow($this->repositorioAssuntos)->toReceive('existeComId')->andReturn(false);
             
             $idAssunto = -1;
-            $idAluno = 1;
 
-            expect(function () use ($idAssunto, $idAluno): void {
-                $this->gestorPerguntas->buscarPerguntasAluno($idAssunto, $idAluno);
+            expect(function () use ($idAssunto): void {
+                $this->gestorPerguntas->buscarPerguntasAluno($idAssunto);
             })->toThrow(new NaoEncontradoException());
-        });
-        
-        it('lança uma exceção ao informar id de um aluno inexistente', function():void{
-            allow($this->repositorioTesteAlunos)->toReceive('existeComId')->andReturn(false);
-            allow($this->repositorioAssuntos)->toReceive('existeComId')->andReturn(true);
-            
-            $idAssunto = 1;
-            $idAluno = -1;
-
-            expect(function () use ($idAssunto, $idAluno): void {
-                $this->gestorPerguntas->buscarPerguntasAluno($idAssunto, $idAluno);
-            })->toThrow(new DominioException());
         });
     });
 
    describe('listarPerguntasOuPorAssunto', function():void{
+
 
         it('retorna um array de objetos de PerguntaListagemDTO', function():void{
             allow($this->repositorioTestePerguntas)->toReceive('listarTodosOuPorAssunto')->andReturn([
@@ -133,6 +136,8 @@ describe('GestorPerguntas', function(): void{
                 criarPerguntaListagemTeste('1','pergunta teste 2')
             ]);
             allow($this->repositorioAssuntos)->toReceive('existeComId')->andReturn(true);
+
+            allow($this->autentificacao)->toReceive('buscarTipoUsuario')->andReturn('administrador');
 
             $resultado = $this->gestorPerguntas->listarPerguntasOuPorAssunto(1);
             expect($resultado)->toBeAn('array');
@@ -144,6 +149,10 @@ describe('GestorPerguntas', function(): void{
     });
 
     describe('criarPergunta', function():void{
+
+        beforeEach(function(): void{
+            allow($this->autentificacao)->toReceive('buscarTipoUsuario')->andReturn('administrador');
+        });
 
         it('envia a pergunta quando passamos os dados corretamente', function():void{
             

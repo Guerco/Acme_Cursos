@@ -18,6 +18,7 @@ describe('GestorAlunos', function (): void {
         $this->repositorioTesteAlunos    = Double::instance(['implements' => RepositorioAlunos::class]);
         $this->repositorioTestePerguntas = Double::instance(['implements' => RepositorioPerguntas::class]);
         $this->repositorioTesteCursos    = Double::instance(['implements' => RepositorioCursos::class]);
+        $this->repositorioTesteAssuntos    = Double::instance(['implements' => RepositorioAssuntos::class]);
 
         $this->gerenciadorTransacoes = Double::instance([
             'implements' => GerenciadorDeTransacoes::class,
@@ -26,104 +27,106 @@ describe('GestorAlunos', function (): void {
         allow($this->gerenciadorTransacoes)->toReceive('confirmar');
         allow($this->gerenciadorTransacoes)->toReceive('reverter');
 
+        allow($this->repositorioTesteAlunos)->toReceive('existeComId')->andReturn(true);
+        allow($this->repositorioTesteAlunos)->toReceive('buscarPontuacaoGeral')->andReturn(100.0);
+        allow($this->repositorioTesteAlunos)->toReceive('buscarPontuacaoPorCurso')->andReturn(
+            new PontuacaoCurso(
+                new Curso(
+                    null, 1
+                ),
+                new Aluno(
+                    1
+                ),
+                100.00,
+                1
+            )
+        );
+
+        allow($this->repositorioTesteAssuntos)->toReceive('existeComId')->andReturn(true);
+        allow($this->repositorioTesteAssuntos)->toReceive('buscarPeloId')->andReturn(New Assunto(
+            New Curso(null),
+            1,
+            'assunto'
+        ));
+
+        $this->autentificacao = Double::instance([
+            'implements' => Autentificacao::class
+        ]);
+        allow($this->autentificacao)->toReceive('estaLogado')->andReturn(true);
+        
+        $this->autorizacao = Double::instance([
+            'implements' => Autorizacao::class
+        ]);
+        allow($this->autorizacao)->toReceive('verificarAutorizacao')->andReturn(true);
+
         $this->gestorAlunos              = new GestorAlunos(
             $this->repositorioTesteAlunos, 
             $this->repositorioTestePerguntas, 
             $this->repositorioTesteCursos,
-            $this->gerenciadorTransacoes
+            $this->gerenciadorTransacoes,
+            $this->repositorioTesteAssuntos,
+            $this->autentificacao,
+            $this->autorizacao
+
         );
     });
 
-    describe('verificarCredenciais', function (): void {
+    describe('buscarPontuacoes', function (): void {
 
-        it('retorna um array de objetos de AlunoListagemDTO', function (): void {
-            allow($this->repositorioTesteAlunos)->toReceive('existeComCredenciais')->andReturn(
-                criarAlunoTeste(1, 'aluno teste 1')
-            );
-
-            $dados['email'] = 'aluno@email.com';
-            $dados['senha'] = '123456';
-            $resultado      = $this->gestorAlunos->verificarCredenciais($dados);
-            expect($resultado)->toBeAn('object');
-            expect($resultado)->not->toBe(0);
-            expect($resultado ?? null)->toBeAnInstanceOf(AlunoListagemDTO::class);
+        beforeEach(function(): void{
+            allow($this->autentificacao)->toReceive('buscarTipoUsuario')->andReturn('aluno');
+            allow($this->autentificacao)->toReceive('buscaridUsuario')->andReturn(1);
         });
 
-        it('lança uma exceção ao informar um email inválido', function (): void {
-            $credenciaisInválidas = ['email' => 'email_invalido', 'senha' => '123456'];
-
-            expect(function () use ($credenciaisInválidas): void {
-                $this->gestorAlunos->verificarCredenciais($credenciaisInválidas);
-            })->toThrow(new DominioException());
-        });
-
-        it('lança uma exceção ao informar email e senha vazios', function (): void {
-            $credenciaisInválidas = ['email' => '', 'senha' => ''];
-
-            expect(function () use ($credenciaisInválidas): void {
-                $this->gestorAlunos->verificarCredenciais($credenciaisInválidas);
-            })->toThrow(new DominioException());
-        });
-    });
-
-    describe('buscarPontuacaoCurso', function (): void {
         it('retorna uma pontuação', function (): void {
-            allow($this->repositorioTesteAlunos)->toReceive('buscarPontuacaoPorCurso')->andReturn(10.5);
+            allow($this->repositorioTesteAlunos)->toReceive('buscarPontuacoes')->andReturn(new PontuacoesAlunoDTO(
+                'Assunto',
+                10.0,
+                10.0
+            ));
             allow($this->repositorioTesteAlunos)->toReceive('existeComId')->andReturn(true);
             allow($this->repositorioTesteCursos)->toReceive('existeComId')->andReturn(true);
 
-            $idAluno = 1;
-            $idCurso = 1;
+            $idAssunto = 1;
 
-            $pontuacao = $this->gestorAlunos->buscarPontuacaoCurso($idAluno, $idCurso);
+            $pontuacao = $this->gestorAlunos->buscarPontuacoes($idAssunto);
 
-            expect($pontuacao)->toBeA('float');
+            expect($pontuacao)->toBeAnInstanceOf(PontuacoesAlunoDTO::class);
         });
 
-        it('lança uma exceção ao não informar id de aluno e curso', function (): void {
-            $idAluno = '';
-            $idCurso = '';
+        it('lança uma exceção ao não informar id de assunto', function (): void {
+            $idAssunto = '';
 
-            expect(function () use ($idAluno, $idCurso): void {
-                $this->gestorAlunos->buscarPontuacaoCurso($idAluno, $idCurso);
+            expect(function () use ($idAssunto): void {
+                $this->gestorAlunos->buscarPontuacoes($idAssunto);
             })->toThrow(new DominioException());
         });
 
-        it('lança uma exceção ao informar id de aluno e curso não inteiros', function (): void {
-            $idAluno = 'nao_inteiro';
-            $idCurso = 'nao_inteiro';
+        it('lança uma exceção ao informar id de assunto não inteiros', function (): void {
+            $idAssunto = 'nao_inteiro';
 
-            expect(function () use ($idAluno, $idCurso): void {
-                $this->gestorAlunos->buscarPontuacaoCurso($idAluno, $idCurso);
+            expect(function () use ($idAssunto): void {
+                $this->gestorAlunos->buscarPontuacoes($idAssunto);
             })->toThrow(new DominioException());
         });
 
-        it('lança uma exceção ao informar id de um aluno inexistente', function (): void {
-            allow($this->repositorioTesteAlunos)->toReceive('existeComId')->andReturn(false);
-            allow($this->repositorioTesteCursos)->toReceive('existeComId')->andReturn(true);
+        it('lança uma exceção ao informar id de um assunto inexistente', function (): void {
+            allow($this->repositorioTesteAssuntos)->toReceive('existeComId')->andReturn(false);
 
-            $idAluno = -1;
-            $idCurso = 1;
+            $idAssunto = -1;
 
-            expect(function () use ($idAluno, $idCurso): void {
-                $this->gestorAlunos->buscarPontuacaoCurso($idAluno, $idCurso);
-            })->toThrow(new NaoEncontradoException('Aluno inexistente.'));
-        });
-
-        it('lança uma exceção ao informar id de um aluno inexistente', function (): void {
-            allow($this->repositorioTesteAlunos)->toReceive('existeComId')->andReturn(true);
-            allow($this->repositorioTesteCursos)->toReceive('existeComId')->andReturn(false);
-
-            $idAluno = 1;
-            $idCurso = -1;
-
-            expect(function () use ($idAluno, $idCurso): void {
-                $this->gestorAlunos->buscarPontuacaoCurso($idAluno, $idCurso);
-            })->toThrow(new NaoEncontradoException('Curso inexistente.'));
+            expect(function () use ($idAssunto): void {
+                $this->gestorAlunos->buscarPontuacoes($idAssunto);
+            })->toThrow(new DominioException());
         });
     });
 
     describe('salvarResposta', function (): void {
+        beforeEach(function(): void{
+            allow($this->autentificacao)->toReceive('buscarTipoUsuario')->andReturn('aluno');
+            allow($this->autentificacao)->toReceive('buscaridUsuario')->andReturn(1);
+        });
+        
         it('retorna true se as respostas forem corretas', function (): void {
             allow($this->repositorioTesteAlunos)->toReceive('existeComCredenciais')->andReturn(
                 criarAlunoTeste(1, 'aluno teste 1')
@@ -136,13 +139,10 @@ describe('GestorAlunos', function (): void {
             allow($this->repositorioTestePerguntas)->toReceive('existeComId')->andReturn(true);
             allow($this->repositorioTestePerguntas)->toReceive('buscarIdsRespostasCorretas')->andReturn([0,1,2,3]);
             allow($this->repositorioTestePerguntas)->toReceive('buscarCursoEDificuldadePeloID')->andReturn(['idCurso'=>1, 'dificuldade'=>'facil']);
-            $respostaAluno = RespostaAlunoCadastroDTO::deArray(
-                [
-                    'credenciaisAluno' => ['email' => 'aluno@email.com', 'senha' => '123456'], 
-                    'idPergunta' => 1, 
-                    'idsRespostas' => [0, 1, 2, 3]
-                ]
-            );
+            $respostaAluno = [
+                'idPergunta' => 1, 
+                'idsRespostas' => [0, 1, 2, 3]
+            ];
 
             $acertou = $this->gestorAlunos->salvarResposta($respostaAluno);
 
@@ -161,13 +161,10 @@ describe('GestorAlunos', function (): void {
             allow($this->repositorioTestePerguntas)->toReceive('existeComId')->andReturn(true);
             allow($this->repositorioTestePerguntas)->toReceive('buscarIdsRespostasCorretas')->andReturn([0,1,2]);
             allow($this->repositorioTestePerguntas)->toReceive('buscarCursoEDificuldadePeloID')->andReturn(['idCurso'=>1, 'dificuldade'=>'facil']);
-            $respostaAluno = RespostaAlunoCadastroDTO::deArray(
-                [
-                    'credenciaisAluno' => ['email' => 'aluno@email.com', 'senha' => '123456'], 
-                    'idPergunta' => 1, 
-                    'idsRespostas' => [0, 1, 2, 3]
-                ]
-            );
+            $respostaAluno = [
+                'idPergunta' => 1, 
+                'idsRespostas' => [0, 1, 2, 3]
+            ];
 
             $acertou = $this->gestorAlunos->salvarResposta($respostaAluno);
 
