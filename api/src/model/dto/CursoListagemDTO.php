@@ -14,11 +14,16 @@ class CursoListagemDTO{
     ){}
    
     public static function deObjetoParaDTO(Curso $curso): CursoListagemDTO{
+        /**
+         * @var Professor
+         */
+        $professor = $curso->getProfessor();
+        
         return new Self(
             $curso->getId(),
             $curso->getDescricao(),
             $curso->getCaminhoImg(),
-            $curso->getProfessor()->getNome(),
+            $professor->getNome(),
             AssuntoListagemDTO::deObjetos($curso->getAssuntos())
         );
     }

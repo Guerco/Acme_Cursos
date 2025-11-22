@@ -198,8 +198,14 @@ class RepositorioAlunosEmBDR implements RepositorioAlunos{
             'insert into aluno (id_credenciais, nome) 
                 values (:idCredenciais, :nome)'
             );
+
+            /**
+             * @var Credenciais
+             */
+            $credenciais = $aluno->getCredenciais();
+
             $ps->execute([
-                'idCredenciais' => $aluno->getCredenciais()->getId(),
+                'idCredenciais' => $credenciais->getId(),
                 'nome' => $aluno->getNome()
             ]);
             $idAluno = $this->pdo->lastInsertId();
@@ -240,6 +246,10 @@ class RepositorioAlunosEmBDR implements RepositorioAlunos{
 
     }
 
+    /**
+     * @param array<string|mixed> $dados
+     * @return AlunoRelVO[]
+     */
     private function criarRankingPorPontuacaoGeral(array $dados):array {
         $relatorio = [];
         $rankingPontuacaoGeral = '';
@@ -294,6 +304,10 @@ class RepositorioAlunosEmBDR implements RepositorioAlunos{
         }
     }
 
+    /**
+     * @param array<string|mixed> $dados
+     * @return AlunoCursoRelVO[]
+     */
     private function criarRankingAlunosPorCurso(array $dados):array {
         $relatorio = [];
         $rankingAlunoCurso = '';

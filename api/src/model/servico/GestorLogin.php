@@ -28,7 +28,7 @@ class GestorLogin {
             0,
             $dados['email'],
             $dados['senha'],
-            $sal
+            (string) $sal
         );
 
         return $this->autentificacao->entrar($credenciais);

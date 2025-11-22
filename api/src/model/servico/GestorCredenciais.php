@@ -68,11 +68,11 @@ class GestorCredenciais
             throw DominioException::comProblemas($problemas);
         }
 
-        $hash = $this->GerenciadorDeSenha->criarHash($usuario->senha);
+        $hash = $this->GerenciadorDeSenha->criarHash((string) $usuario->senha);
 
         $credenciais = new Credenciais(
             0,
-            $usuario->email,
+            (string) $usuario->email,
             $hash['senha'],
             $hash['sal']
         );
@@ -87,7 +87,7 @@ class GestorCredenciais
                 case 'aluno':
                     $aluno = new Aluno(
                         0,
-                        $usuario->nome,
+                        (string) $usuario->nome,
                         0,
                         $credenciais
                     );
@@ -97,7 +97,7 @@ class GestorCredenciais
                 case 'professor':
                     $professor = new Professor(
                         0,
-                        $usuario->nome,
+                        (string) $usuario->nome,
                         $credenciais
                     );
                     $resultado = $this->repositorioProfessor->adicionar(professor: $professor);
@@ -106,7 +106,7 @@ class GestorCredenciais
                 case 'administrador':
                     $administrador = new Administrador(
                         0,
-                        $usuario->nome,
+                        (string) $usuario->nome,
                         $credenciais
                     );
                     $resultado = $this->repositorioAdministrador->adicionar($administrador);
@@ -115,12 +115,12 @@ class GestorCredenciais
                 case 'professor-administrador':
                     $administrador = new Administrador(
                         0,
-                        $usuario->nome,
+                        (string) $usuario->nome,
                         $credenciais
                     );
                     $professor = new Professor(
                         0,
-                        $usuario->nome,
+                        (string) $usuario->nome,
                         $credenciais
                     );
                     $resultado = $this->repositorioAdministrador->adicionar($administrador);
@@ -159,13 +159,13 @@ class GestorCredenciais
             $problemas[] = 'A senha deve ser preenchida.';
         }
 
-        if ($this->repositorioCredenciais->buscarPorEmail($usuario->email) !== false) {
+        if ($this->repositorioCredenciais->buscarPorEmail((string) $usuario->email) !== false) {
             $problemas[] = 'Este e-mail já está cadastrado.';
         }
 
         $credenciais = new Credenciais();
-        $credenciais->setEmail($usuario->email);
-        $credenciais->setSenha($usuario->senha);
+        $credenciais->setEmail((string) $usuario->email);
+        $credenciais->setSenha((string) $usuario->senha);
         $problemasCredenciais = $credenciais->validar();
 
         if ($problemasCredenciais) {

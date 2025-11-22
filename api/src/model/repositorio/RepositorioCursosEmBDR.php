@@ -150,6 +150,10 @@ class RepositorioCursosEmBDR implements RepositorioCursos{
         }
     }
 
+    /**
+     * @param array<string|mixed> $dados
+     * @return CursoQtdAlunoRelVO[]
+     */
     private function criarNumeroDeAlunosPorCurso(array $dados):array {
         $relatorio = [];
         foreach($dados as $d) {

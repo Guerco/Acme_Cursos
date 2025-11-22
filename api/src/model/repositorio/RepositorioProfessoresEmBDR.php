@@ -32,8 +32,14 @@ class RepositorioProfessoresEmBDR implements RepositorioProfessores {
                 'insert into professor (id_credenciais, nome) 
                 values (:idCredenciais, :nome)'
             );
+
+            /**
+             * @var Credenciais
+             */
+            $credenciais = $professor->getCredenciais();
+
             $ps->execute([
-                'idCredenciais' => $professor->getCredenciais()->getId(),
+                'idCredenciais' => $credenciais->getId(),
                 'nome' => $professor->getNome()
             ]);
             $idProfessor = $this->pdo->lastInsertId();

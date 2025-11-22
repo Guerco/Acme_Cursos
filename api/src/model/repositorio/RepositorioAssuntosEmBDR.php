@@ -76,7 +76,7 @@ class RepositorioAssuntosEmBDR implements RepositorioAssuntos
 
             $result = $ps->fetchColumn();
             if ($result === false) return false; 
-            return $result;
+            return (int) $result;
         } catch (PDOException $e) {
             throw new RepositorioException('Não foi possível buscar o professor do assunto.');
         }

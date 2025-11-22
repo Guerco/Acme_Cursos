@@ -13,7 +13,7 @@ class Curso{
         private array $assuntos = []
     ){}
 
-    public function getProfessor(): Professor{
+    public function getProfessor(): ?Professor{
         return $this->professor;
     }
     public function setProfessor(Professor $professor): void{

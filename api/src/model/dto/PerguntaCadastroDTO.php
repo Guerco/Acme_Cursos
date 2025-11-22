@@ -48,6 +48,11 @@ class PerguntaCadastroDTO
             $respostas[] = $r->paraObjeto();
         }
 
+        /**
+         * @var Dificuldade
+         */
+        $dificuldade = Dificuldade::deString($this->dificuldade);
+
         return new Pergunta(
             0,
             new Assunto(
@@ -57,7 +62,7 @@ class PerguntaCadastroDTO
             $this->descricao,
             null,
             $this->tempoSeg,
-            Dificuldade::deString($this->dificuldade),
+            $dificuldade,
             $respostas
         );
     }

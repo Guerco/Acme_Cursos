@@ -12,7 +12,7 @@ class Assunto{
         private array $perguntas = []
     ){}
 
-    public function getCurso(): Curso{
+    public function getCurso(): ?Curso{
         return $this->curso;
     }
     public function setCurso(Curso $curso): void{

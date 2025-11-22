@@ -12,8 +12,14 @@ class RepositorioAdministradoresEmBDR implements RepositorioAdministradores{
             'insert into administrador (id_credenciais, nome) 
                 values (:idCredenciais, :nome)'
             );
+
+            /**
+             * @var Credenciais
+             */
+            $credenciais = $administrador->getCredenciais();
+
             $ps->execute([
-                'idCredenciais' => $administrador->getCredenciais()->getId(),
+                'idCredenciais' => $credenciais->getId(),
                 'nome' => $administrador->getNome()
             ]);
             $idAdministrador = $this->pdo->lastInsertId();

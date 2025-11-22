@@ -37,7 +37,8 @@ class RepositorioCredenciaisEmBDR implements RepositorioCredenciais{
 
             $salSenha = $ps->fetchColumn();
 
-            return $salSenha;
+            if ($salSenha === false) return false; 
+            return (string) $salSenha;
         } catch (PDOException $e){
             throw new RepositorioException ($e->getMessage());
         } 
@@ -163,10 +164,10 @@ class RepositorioCredenciaisEmBDR implements RepositorioCredenciais{
 
     /**
      * @param array{
-     *      nome: string, 
-     *      email: string, 
-     *      tipo_usuario: string,
-     *      ?id_usuario: int
+     *     nome: string,
+     *     email: string,
+     *     tipo_usuario: string,
+     *     id_usuario?: int
      * } $usuario
      * @throws \RepositorioException
      * @return Administrador|Aluno|Professor|ProfessorAdministrador

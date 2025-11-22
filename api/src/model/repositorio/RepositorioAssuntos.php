@@ -27,7 +27,7 @@ interface RepositorioAssuntos
     /**
      * Retorna o id do professor de um assunto de determinado id.
      * @param int $id
-     * @return Assunto
+     * @return bool|int
      */
     public function buscarIdProfessor(int $id): bool|int;
 }

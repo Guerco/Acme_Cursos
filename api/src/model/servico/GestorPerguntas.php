@@ -271,6 +271,9 @@ class GestorPerguntas
 
         $this->validarListarPerguntasOuPorAssunto($idAssunto);
 
+        /**
+         * @var array<Pergunta>
+         */
         $perguntas = $this->repositorioPerguntas->listarTodosOuPorAssunto($idAssunto);
 
         return PerguntaListagemDTO::deObjetos($perguntas);

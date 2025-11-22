@@ -62,7 +62,6 @@ describe('GestorAlunos', function (): void {
         $this->gestorAlunos              = new GestorAlunos(
             $this->repositorioTesteAlunos, 
             $this->repositorioTestePerguntas, 
-            $this->repositorioTesteCursos,
             $this->gerenciadorTransacoes,
             $this->repositorioTesteAssuntos,
             $this->autentificacao,

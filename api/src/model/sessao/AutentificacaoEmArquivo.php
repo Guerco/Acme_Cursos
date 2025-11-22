@@ -69,7 +69,7 @@ class AutentificacaoEmArquivo implements Autentificacao {
     }
 
     // Auxiliares
-    private function iniciarSessao() {
+    private function iniciarSessao(): void {
         if (session_status() !== PHP_SESSION_ACTIVE) {
             session_name('sid');
 

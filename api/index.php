@@ -279,7 +279,6 @@ function criarGestor(string $tipoGestor): GestorCursos|GestorAlunos|GestorCreden
             return new GestorAlunos(
                 new RepositorioAlunosEmBDR($pdo),
                 new RepositorioPerguntasEmBDR($pdo),
-                new RepositorioCursosEmBDR($pdo),
                 new GerenciadorDeTransacoesEmBDR($pdo),
                 new RepositorioAssuntosEmBDR($pdo),
                 new AutentificacaoEmArquivo(

@@ -4,7 +4,6 @@ class GestorAlunos {
     public function __construct(
         private RepositorioAlunos $repositorioAlunos,
         private RepositorioPerguntas $repositorioPerguntas,
-        private RepositorioCursos $repositorioCursos,
         private GerenciadorDeTransacoes $transacao,
         private RepositorioAssuntos $repositorioAssuntos,
         private Autentificacao $autentificacao,
@@ -107,7 +106,7 @@ class GestorAlunos {
             throw DominioException::comProblemas($problemas);
     }
 
-    private function validarSalvarResposta($idPergunta, $idAluno): void{
+    private function validarSalvarResposta(mixed $idPergunta, mixed $idAluno): void{
         $idPergunta = $idPergunta ?? null;
         $idAluno = $idAluno ?? null;
 
@@ -154,7 +153,7 @@ class GestorAlunos {
         return array_unique($idsRespostas) == $idsRespostasCorretas;
     }
 
-    public function buscarPontuacoes(mixed $idAssunto) {
+    public function buscarPontuacoes(mixed $idAssunto): PontuacoesAlunoDTO {
         $this->autorizar(
             [
                 TipoUsuario::ALUNO
@@ -177,9 +176,13 @@ class GestorAlunos {
          */
         $assunto = $this->repositorioAssuntos->buscarPeloId($idAssunto);
 
+        /**
+         * @var Curso
+         */
+        $curso = $assunto->getCurso();
         $pontuacaoCurso = ($this->repositorioAlunos->buscarPontuacaoPorCurso(
             $idAluno, 
-            $assunto->getCurso()->getId()
+            $curso->getId()
         ))->getPontuacao();
 
         $pontuacaoGeral = (float) $this->repositorioAlunos->buscarPontuacaoGeral(
@@ -189,7 +192,7 @@ class GestorAlunos {
         return new PontuacoesAlunoDTO(
             $assunto->getDescricao(),
             $pontuacaoGeral,
-            $pontuacaoCurso
+            (float) $pontuacaoCurso
         );
     }
 

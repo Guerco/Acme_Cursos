@@ -16,13 +16,22 @@ class PerguntaListagemDTO{
     ){}
 
     public static function deObjeto(Pergunta $pergunta): PerguntaListagemDTO {
+        /**
+         * @var Assunto
+         */
+        $assunto = $pergunta->getAssunto();
+        /**
+         * @var DateTime
+         */
+        $dataAtt = $pergunta->getUltimaAtualizacao();
+        
         return new self(
             $pergunta->getDescricao(),
             $pergunta->getCaminhoImg(),
             $pergunta->getTempoSeg(),
             $pergunta->getDificuldade()->value,
-            $pergunta->getAssunto()->getDescricao(),
-            $pergunta->getUltimaAtualizacao()->format('d/m/Y H:i:s'),
+            $assunto->getDescricao(),
+            $dataAtt->format('d/m/Y H:i:s'),
             RespostaPerguntaCadastroDTO::deObjetos($pergunta->getRespostas())
         );
     }

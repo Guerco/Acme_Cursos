@@ -9,13 +9,17 @@ class UsuarioListagemDTO{
     ){}
 
     public static function deObjetoParaDTO(object $objeto): UsuarioListagemDTO{
+        /** @var Aluno|Professor|Administrador|ProfessorAdministrador $objeto */
         $tipo = self::tipoUsuario($objeto);
 
-        /** @var Aluno|Professor|Administrador|ProfessorAdministrador $objeto */
+        /**
+         * @var Credenciais
+         */
+        $credenciais = $objeto->getCredenciais();
         return new Self(
             $tipo,
             $objeto->getNome(),
-            $objeto->getCredenciais()->getEmail()
+            $credenciais->getEmail()
         );
     }
 
