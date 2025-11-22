@@ -29,7 +29,8 @@ export const rotasApi = {
     rankingAlunosPorCurso: (busca: string) =>
         BASE_URL_API + 'relatorios/rankingAlunosPorCurso?busca=' + busca,
     numeroDeAlunosPorCurso:
-        BASE_URL_API + 'relatorios/numeroDeAlunosPorCurso',
+    BASE_URL_API + 'relatorios/numeroDeAlunosPorCurso',
+    quizAleatorio: BASE_URL_API+'alunos/quizAleatorio/', 
 };
 
 export const rotasPaginas = {

@@ -11,5 +11,5 @@ export interface VisaoCabecalho {
 
     // Métodos de Saída
     exibirMensagemLogin(mensagem : string): void;
-
+    redirecionarQuiz(idAssunto : number) : void;
 }

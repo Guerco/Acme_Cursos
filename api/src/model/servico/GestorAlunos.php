@@ -262,4 +262,42 @@ class GestorAlunos {
 
         return $resultado;
     }
+
+    public function buscarQuizAleatorio() : int {
+        $this->autorizar(
+            [
+                TipoUsuario::ALUNO
+            ]
+        );
+
+        $idAluno = 0;
+
+        if ( 
+            $this->autentificacao->estaLogado() 
+            && $this->autentificacao->buscarTipoUsuario() === TipoUsuario::ALUNO->value
+        ) {
+            $idAluno = $this->autentificacao->buscaridUsuario();
+        } 
+
+        $this->validarQuizAleatorio( $idAluno);
+
+        $ids = $this->repositorioAlunos->buscarIdsAssuntosNaoRespondidos($idAluno);
+
+        return (int) $ids[array_rand($ids)];
+    }
+
+    private function validarQuizAleatorio(mixed  $idAluno): void {
+        $idAluno = $idAluno ?? null;
+
+        if (
+            !filter_var($idAluno, FILTER_VALIDATE_INT)
+        ) {
+            throw new DominioException('Os ids devem ser inteiros.');     
+        }
+
+        if (! $this->repositorioAlunos->existeComId((int) $idAluno))
+            throw new DominioException('Aluno inexistente.');
+    }
+
+    
 }

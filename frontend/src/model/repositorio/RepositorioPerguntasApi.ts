@@ -4,16 +4,18 @@ import { PerguntaListagemQuiz } from "../dto/PerguntaListagemQuiz";
 import { rotasApi } from "../../rotas";
 import { PerguntaCadastro } from "../dto/PerguntaCadastro";
 import { DominioException } from "../exception/DominioException";
+import { NaoAutorizadoException } from "../exception/NaoAutorizadoException";
 
 export class RepositorioPerguntasApi implements RepositorioPerguntas {
 
     async buscarPerguntas(idAssunto: number): Promise<PerguntaListagemQuiz[]> {
         try {
             const response = await fetch(rotasApi.buscarPerguntas(idAssunto), {
-                    method: 'GET',
-                    credentials: 'include' 
+                method: 'GET',
+                credentials: 'include' 
             });
-
+            if (response.status == 401)
+                    throw new NaoAutorizadoException('Ops, parece que você não tem acesso a esse recurso.');
             if (response.status >= 400 && response.status < 500) {
                 throw DominioException.comProblemas((await response.json()).erros);
             }
@@ -33,7 +35,11 @@ export class RepositorioPerguntasApi implements RepositorioPerguntas {
                 )
         );
         } catch (error) {
-            if (error instanceof DominioException) throw error;
+            if (
+                error instanceof DominioException
+                || error instanceof NaoAutorizadoException
+            ) throw error;
+
             else throw new Error('Não foi possível buscar as perguntas.');
         }
     }
@@ -45,8 +51,11 @@ export class RepositorioPerguntasApi implements RepositorioPerguntas {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(pergunta)
+                body: JSON.stringify(pergunta),
+                credentials: 'include' 
             });
+            if (response.status == 401)
+                    throw new NaoAutorizadoException('Ops, parece que você não tem acesso a esse recurso.');
 
             if (!response.ok) {
                 if (response.status >= 400 && response.status < 500) {
@@ -55,9 +64,10 @@ export class RepositorioPerguntasApi implements RepositorioPerguntas {
                 } else throw new Error();
             }
         } catch (error) {
-            if (error instanceof DominioException) {
-                throw error;
-            }
+            if (
+                error instanceof DominioException
+                || error instanceof NaoAutorizadoException
+            ) throw error;
             
             throw new Error('Não foi possível salvar a pergunta.');
         }
@@ -67,9 +77,13 @@ export class RepositorioPerguntasApi implements RepositorioPerguntas {
         try {
             const url = rotasApi.perguntas + (idAssunto ? `?id_assunto=${idAssunto}`: '');
 
-            const response = await fetch(url);
+            const response = await fetch(url, {
+                    credentials: 'include' 
+            });
 
             if (!response.ok){
+                if (response.status == 401)
+                    throw new NaoAutorizadoException('Ops, parece que você não tem acesso a esse recurso.');
                 if (response.status >= 400 && response.status < 500) {
                     const body = await response.json();
                     throw DominioException.comProblemas(body.erros)
@@ -89,9 +103,10 @@ export class RepositorioPerguntasApi implements RepositorioPerguntas {
                 p.respostas
             ));
         } catch(err) {
-            if (err instanceof DominioException) {
-                throw err;
-            }
+            if (
+                err instanceof DominioException
+                || err instanceof NaoAutorizadoException
+            ) throw err;
 
             throw new Error('Não foi possível buscar as perguntas.');
         }

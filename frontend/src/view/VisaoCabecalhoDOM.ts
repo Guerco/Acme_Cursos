@@ -218,9 +218,21 @@ export class VisaoCabecalhoDOM implements VisaoCabecalho {
                 return item;
         }
 
-        if (e.rota && e.descricao) {
+        if (e.descricao && e.acao) {
+            item = UtilDOM.criaComTexto('a', e.descricao!) as HTMLAnchorElement;
+            item.href = '#';
+
+            item.onclick = async (event) => {
+                event.preventDefault();
+
+                const metodo = this.controladora[e.acao!];
+                await metodo.call(this.controladora);
+            }
+        } 
+        else if (e.rota && e.descricao) {
             item = UtilDOM.criaAncoraComTexto(e.descricao, e.rota) as HTMLAnchorElement;
         } 
+
         else if (e.descricao && e.subMenu) {
             const botao = UtilDOM.criaComTexto('a', e.descricao);
             const subMenu = UtilDOM.criaComClasses('ul', [classes.submenu]) as HTMLUListElement;
@@ -337,6 +349,10 @@ export class VisaoCabecalhoDOM implements VisaoCabecalho {
 
         this.mensagemLogin = output;
         return dialog;
+    }
+
+    redirecionarQuiz(idAssunto : number) : void {
+        location.href = rotasPaginas.quiz+'?assunto='+idAssunto.toString();
     }
 
 }

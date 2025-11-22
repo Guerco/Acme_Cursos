@@ -89,6 +89,18 @@ $app->route('/alunos')
             $res->status(200)->json(['respostaCorreta' => $resultado]);
         }, $res);
 
+    })
+
+    ->get('/quizAleatorio', function (HttpRequest $req, HttpResponse $res) use ($pdo) {
+
+        executaComTratamentoErros(function () use ($pdo, $req, $res) {
+            $gestorAlunos = criarGestor('alunos');
+    
+            $resultado = $gestorAlunos->buscarQuizAleatorio();
+
+            $res->status(200)->json(['idAssunto' => $resultado]);
+        }, $res);
+
     });
 
 // Rotas de assuntos

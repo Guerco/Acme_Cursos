@@ -323,4 +323,30 @@ class RepositorioAlunosEmBDR implements RepositorioAlunos{
        
         return $relatorio;
     }
+
+    public function buscarIdsAssuntosNaoRespondidos(int $idAluno) : array {
+        try {
+            $sql = <<<'SQL'
+                SELECT p.id_assunto
+                FROM pergunta p
+                LEFT JOIN resposta_aluno ra 
+                    ON ra.id_pergunta = p.id 
+                    AND ra.id_aluno = :id_aluno
+                WHERE ra.id_pergunta IS NULL
+                GROUP BY p.id_assunto;
+            SQL;
+
+            $ps = $this->pdo->prepare($sql);
+            $ps->execute( [
+                'id_aluno' => $idAluno
+            ] );
+
+            $resultado = $ps->fetchAll(PDO::FETCH_COLUMN);
+
+            return array_map('intval', $resultado);
+        } catch (PDOException $e) {
+            throw new RepositorioException('Não foi possível incrementar a pontuação geral do aluno.'); 
+        }
+    }
+
 }

@@ -1,6 +1,7 @@
 import { rotasApi, rotasJsonServer } from "../../rotas";
 import { CursoListagem } from "../dto/CursoListagem";
 import { CursoListagemResumo } from "../dto/CursoListagemResumo";
+import { NaoAutorizadoException } from "../exception/NaoAutorizadoException";
 import { RepositorioCursos } from "./RepositorioCursos";
 
 
@@ -60,6 +61,8 @@ export class RepositorioCursosApi implements RepositorioCursos  {
             );
 
             if (!response.ok){
+                if (response.status == 401)
+                    throw new NaoAutorizadoException('Ops, parece que você não tem acesso a esse recurso.');
                 throw new Error();
             }
             const cursos = await response.json();
@@ -70,6 +73,7 @@ export class RepositorioCursosApi implements RepositorioCursos  {
                 )
             );
         } catch(err) {
+            if (err instanceof NaoAutorizadoException) throw err;
             throw new Error('Não foi possível buscar os cursos.');
         }
     }

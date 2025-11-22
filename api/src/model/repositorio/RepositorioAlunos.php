@@ -87,4 +87,11 @@ interface RepositorioAlunos {
      */
     public function rankingAlunosPorCurso(string $nome): array;
 
+    /**
+     * @param int $idAluno
+     * @return int[]
+     */
+    public function buscarIdsAssuntosNaoRespondidos(int $idAluno) : array;
+
+
 }

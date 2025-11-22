@@ -5,6 +5,7 @@ import { DominioException } from "../exception/DominioException";
 import { AlunoRel } from "../dto/relatorio/AlunoRel";
 import { AlunoCursoRel } from "../dto/relatorio/AlunoCursoRel";
 import { PontuacoesAluno } from "../dto/PontuacoesAluno";
+import { NaoAutorizadoException } from "../exception/NaoAutorizadoException";
 
 export class RepositorioAlunosAPI implements RespositorioAlunos {
     async enviarResposta(respostaAluno: RespostaAlunoCadastro): Promise<boolean>{
@@ -19,6 +20,8 @@ export class RepositorioAlunosAPI implements RespositorioAlunos {
             });
 
             if (!response.ok) {
+                if (response.status == 401)
+                    throw new NaoAutorizadoException('Ops, parece que você não tem acesso a esse recurso.');
                 throw new Error();
             }
             
@@ -26,6 +29,7 @@ export class RepositorioAlunosAPI implements RespositorioAlunos {
             
             return body.respostaCorreta;
         } catch(error){
+            if (error instanceof NaoAutorizadoException) throw error;
             throw new Error('Não foi possível salvar a Resposta.');
         }
     }
@@ -40,6 +44,8 @@ export class RepositorioAlunosAPI implements RespositorioAlunos {
             );
 
             if (!response.ok) {
+                if (response.status == 401)
+                    throw new NaoAutorizadoException('Ops, parece que você não tem acesso a esse recurso.');
                 throw new Error();
             }
             
@@ -51,6 +57,7 @@ export class RepositorioAlunosAPI implements RespositorioAlunos {
                 Number(body.pontuacaoCurso)
             );
         } catch(error){
+            if (error instanceof NaoAutorizadoException) throw error;
             throw new Error('Não foi possível buscar as Pontuações.');
         }
     }
@@ -66,6 +73,8 @@ export class RepositorioAlunosAPI implements RespositorioAlunos {
             );
 
             if (!response.ok) {
+                if (response.status == 401)
+                    throw new NaoAutorizadoException('Ops, parece que você não tem acesso a esse recurso.');
                 throw new Error();
             }
             
@@ -80,6 +89,7 @@ export class RepositorioAlunosAPI implements RespositorioAlunos {
                     );
             
         } catch(error){
+            if (error instanceof NaoAutorizadoException) throw error;
             throw new Error('Não foi possível listar o raking de alunos.');
         }
     } 
@@ -94,6 +104,8 @@ export class RepositorioAlunosAPI implements RespositorioAlunos {
             );
 
             if (!response.ok) {
+                if (response.status == 401)
+                    throw new NaoAutorizadoException('Ops, parece que você não tem acesso a esse recurso.');
                 throw new Error();
             }
             
@@ -109,7 +121,33 @@ export class RepositorioAlunosAPI implements RespositorioAlunos {
                     );
             
         } catch(error){
+            if (error instanceof NaoAutorizadoException) throw error;
             throw new Error('Não foi possível listar o raking de alunos por curso.');
+        }
+    } 
+
+    async buscarQuizAleatorio() : Promise<number> {
+        try{
+            const response = await fetch(rotasApi.quizAleatorio, 
+                { 
+                    method: 'GET', 
+                    credentials: 'include' 
+                }
+            );
+
+            if (!response.ok) {
+                if (response.status == 401)
+                    throw new NaoAutorizadoException('Ops, parece que você não tem acesso a esse recurso.');
+                throw new Error();
+            }
+            
+            const body = await response.json();
+
+            console.log(body);
+            return body.idAssunto;
+        } catch(error){
+            if (error instanceof NaoAutorizadoException) throw error;
+            throw new Error('Não foi possível buscar um assunto aleatório.');
         }
     } 
 }

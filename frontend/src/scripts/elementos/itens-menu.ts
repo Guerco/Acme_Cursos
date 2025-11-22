@@ -1,4 +1,5 @@
 import { TipoUsuario } from "../../model/TipoUsuario";
+import { ControladoraCabecalho } from "../../presenter/ControladoraCabecalho";
 import { rotasPaginas } from "../../rotas";
 
 export type ItemMenu = {
@@ -8,6 +9,7 @@ export type ItemMenu = {
     subMenu?: ItemMenu[];
     autorizados?: string[];
     logado?: boolean;
+    acao?: keyof ControladoraCabecalho;
 };
 
 export const ELEMENTOS_MENU: ItemMenu[] = [
@@ -15,6 +17,13 @@ export const ELEMENTOS_MENU: ItemMenu[] = [
     {
         rota: rotasPaginas.listagemCursos,
         descricao: 'Listagem de Cursos 🎓'
+    },
+    {
+        acao: "quizAleatorio",
+        descricao: 'Quiz Aleatório 🎲',
+        autorizados: [
+            TipoUsuario.ALUNO,
+        ]
     },
     {
         rota: rotasPaginas.listagemPerguntas,
@@ -34,12 +43,7 @@ export const ELEMENTOS_MENU: ItemMenu[] = [
             TipoUsuario.PROFESSOR_ADMINISTRADOR,
         ]
     },
-    { linha: true,
-        autorizados: [
-            TipoUsuario.ADMINISTRADOR,
-            TipoUsuario.PROFESSOR,
-            TipoUsuario.PROFESSOR_ADMINISTRADOR,
-        ] },
+    { linha: true },
     {
         rota: rotasPaginas.cadastroPerguntas,
         descricao: 'Cadastro de Perguntas ❓',
