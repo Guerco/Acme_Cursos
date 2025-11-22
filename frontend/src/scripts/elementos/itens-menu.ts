@@ -75,7 +75,7 @@ export const ELEMENTOS_MENU: ItemMenu[] = [
                 descricao: 'Top Alunos 🏅'
             },
             {
-                rota: rotasPaginas.listagemCursos,
+                rota: rotasPaginas.numeroDeAlunosPorCurso,
                 descricao: 'Total Alunos Curso 📚',
                 autorizados: [
                     TipoUsuario.ADMINISTRADOR,

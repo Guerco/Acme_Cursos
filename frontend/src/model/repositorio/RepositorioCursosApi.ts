@@ -3,6 +3,7 @@ import { CursoListagem } from "../dto/CursoListagem";
 import { CursoListagemResumo } from "../dto/CursoListagemResumo";
 import { NaoAutorizadoException } from "../exception/NaoAutorizadoException";
 import { RepositorioCursos } from "./RepositorioCursos";
+import { CursoQtdAlunoRel } from "../dto/relatorio/CursoQtdAlunoRel";
 
 
 export class RepositorioCursosApi implements RepositorioCursos  {
@@ -77,5 +78,36 @@ export class RepositorioCursosApi implements RepositorioCursos  {
             throw new Error('Não foi possível buscar os cursos.');
         }
     }
+
+    async buscarNumeroDeAlunosPorCurso() : Promise<CursoQtdAlunoRel[]> {
+            try{
+                const response = await fetch(rotasApi.numeroDeAlunosPorCurso, 
+                    { 
+                        method: 'GET', 
+                        credentials: 'include' 
+                    }
+                );
+
+                if (!response.ok){
+
+                    if (response.status == 401)
+                            throw new NaoAutorizadoException('Ops, parece que você não tem acesso a esse recurso.');
+                        throw new Error();
+                }
+                    
+                const body = await response.json();
+    
+                return body.map((b : any)  => 
+                                new CursoQtdAlunoRel(
+                                b.descricao,
+                                Number(b.quantidade)
+                            )
+                        );
+                
+            } catch(error){
+                if (error instanceof NaoAutorizadoException) throw error;
+                throw new Error('Não foi possível listar o número de alunos por curso.');
+            }
+        } 
     
 }

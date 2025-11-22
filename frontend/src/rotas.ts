@@ -42,6 +42,7 @@ export const rotasPaginas = {
     listagemUsuarios: BASE_URL_WEB+'pages/listagem-usuario.html',
     cadastroPerguntas: BASE_URL_WEB+'pages/cadastro-perguntas.html',
     listagemPerguntas: BASE_URL_WEB+'pages/listagem-perguntas.html',
+    numeroDeAlunosPorCurso: BASE_URL_WEB+'pages/alunos-cursos.html'
 };
 
 export const rotasJsonServer = {
