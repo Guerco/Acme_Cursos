@@ -31,6 +31,8 @@ export class ControladoraQuiz {
 
         if (perguntas.length === 0) {
             this.visao.exibirMensagemFim('Não há perguntas restantes para esse assunto');
+            this.visao.preencherInformacoesQuiz(pontuacoes);
+            this.visao.exibirMenus();
         } else {
             this.visao.carregarPerguntas(perguntas);
             await this.prepararQuiz(pontuacoes);

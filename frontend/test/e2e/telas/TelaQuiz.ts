@@ -16,27 +16,6 @@ export class TelaQuiz {
         await this.page.goto(`${URL}?assunto=4`);
     }
 
-    private buscarCaixaCredencial(): Locator {
-        return this.page.locator(`#${ids.dialogCredenciais}`);
-    }
-
-    async preencherCredenciais(email: string, senha: string) {
-        const caixa = this.buscarCaixaCredencial();
-        await caixa.locator(`#${ids.inputEmail}`).fill(email);
-        await caixa.locator(`#${ids.inputSenha}`).fill(senha);
-    }
-
-    async clicarEnviarCredenciais() {
-        const caixa = this.buscarCaixaCredencial();
-        const enviar = caixa.locator(`#${ids.botaoEnviar}`);
-        await enviar.click();
-    }
-
-    async exigeCredenciais() {
-        const caixa = this.buscarCaixaCredencial();
-        await expect(caixa).toBeVisible();
-    }
-
     async selecionarRespostasCorretasFracao() {
         const respostaCorreta = this.page.locator(`.${classes.resposta}[data-id="13"]`).first();
         await respostaCorreta.waitFor({ state: 'visible', timeout: 5000 });
@@ -70,16 +49,6 @@ export class TelaQuiz {
     }
 
     // Expects
-    async deveExibirCaixaCredenciaisFechada() {
-        const caixa = this.buscarCaixaCredencial();
-        await expect(caixa).not.toHaveAttribute('open', '');
-    }
-
-    async deveExibirCredenciaisInvalidas() {
-        const caixa = this.buscarCaixaCredencial();
-        await expect(caixa).toContainText('Credenciais Inválidas');
-    }
-
     async deveExibirPergunta() {
         const pergunta = this.page.locator(`.${classes.pergunta}`);
         await pergunta.waitFor({ state: 'visible', timeout: 5000 });
