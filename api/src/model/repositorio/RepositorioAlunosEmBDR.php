@@ -102,7 +102,7 @@ class RepositorioAlunosEmBDR implements RepositorioAlunos{
         }
     }
 
-    public function buscarPontuacaoPorCurso($idAluno, $idCurso): float|bool {
+    public function buscarPontuacaoPorCurso($idAluno, $idCurso): PontuacaoCurso {
         try {
             $sql = <<<'SQL'
                 SELECT p.pontuacao
@@ -116,6 +116,34 @@ class RepositorioAlunosEmBDR implements RepositorioAlunos{
             $ps->execute( [
                 'id_aluno' => $idAluno,
                 'id_curso'=> $idCurso
+            ] );
+
+            $pontuacao = $ps->fetchColumn();
+
+            return new PontuacaoCurso(
+                new Curso(
+                    null,
+                    $idCurso
+                ),
+                new Aluno($idAluno),
+                (float) $pontuacao
+            );
+        } catch (PDOException $e) {
+            throw new RepositorioException('Não foi possível buscar a pontuação.'); 
+        }
+    }
+    public function buscarPontuacaoGeral(int $idAluno): float|bool {
+        try {
+            $sql = <<<'SQL'
+                SELECT a.pontuacao_geral
+                FROM aluno a
+                WHERE
+                    a.id = :id_aluno
+            SQL;
+
+            $ps = $this->pdo->prepare($sql);
+            $ps->execute( [
+                'id_aluno' => $idAluno,
             ] );
 
             $pontuacao = $ps->fetchColumn();

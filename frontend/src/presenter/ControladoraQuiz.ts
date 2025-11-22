@@ -2,10 +2,9 @@ import { VisaoQuiz } from "../view/VisaoQuiz";
 import { ServicoQuiz } from "../model/servico/ServicoQuiz";
 import { RepositorioAlunosAPI } from "../model/repositorio/RepositorioAlunosApi";
 import { RepositorioPerguntasApi } from "../model/repositorio/RepositorioPerguntasApi";
-import { AlunoListagem } from "../model/dto/AlunoListagem";
 import { RespostaAlunoCadastro } from "../model/dto/RespostaAlunoCadastro";
-import { PerguntaListagemQuiz } from "../model/dto/PerguntaListagemQuiz";
 import { DominioException } from "../model/exception/DominioException";
+import { PontuacoesAluno } from "../model/dto/PontuacoesAluno";
 
 export class ControladoraQuiz {
     private servico: ServicoQuiz;
@@ -18,65 +17,52 @@ export class ControladoraQuiz {
         this.servico = new ServicoQuiz(repoAlunos, repoPerguntas);
     }
 
-    async verificarCredenciais() {
-        try {
-            const credenciais = this.visao.buscarCredenciais();
-            const aluno = await this.servico.autenticar(credenciais);
-            await this.preencherPerguntas(aluno);
-            this.visao.fecharFormCredenciais();
-        } catch (err: any) {
-            if (err instanceof DominioException) 
-                this.visao.exibirMensagemCredenciais(err.message);
-            else 
-                throw new Error('Não foi possível verificar as credenciais.');
+    async carregarInformacoes() {
+        const idAssunto = this.visao.buscarIdAssunto();
+
+        if (!idAssunto) {
+            throw new Error('ID do assunto não informado.');
+        } else if (Number.isNaN(idAssunto) || !Number.isInteger(idAssunto) ) {
+            throw new Error('ID do assunto deve ser inteiro e positivo.');
         }
-    }
 
-    redirecionarParaCursos() {
-        this.visao.irParaPaginaCursos();
-    }
-
-    exibirInformarCredenciais() {
-        this.visao.chamarModal();
-    }
-
-    async preencherPerguntas(aluno: AlunoListagem) {
-        const parametrosUrl = this.visao.buscarParametrosUrl();
-        const perguntas = await this.buscarPerguntas(aluno.id, parametrosUrl.idAssunto);
+        const pontuacoes = await this.servico.buscarPontuacoes(idAssunto);
+        const perguntas = await this.servico.buscarPerguntas(idAssunto);
 
         if (perguntas.length === 0) {
             this.visao.exibirMensagemFim('Não há perguntas restantes para esse assunto');
         } else {
-            const pontuacaoCurso = await this.buscarPontuacaoCurso(aluno.id, parametrosUrl.idCurso);
             this.visao.carregarPerguntas(perguntas);
-            await this.prepararQuiz(aluno, pontuacaoCurso);
+            await this.prepararQuiz(pontuacoes);
         }
     }
 
-    prepararQuiz(aluno: AlunoListagem, pontuacaoCurso: number) {
+    prepararQuiz(pontuacoes: PontuacoesAluno) {
         const botao = this.visao.exibirIniciarQuiz();
+        this.visao.preencherInformacoesQuiz(pontuacoes);
+        this.visao.exibirMenus();
+
         botao.addEventListener('click', async () => {
             await this.visao.realizarContagemInicial();
-            await this.iniciarQuiz(aluno, pontuacaoCurso)
+            await this.iniciarQuiz();
         });
     }
 
-    async iniciarQuiz(aluno: AlunoListagem, pontuacaoCurso: number): Promise<void> {
+    async iniciarQuiz(): Promise<void> {
         this.visao.animacaoInicioQuiz();
-        this.visao.preencherInformacoesAluno(aluno.nome, aluno.pontuacaoGeral, pontuacaoCurso);
+
         const pergunta = this.visao.getPerguntas()[this.visao.getPerguntaAtual()];
         this.visao.preencherPergunta(pergunta);
         this.visao.tornarAcaoResponder();
         this.visao.iniciarContagemRegressiva(pergunta.tempoSeg);
         await this.visao.iniciarTelaCheia();
-        this.visao.exibirMenus();
     }
 
     async responder(tempoEsgotado: boolean = false): Promise<boolean>{
         this.visao.limparContagem();
         this.visao.desabilitarRespostas();
 
-        const resposta = this.visao.buscarDadosResposta(this.visao.buscarCredenciais());
+        const resposta = this.visao.buscarDadosResposta();
 
         const acertou = await this.servico.enviarResposta(resposta);
 
@@ -96,7 +82,9 @@ export class ControladoraQuiz {
             acertou = await this.responder();
         }
         if (acertou !== null)  {
-            mensagem = acertou ? 'Parabéns! Você acertou, mas saiu do quiz. Sua resposta foi registrada e o quiz foi encerrado. ✅' : 'Ops! Você errou e saiu do quiz. Sua resposta foi registrada e o quiz foi encerrado. ❌';
+            mensagem = acertou ? 
+                'Parabéns! Você acertou, mas saiu do quiz. Sua resposta foi registrada e o quiz foi encerrado. ✅' 
+                : 'Ops! Você errou e saiu do quiz. Sua resposta foi registrada e o quiz foi encerrado. ❌';
         }
         this.visao.exibirMensagemFim(mensagem);
     }
@@ -122,25 +110,9 @@ export class ControladoraQuiz {
         }
     }
 
-    private async buscarPerguntas(idAluno: number, idAssunto: number): Promise<PerguntaListagemQuiz[]> {
-        try {
-            return await this.servico.buscarPerguntas(idAluno, idAssunto);
-        } catch (err: any) {
-            throw err;
-        }
-    }
-
     async enviarResposta(respostaAluno: RespostaAlunoCadastro): Promise<boolean> {
         try {
             return await this.servico.enviarResposta(respostaAluno);
-        } catch (err: any) {
-            throw err;
-        }
-    }
-
-    async buscarPontuacaoCurso(idAluno: number, idCurso: number): Promise<number> {
-        try {
-            return await this.servico.buscarPontuacaoCurso(idAluno, idCurso);
         } catch (err: any) {
             throw err;
         }

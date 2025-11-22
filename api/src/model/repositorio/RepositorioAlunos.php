@@ -38,7 +38,14 @@ interface RepositorioAlunos {
      * @param mixed $idCurso
      * @return float|bool
      */
-    public function buscarPontuacaoPorCurso($idAluno, $idCurso): float|bool;
+    public function buscarPontuacaoPorCurso($idAluno, $idCurso): PontuacaoCurso;
+
+    /**
+     * Busca a pontuação geral de um aluno.
+     * @param mixed $idAluno
+     * @return float|bool
+     */
+    public function buscarPontuacaoGeral(int $idAluno): float|bool;
 
     /**
      * Incrementa a pontuação geral de um aluno em um valor.

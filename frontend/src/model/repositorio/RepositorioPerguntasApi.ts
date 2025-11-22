@@ -7,9 +7,12 @@ import { DominioException } from "../exception/DominioException";
 
 export class RepositorioPerguntasApi implements RepositorioPerguntas {
 
-    async buscarPerguntas(idAluno: number, idAssunto: number): Promise<PerguntaListagemQuiz[]> {
+    async buscarPerguntas(idAssunto: number): Promise<PerguntaListagemQuiz[]> {
         try {
-            const response = await fetch(rotasApi.buscarPerguntas(idAluno, idAssunto));
+            const response = await fetch(rotasApi.buscarPerguntas(idAssunto), {
+                    method: 'GET',
+                    credentials: 'include' 
+            });
 
             if (response.status >= 400 && response.status < 500) {
                 throw DominioException.comProblemas((await response.json()).erros);

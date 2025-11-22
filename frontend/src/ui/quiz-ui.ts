@@ -24,4 +24,6 @@ export const classes = {
     respostaSelecionada: 'resposta-selecionada',
     atencaoTela: 'atencao-tela-cheia',
     botaoIniciarQuiz: 'botao-iniciar-quiz',
+    botaoVoltar: 'botao-voltar-quiz',
+    opcoesIniciar: 'opcoes-iniciar',
 }

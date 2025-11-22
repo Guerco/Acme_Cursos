@@ -9,11 +9,11 @@ export class TelaQuiz {
 
     // Interação com a tela
     async acessar() {
-        await this.page.goto(`${URL}?assunto=3&curso=2`);
+        await this.page.goto(`${URL}?assunto=3`);
     }
 
     async acessarQuizFracao() {
-        await this.page.goto(`${URL}?assunto=4&curso=2`);
+        await this.page.goto(`${URL}?assunto=4`);
     }
 
     private buscarCaixaCredencial(): Locator {

@@ -7,6 +7,7 @@ import { classes, ids } from "../ui/quiz-ui.ts";
 import { UtilDOM } from "../util/UtilDOM.ts"
 import { Dificuldade, dificuldadeParaString, dificuldadeParaTextoValor, dificuldadeDeString, dificuldadeValor } from "../model/Dificuldade.ts";
 import { RespostaAlunoCadastro } from "../model/dto/RespostaAlunoCadastro.ts";
+import { PontuacoesAluno } from "../model/dto/PontuacoesAluno.ts";
 
 const DIRETORIO_IMAGENS = rotasApi.imagensPerguntas;
 const SRC_LOGO = '/img/logotipo.png';
@@ -25,52 +26,21 @@ export class VisaoQuizDOM implements VisaoQuiz {
         this.controladora = new ControladoraQuiz(this);
     }
 
-    iniciar(): void {
+    async iniciar() {
         this.botaoAcao = document.getElementById(ids.botaoAcao) as HTMLButtonElement;
         this.contagem = document.getElementById(ids.botaoContagem) as HTMLElement;
 
-        this.modal = document.getElementById(ids.dialogCredenciais) as HTMLDialogElement;
-
-        this.modal.showModal();
-
-        const botaoCancelar = document.getElementById(ids.cancelarCredenciais) as HTMLButtonElement;
-        botaoCancelar!.addEventListener('click', (event) => {
-            this.controladora.redirecionarParaCursos();
-        });
-
-        this.modal.addEventListener('submit', (event) => {
-            event.preventDefault();
-
-            this.controladora.verificarCredenciais();
-        });
-
-        const botaoInfoCredenciais = document.getElementById(ids.botaoInformarCredenciais) as HTMLButtonElement;
-        botaoInfoCredenciais!.addEventListener('click', (event) => {
-            this.controladora.exibirInformarCredenciais();
-        });
-
-    }
-
-    chamarModal(): void {
-        this.modal.showModal();
-    }
-
-    buscarParametrosUrl(): { idAssunto: number, idCurso: number } {
-        const params = new URLSearchParams(window.location.search);
-        const idAssunto = Number(params.get('assunto'));
-        const idCurso = Number(params.get('curso'));
-
-        if (!idAssunto || !idCurso) {
-            throw new Error('ID do assunto ou curso não informado na URL.');
-        }
-
-        return {
-            idAssunto: idAssunto,
-            idCurso: idCurso
-        };
+        await this.controladora.carregarInformacoes();
     }
 
     // Entradas
+    buscarIdAssunto() {
+        const params = new URLSearchParams(window.location.search);
+        const idAssunto = Number(params.get('assunto'));
+
+        return idAssunto;
+    }
+
     buscarCredenciais(): Credenciais {
         const form = document.getElementById(ids.formCredenciais) as (HTMLFormElement);
         const credenciais = new Credenciais(form.email.value, form.senha.value);
@@ -95,7 +65,7 @@ export class VisaoQuizDOM implements VisaoQuiz {
         });
     }
 
-    buscarDadosResposta(credenciais: Credenciais): RespostaAlunoCadastro {
+    buscarDadosResposta(): RespostaAlunoCadastro {
         const pergunta = document.querySelector(`.${classes.pergunta}`);
 
         const idPergunta = (pergunta as HTMLElement).dataset.id;
@@ -107,7 +77,7 @@ export class VisaoQuizDOM implements VisaoQuiz {
             idsRespostas.push(Number((r as HTMLElement).dataset.id));
         }
 
-        return new RespostaAlunoCadastro(credenciais, Number(idPergunta), idsRespostas);
+        return new RespostaAlunoCadastro(Number(idPergunta), idsRespostas);
     }
 
     buscarMensagemAcertou() : string {
@@ -121,8 +91,15 @@ export class VisaoQuizDOM implements VisaoQuiz {
         const divQuiz = document.getElementById(ids.quiz) as HTMLDivElement;
         divQuiz.innerHTML = '';
 
-        const botaoIniciar = UtilDOM.criaComTextoEClasses('button', 'Clique aqui para iniciar o quiz', ['botao-iniciar-quiz']);
-        divQuiz.appendChild(botaoIniciar);
+        const divOpcoes = UtilDOM.criaComClasses('div', [classes.opcoesIniciar])
+        const botaoIniciar = UtilDOM.criaComTextoEClasses('button', 'Iniciar', [classes.botaoIniciarQuiz]);
+        const botaoVoltar = UtilDOM.criaComTextoEClasses('button', 'Voltar', [classes.botaoVoltar]);
+
+        botaoVoltar.onclick = () => this.irParaPaginaCursos();
+
+        divOpcoes.append(botaoIniciar, botaoVoltar);
+
+        divQuiz.appendChild(divOpcoes);
         return botaoIniciar as HTMLButtonElement;
     }
 
@@ -222,17 +199,17 @@ export class VisaoQuizDOM implements VisaoQuiz {
         } else mensagem.innerText = tempoEsgotado ? 'Tempo esgotado. Você errou.' : 'Você errou...';
     }
 
-    preencherInformacoesAluno(nome: string, pontuacaoGeral: number, pontuacaoCurso: number) {
-        const h2Usuario = document.getElementById(ids.usuario);
-        (h2Usuario as HTMLElement).textContent = nome;
+    preencherInformacoesQuiz(pontuacoes: PontuacoesAluno) : void{
+        const h2Assunto = document.getElementById(ids.usuario) as HTMLHeadingElement;
+        h2Assunto.textContent = 'Quiz: ' + pontuacoes.descricaoAssunto;
 
         const inputPontuacaoGeral = document.getElementById(ids.pontuacaoGeral);
-        (inputPontuacaoGeral as HTMLInputElement).value = pontuacaoGeral.toFixed(1);
+        (inputPontuacaoGeral as HTMLInputElement).value = pontuacoes.pontuacaoGeral.toFixed(1);
 
         const inputPontuacaoCurso = document.getElementById(ids.pontuacaoCurso);
-        (inputPontuacaoCurso as HTMLInputElement).value = pontuacaoCurso.toFixed(1);
+        (inputPontuacaoCurso as HTMLInputElement).value = pontuacoes.pontuacaoCurso.toFixed(1);
     }
-
+    
     incrementarPontuacaoExibida(valor: number) {
         const inputPontuacaoGeral = document.getElementById(ids.pontuacaoGeral);
         let pontuacaoAtual = Number((inputPontuacaoGeral as HTMLInputElement).value);

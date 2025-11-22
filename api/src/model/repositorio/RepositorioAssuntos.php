@@ -16,6 +16,13 @@ interface RepositorioAssuntos
      * @return Assunto[]
      */
     public function buscarPorIdCurso(int $idCurso): array;
+
+    /**
+     * Retorna o assunto de determinado id.
+     * @param int $idAssunto
+     * @return Assunto
+     */
+    public function buscarPeloId(int $id): bool|Assunto;
 }
 
 

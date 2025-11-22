@@ -7,11 +7,11 @@ export const rotasApi = {
     cursos: BASE_URL_API+'cursos/',
     cursosBusca: BASE_URL_API+'cursos/?busca=',
     verificarCredenciais: BASE_URL_API + 'alunos/verificarCredenciais',
-    buscarPerguntas: ( idAluno: number, idAssunto: number) =>
-        BASE_URL_API + 'assuntos/' + idAssunto + '/perguntas?id_aluno=' + idAluno,
-    buscarPontuacao: ( idAluno: number, idCurso: number) =>
-        BASE_URL_API + 'alunos/' + idAluno + '/pontuacaoCurso/?id_curso=' + idCurso,
-    enviarResposta: BASE_URL_API+'respostasAluno/',
+    buscarPerguntas: ( idAssunto: number) =>
+        BASE_URL_API + 'assuntos/' + idAssunto + '/perguntas/',
+    buscarPontuacao: ( idAssunto: number) =>
+        BASE_URL_API + 'alunos/pontuacoes/?id_assunto=' + idAssunto,
+    enviarResposta: BASE_URL_API+'alunos/respostas/',
     imagensCursos: BASE_URL_API+'img/cursos/',
     imagensPerguntas: BASE_URL_API+'img/perguntas/',
     professores: BASE_URL_API+'professores/',

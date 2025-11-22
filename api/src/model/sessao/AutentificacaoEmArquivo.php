@@ -53,13 +53,13 @@ class AutentificacaoEmArquivo implements Autentificacao {
     public function buscarIdUsuario() : int {
         $this->iniciarSessao();
 
-        return $_SESSION['id_usuario'];
+        return $_SESSION['id_usuario'] ?? 0;
     }
 
     public function buscarTipoUsuario() : string {
         $this->iniciarSessao();
 
-        return $_SESSION['tipo_usuario'];
+        return $_SESSION['tipo_usuario'] ?? '';
     }
 
     public function estaLogado(): bool {

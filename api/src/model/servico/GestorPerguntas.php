@@ -9,15 +9,25 @@ class GestorPerguntas
         private RepositorioAlunos $repositorioAlunos,
         private RepositorioAssuntos $repositorioAssuntos,
         private RepositorioRespostasPergunta $repositorioRespostas,
-        private GerenciadorDeTransacoes $transacao
+        private GerenciadorDeTransacoes $transacao,
+        private Autentificacao $autentificacao
     ) {
     }
 
     /**
      * @return PerguntaListagemQuizDTO[]
      */
-    public function buscarPerguntasAluno(string|int $idAssunto, string|int $idAluno): array
+    public function buscarPerguntasAluno(string|int $idAssunto): array
     {
+        $idAluno = 0;
+
+        if ( 
+            $this->autentificacao->estaLogado() 
+            && $this->autentificacao->buscarTipoUsuario() === TipoUsuario::ALUNO->value
+        ) {
+            $idAluno = $this->autentificacao->buscaridUsuario();
+        } 
+
         $this->validarBuscarPerguntasAluno($idAssunto, $idAluno);
         $perguntas = $this->repositorioPerguntas->buscarPorAssuntoEAluno((int) $idAssunto, (int) $idAluno);
         shuffle($perguntas);

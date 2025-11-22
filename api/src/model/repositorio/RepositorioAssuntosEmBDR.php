@@ -27,6 +27,38 @@ class RepositorioAssuntosEmBDR implements RepositorioAssuntos
         }
     }
 
+    public function buscarPeloId(int $id): bool|Assunto {
+        try {
+            $sql = <<<'SQL'
+                SELECT
+                    id_curso,
+                    descricao
+                FROM assunto a
+                WHERE
+                    a.id = :id
+            SQL;
+
+            $ps = $this->pdo->prepare($sql);
+            $ps->execute([
+                'id' => $id
+            ]);
+
+            $result = $ps->fetch();
+            if ($result === false) return false; 
+            return new Assunto(
+                new Curso(
+                    null,
+                    (int) $result['id_curso'], 
+                ),
+                (int) $id,
+                $result['descricao']
+            );
+        } catch (PDOException $e) {
+            throw new RepositorioException('Não foi possível buscar pelo id.');
+        }
+    }
+
+
     public function buscarPorIdCurso(int $idCurso): array
     {
         $sql = <<<'SQL'

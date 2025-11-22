@@ -1,17 +1,21 @@
 import { AssuntoListagem } from "../model/dto/AssuntoListagem.ts";
 import { CursoListagem } from "../model/dto/CursoListagem.ts";
+import { Sessao } from "../model/sessao/Sessao.ts";
 import { ControladoraListagemCursos } from "../presenter/ControladoraListagemCursos.ts";
 import { classes, ids } from "../ui/listagem-cursos-ui.ts";
 import { UtilDOM } from "../util/UtilDOM.ts";
 import { VisaoListagemCursos } from "./VisaoListagemCursos.ts";
 import { rotasApi, rotasPaginas } from "../rotas.ts";
+import { TipoUsuario } from "../model/TipoUsuario.ts";
 
 const DIRETORIO_IMAGENS = rotasApi.imagensCursos;
 
 export class VisaoListagemCursosDom implements VisaoListagemCursos{
     private controladora: ControladoraListagemCursos;
     
-    constructor() {
+    constructor(
+        private sessao: Sessao
+    ) {
         this.controladora = new ControladoraListagemCursos(this);
     }
 
@@ -140,10 +144,28 @@ export class VisaoListagemCursosDom implements VisaoListagemCursos{
         
 
         const tdAcoes = UtilDOM.criaComClasses('td', ['assunto-acoes']); 
-        const botaoIniciarQuiz = UtilDOM.criaComTextoEClasses('button', 'iniciar quiz 🎲', ['botao-iniciar-quiz']);
-        botaoIniciarQuiz.addEventListener('click', this.redirecionarParaQuiz);
-        tdAcoes.appendChild(botaoIniciarQuiz);
-        trAssunto.appendChild(tdAcoes);
+
+        if ( this.sessao.estaLogado()) {
+            const tipoUser = this.sessao.buscarTipoUsuario();
+            
+            if ( tipoUser == TipoUsuario.ALUNO) {
+                const botaoIniciarQuiz = UtilDOM.criaComTextoEClasses('button', 'Abrir Quiz 🎲', ['botao-iniciar-quiz']);
+                botaoIniciarQuiz.addEventListener('click', this.redirecionarParaQuiz);
+    
+                tdAcoes.appendChild(botaoIniciarQuiz);
+                trAssunto.appendChild(tdAcoes);
+            } else if ( 
+                tipoUser == TipoUsuario.PROFESSOR ||
+                tipoUser == TipoUsuario.ADMINISTRADOR ||
+                tipoUser == TipoUsuario.PROFESSOR_ADMINISTRADOR
+            ) {
+                const botaoVerPerguntas = UtilDOM.criaComTextoEClasses('button', 'Ver Perguntas 👀', ['botao-iniciar-quiz']);
+                botaoVerPerguntas.addEventListener('click', this.redirecionarParaPerguntas);
+    
+                tdAcoes.appendChild(botaoVerPerguntas);
+                trAssunto.appendChild(tdAcoes);
+            }
+        } 
 
         return trAssunto;
     }
@@ -179,8 +201,16 @@ export class VisaoListagemCursosDom implements VisaoListagemCursos{
         const botao = event.target as HTMLButtonElement;
 
         const idAssunto = (botao.closest(`.${classes.linhaAssunto}`) as HTMLTableRowElement).dataset.id;
-        const idCurso = (botao.closest(classes.curso) as HTMLDivElement).dataset.id;
 
-        window.location.href = `${rotasPaginas.quiz}?curso=${idCurso}&assunto=${idAssunto}`;
+        window.location.href = `${rotasPaginas.quiz}?assunto=${idAssunto}`;
+    }
+
+    private redirecionarParaPerguntas(event: Event){
+        event.stopPropagation();
+        const botao = event.target as HTMLButtonElement;
+
+        const idAssunto = (botao.closest(`.${classes.linhaAssunto}`) as HTMLTableRowElement).dataset.id;
+
+        window.location.href = `${rotasPaginas.listagemPerguntas}?assunto=${idAssunto}`;
     }
 }

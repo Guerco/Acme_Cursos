@@ -9,28 +9,29 @@ class GerenciadorDeTransacoesEmBDR implements GerenciadorDeTransacoes
     }
 
     public function iniciar(): void {
-        if (!$this->pdo) {
+        if ($this->pdo === null) {
             throw new RuntimeException('Erro ao iniciar transação.');
         }
         $this->pdo->beginTransaction();
     }
 
     public function confirmar(): void {
-        if (!$this->pdo) {
+        if ($this->pdo === null) {
             throw new RuntimeException('Erro ao confirmar transação.');
         }
         $this->pdo->commit();
     }
 
     public function reverter(): void {
-        if (!$this->pdo) {
+        if ($this->pdo === null) {
             throw new RuntimeException('Erro ao reverter transação.');
         }
-        $this->pdo->rollBack();
+        if ($this->pdo->inTransaction())
+            $this->pdo->rollBack();
     }
 
     public function obterConexao(): PDO {
-        if (!$this->pdo) {
+        if ($this->pdo === null) {
             throw new RuntimeException('Erro ao obter conexão.');
         }
         return $this->pdo;

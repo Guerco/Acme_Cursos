@@ -9,132 +9,6 @@
 }
 
 /* ========================================================== */
-/* Estilo das Credenciais */
-#caixa-credenciais {
-    border: none;
-    border-radius: 15px;
-    text-align: center;
-    margin: auto;
-    width: 740px;
-    height: 500px;
-    max-width: 80vw;
-    max-height: 90vh;
-    background-color: #fff;
-    box-sizing: border-box;
-    display: flex;
-    flex: row;
-    padding: 0;
-    overflow: hidden;
-}
-
-#caixa-credenciais::backdrop {
-    background: #820ec0;
-}
-
-.logo-credenciais {
-    flex: 1;
-    width: 370px;
-    height: 100%;
-    background-image: linear-gradient(#ffffff2d, #ffffff4d),
-        url("../img/blur-bg.png");
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    display: flex;
-    align-items: center;
-    border-radius: 15px;
-}
-
-.logo-credenciais img {
-    margin: auto;
-    width: 70%;
-}
-
-#form-credenciais {
-    flex: 1;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-    align-items: center;
-    margin: 0 auto;
-    padding: 0 20px;
-}
-
-#form-credenciais h1 {
-    font-size: 2rem;
-    font-weight: lighter;
-}
-
-#form-credenciais .inputs-credenciais {
-    text-align: left;
-    width: 100%;
-    border: none;
-}
-
-#form-credenciais .inputs-credenciais label {
-    font-size: larger;
-}
-
-#form-credenciais input {
-    width: 100%;
-    height: 4vh;
-    border-radius: 12px;
-    border: solid 2px #e9e9e9;
-}
-
-#form-credenciais .acoes-credenciais {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 1vh;
-    width: 100%;
-}
-
-#form-credenciais .acoes-credenciais button {
-    width: 100%;
-    height: 4vh;
-    border-radius: 12px;
-    border: none;
-    height: 5vh;
-    color: #fff;
-    font-weight: bold;
-}
-
-#form-credenciais .acoes-credenciais button:hover {
-    transform: matrix3d();
-    cursor: pointer;
-}
-
-#form-credenciais .acoes-credenciais #botao-enviar {
-    background-color: #820ec0;
-}
-
-#form-credenciais .acoes-credenciais #botao-cancelar {
-    background-color: #ff7700;
-}
-
-#form-credenciais .acoes-credenciais output {
-    color: #ff0000;
-    font-weight: bold;
-    font-size: large;
-    min-height: 2em;
-    display: block;
-    text-align: center;
-}
-
-#botao-informar-credenciais {
-    background: none;
-    border: none;
-    color: #9f9f9f;
-    border-radius: 20px;
-    cursor: pointer;
-    height: 100%;
-    width: 100%;
-    font-size: xx-large;
-}
-
-/* ========================================================== */
 /* Estilos do cabeçalho*/
 header {
     position: fixed;
@@ -159,19 +33,26 @@ header {
     color: white;
 }
 
+#usuario {
+    max-width: 250px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
 .container-pontuacoes {
     display: flex;
     flex-direction: row;
 }
 
 .input-pontuacao {
-    width: 50px;
+    width: 70px;
     color: white;
     border-radius: 5px;
 }
 
 .atencao-tela-cheia {
-    height: 2.5vh;
+    height: 3vh;
     background-color: #faf38e;
     color: #895b12;
     width: 100%;
@@ -189,15 +70,41 @@ header {
 
 /* ========================================================== */
 /* Estilos do quiz */
+
+.opcoes-iniciar {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+}
+
 .botao-iniciar-quiz {
-    background: none;
+    background-color: #6CBF4577;
+    text-shadow: 2px 2px 5px #820ec0;
     border: none;
-    color: #9f9f9f;
-    border-radius: 20px;
+    color: #ffffff;
     cursor: pointer;
     height: 100%;
     width: 100%;
     font-size: xx-large;
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
+    transition: 0.1s;
+}
+
+.botao-voltar-quiz {
+    background-color: #820ec077;
+    text-shadow: 2px 2px 5px #6CBF45;
+    background-color: none;
+    border: none;
+    color: #ffffff;
+    cursor: pointer;
+    height: 100%;
+    width: 100%;
+    font-size: xx-large;
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+    transition: 0.1s;
 }
 
 .contagem-inicial {
@@ -205,6 +112,14 @@ header {
     font-weight: 50;
     margin: auto;
     color: #9f9f9f;
+}
+
+.opcoes-iniciar:has(.botao-iniciar-quiz:hover) .botao-voltar-quiz {
+    width: 80%;
+}
+
+.opcoes-iniciar:has(.botao-voltar-quiz:hover) .botao-iniciar-quiz {
+    width: 80%;
 }
 
 #quiz {
@@ -337,7 +252,7 @@ footer#acoes {
     background: #e0e0e0;
     text-align: center;
     box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
-    height: 5vh;
+    height: 7vh;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -350,9 +265,14 @@ footer#acoes {
     border-radius: 8px;
     cursor: pointer;
     height: 100%;
-    width: 100px;
+    width: 150px;
     max-width: 50%;
     overflow: hidden;
+}
+
+#acoes:has(#acao:empty) {
+    display: none;
+    pointer-events: none;
 }
 
 #acao.responder {
@@ -362,7 +282,7 @@ footer#acoes {
 }
 
 #acao.proxima {
-    background: none;
+    background-color: #820ec02a;
     border: 1px solid #820ec0;
     color: #820ec0;
 }
@@ -400,11 +320,6 @@ footer#acoes {
 @media (max-width: 575px) {
     * {
         font-family: sans-serif;
-    }
-
-    #caixa-credenciais {
-        width: 90vw;
-        height: 90vh;
     }
 
     header {
@@ -456,6 +371,10 @@ footer#acoes {
         height: 5vh;
         font-size: 9px;
     }
+
+    #acao {
+        width: 90px;
+    }
 }
 
 .resposta-selecionada button {
@@ -469,42 +388,31 @@ footer#acoes {
 /* ========================================================== */
 /* Estilos específicos para proporção retrato */
 @media (orientation: portrait) {
-    #caixa-credenciais {
+    .opcoes-iniciar {
         flex-direction: column;
-        width: 95vw;
-        height: 95vh;
-        max-width: 95vw;
-        max-height: 95vh;
-        margin: 2.5vh auto;
-        border-radius: 20px;
+        padding: 10px;
     }
 
-    .logo-credenciais {
-        flex: 1.2;
+    .botao-iniciar-quiz {
+        border-radius: 0;
+        border-top-left-radius: 20px;
+        border-top-right-radius: 20px;
+    }
+    
+    .botao-voltar-quiz {
+        border-radius: 0;
+        border-bottom-left-radius: 20px;
+        border-bottom-right-radius: 20px;
+    }
+
+    .opcoes-iniciar:has(.botao-iniciar-quiz:hover) .botao-voltar-quiz {
         width: 100%;
-        height: 100%;
+        height: 80%;
     }
-
-    .logo-credenciais img {
-        margin: auto;
-        height: 70%;
-        width: auto;
-    }
-
-    #form-credenciais {
-        flex: 1;
-        height: 100%;
-        width: 90%;
-        padding: 20px 20px
-    }
-
-    #form-credenciais h1 {
-        font-size: 1.5rem;
-        font-weight: lighter;
-    }
-
-    #form-credenciais input {
-        border: solid 1px #a8a8a8;
+    
+    .opcoes-iniciar:has(.botao-voltar-quiz:hover) .botao-iniciar-quiz {
+        width: 100%;
+        height: 80%;
     }
 }
 
@@ -514,13 +422,6 @@ footer#acoes {
 
 .resposta-selecionada button:hover {
     background-color: #caaafa;
-}
-
-
-#caixa-credenciais:not([open]) {
-    display: none !important;
-    opacity: 0;
-    pointer-events: none;
 }
 
 .atencao-tela-cheia-destaque {

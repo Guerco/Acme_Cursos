@@ -67,26 +67,26 @@ $app->route('/cursos')
 // Rotas de Alunos
 $app->route('/alunos')
 
-    ->post('/verificarCredenciais', function (HttpRequest $req, HttpResponse $res) use ($pdo) {
+    ->get('/pontuacoes', function (HttpRequest $req, HttpResponse $res) use ($pdo) {
 
         executaComTratamentoErros(function () use ($pdo, $req, $res) {
             $gestorAlunos = criarGestor('alunos');
     
-            $aluno = $gestorAlunos->verificarCredenciais((array) $req->body());
-            $res->status(200)->json($aluno);
+            $idAssunto = $_GET['id_assunto'] ?? '';
+            $pontuacao = $gestorAlunos->buscarPontuacoes($idAssunto);
+            $res->status(200)->json($pontuacao);
         }, $res);
 
     })
 
-    ->get('/:id/pontuacaoCurso', function (HttpRequest $req, HttpResponse $res) use ($pdo) {
+    ->post('/respostas', function (HttpRequest $req, HttpResponse $res) use ($pdo) {
 
         executaComTratamentoErros(function () use ($pdo, $req, $res) {
             $gestorAlunos = criarGestor('alunos');
     
-            $idAluno = $req->param('id') ?? null;
-            $idCurso = $_GET['id_curso'] ?? '';
-            $pontuacao = $gestorAlunos->buscarPontuacaoCurso($idAluno, $idCurso);
-            $res->status(200)->json(['pontuacao' => $pontuacao]);
+            $body = (array) $req->body();
+            $resultado = $gestorAlunos->salvarResposta($body);
+            $res->status(200)->json(['respostaCorreta' => $resultado]);
         }, $res);
 
     });
@@ -100,26 +100,10 @@ $app->route('/assuntos')
             $gestorPerguntas = criarGestor('perguntas');
     
             $idAssunto = $req->param('id') ?? '';
-            $idAluno = $_GET['id_aluno'] ?? '';
     
-            $perguntas = $gestorPerguntas->buscarPerguntasAluno($idAssunto, $idAluno);
+            $perguntas = $gestorPerguntas->buscarPerguntasAluno($idAssunto);
     
             $res->status(200)->json($perguntas);
-        }, $res);
-
-    });
-
-// Rotas de RespostasAluno
-$app->route('/respostasAluno')
-
-    ->post('/', function (HttpRequest $req, HttpResponse $res) use ($pdo) {
-
-        executaComTratamentoErros(function () use ($pdo, $req, $res) {
-            $gestorAlunos = criarGestor('alunos');
-    
-            $body = (array) $req->body();
-            $resultado = $gestorAlunos->salvarResposta(RespostaAlunoCadastroDTO::deArray($body));
-            $res->status(200)->json(['respostaCorreta' => $resultado]);
         }, $res);
 
     });
@@ -255,7 +239,12 @@ function criarGestor(string $tipoGestor): GestorCursos|GestorAlunos|GestorCreden
                 new RepositorioAlunosEmBDR($pdo),
                 new RepositorioPerguntasEmBDR($pdo),
                 new RepositorioCursosEmBDR($pdo),
-                new GerenciadorDeTransacoesEmBDR($pdo)
+                new GerenciadorDeTransacoesEmBDR($pdo),
+                new RepositorioAssuntosEmBDR($pdo),
+                new AutentificacaoEmArquivo(
+                    new GerenciadorDeSenhaEnv(),
+                    new RepositorioCredenciaisEmBDR($pdo)
+                )
             );
 
         case 'perguntas':
@@ -264,7 +253,11 @@ function criarGestor(string $tipoGestor): GestorCursos|GestorAlunos|GestorCreden
                 new RepositorioAlunosEmBDR($pdo),
                 new RepositorioAssuntosEmBDR($pdo),
                 new RepositorioRespostasPerguntaEmBDR($pdo),
-                new GerenciadorDeTransacoesEmBDR($pdo)
+                new GerenciadorDeTransacoesEmBDR($pdo),
+                new AutentificacaoEmArquivo(
+                    new GerenciadorDeSenhaEnv(),
+                    new RepositorioCredenciaisEmBDR($pdo)
+                )
             );
 
         case 'credenciais':
@@ -318,6 +311,7 @@ function executaComTratamentoErros (callable $callback, HttpResponse $res) {
     } catch (RuntimeException $e) {
         $res->status(500)->json(['erros' => $e->getMessage()]);
     } catch (Throwable $e) {
+        error_log($e->getMessage());
         $res->status(500)->json(['erros' => 'Ocorreu um erro interno no servidor.']);
     }
 }

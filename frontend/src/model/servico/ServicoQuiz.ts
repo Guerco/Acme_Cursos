@@ -1,10 +1,8 @@
 import { RespositorioAlunos } from "../repositorio/RepositorioAlunos";
 import { RepositorioPerguntas } from "../repositorio/RepositorioPerguntas";
-import { AlunoListagem } from "../dto/AlunoListagem";
-import { Credenciais } from "../dto/Credenciais";
+import { PontuacoesAluno } from "../dto/PontuacoesAluno";
 import { RespostaAlunoCadastro } from "../dto/RespostaAlunoCadastro";
 import { PerguntaListagemQuiz } from "../dto/PerguntaListagemQuiz";
-import { DominioException } from "../exception/DominioException";
 
 export class ServicoQuiz {
 
@@ -13,41 +11,15 @@ export class ServicoQuiz {
         private repositorioPerguntas: RepositorioPerguntas
     ){}
 
-    async autenticar(credenciais: Credenciais): Promise<AlunoListagem>{
-        if(!credenciais.email || !credenciais.senha){
-            throw new DominioException("Preencha todos os campos!");
-        }
-        try {
-            await credenciais.aplicarHashSenha();
-            return await this.repositorioAlunos.verificarCredenciais(credenciais);
-        } catch (error) {
-            throw error;
-        }
+    async buscarPontuacoes(idAssunto: number): Promise<PontuacoesAluno>{
+        return await this.repositorioAlunos.buscarPontuacoesAluno(idAssunto);
     }
 
-    async buscarPerguntas(idAluno: number, idAssunto: number): Promise<PerguntaListagemQuiz[]>{
-        try{
-            return await this.repositorioPerguntas.buscarPerguntas(idAluno, idAssunto);
-        } catch(error:any){
-            throw error;
-        }
+    async buscarPerguntas(idAssunto: number): Promise<PerguntaListagemQuiz[]>{
+        return await this.repositorioPerguntas.buscarPerguntas(idAssunto);
     }
 
     async enviarResposta(respostaAluno: RespostaAlunoCadastro): Promise<boolean>{
-        try{
-            await respostaAluno.credenciaisAluno.aplicarHashSenha();
-            return await this.repositorioAlunos.enviarResposta(respostaAluno);
-        }catch(error:any){
-            throw new Error(error.message);
-        }
+        return await this.repositorioAlunos.enviarResposta(respostaAluno);
     }
-
-    async buscarPontuacaoCurso(idAluno: number, idCurso: number): Promise<number> {
-        try{
-            return await this.repositorioAlunos.buscarPontuacaoAlunoCurso(idAluno, idCurso);
-        }catch(error:any){
-            throw error;
-        }
-    }
-
 }

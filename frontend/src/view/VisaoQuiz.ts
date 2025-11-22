@@ -1,5 +1,6 @@
 import { Credenciais } from "../model/dto/Credenciais";
 import { PerguntaListagemQuiz } from "../model/dto/PerguntaListagemQuiz";
+import { PontuacoesAluno } from "../model/dto/PontuacoesAluno";
 import { RespostaAlunoCadastro } from "../model/dto/RespostaAlunoCadastro";
 
 export interface VisaoQuiz {
@@ -7,9 +8,8 @@ export interface VisaoQuiz {
 
     //Entrada
     buscarCredenciais(): Credenciais;
-    buscarParametrosUrl(): { idAssunto: number; idCurso: number };
-    chamarModal(): void;
-    buscarDadosResposta(credenciais: Credenciais): RespostaAlunoCadastro;
+    buscarIdAssunto(): number;
+    buscarDadosResposta(): RespostaAlunoCadastro;
     buscarMensagemAcertou() : string;
 
     //Saída
@@ -23,7 +23,7 @@ export interface VisaoQuiz {
     desabilitarRespostas(): void;
     tornarAcaoProximaPergunta(): void;
     limparEventosSaida(): void;
-    preencherInformacoesAluno(nome: string, pontuacaoGeral: number, pontuacaoCurso: number) : void;
+    preencherInformacoesQuiz(pontuacoes: PontuacoesAluno) : void;
     preencherPergunta(pergunta: PerguntaListagemQuiz): void;
     tornarAcaoResponder() : void;
     iniciarTelaCheia() : void;
