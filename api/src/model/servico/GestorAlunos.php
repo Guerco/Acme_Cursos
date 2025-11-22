@@ -181,4 +181,33 @@ class GestorAlunos {
         if (! $this->repositorioAlunos->existeComId((int) $idAluno))
             throw new DominioException('Aluno inexistente.');
     }
+    
+    /**
+     * @param string $nome || ''
+     * @return AlunoRelDTO[]
+     */
+    public function listarRankingPorPontuacaoGeral(string $nome): array{
+        $dados = [];
+        $resultado = [];
+
+        $dados = $this->repositorioAlunos->rankingPorPontuacaoGeral($nome);
+        $resultado = AlunoRelDTO::deVOS($dados);
+
+        return $resultado;
+    }
+
+    /**
+     * @param string $nome || ''
+     * @return AlunoCursoRelDTO[]
+     */
+    public function listarRankingAlunosPorCurso(string $nome): array{
+        $dados = [];
+        $resultado = [];
+
+        $dados = $this->repositorioAlunos->rankingAlunosPorCurso($nome);
+       
+        $resultado = AlunoCursoRelDTO::deVOS($dados);
+
+        return $resultado;
+    }
 }

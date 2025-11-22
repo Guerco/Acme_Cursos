@@ -24,6 +24,12 @@ export const rotasApi = {
     usuariosBusca: ( busca: string ) =>
         BASE_URL_API+'usuarios/?busca=' + busca,
     login: BASE_URL_API+'login/',
+    rankingPorPontuacaoGeral: (busca: string) =>
+        BASE_URL_API + 'relatorios/rankingPorPontuacaoGeral?busca=' + busca,
+    rankingAlunosPorCurso: (busca: string) =>
+        BASE_URL_API + 'relatorios/rankingAlunosPorCurso?busca=' + busca,
+    numeroDeAlunosPorCurso:
+        BASE_URL_API + 'relatorios/numeroDeAlunosPorCurso',
 };
 
 export const rotasPaginas = {

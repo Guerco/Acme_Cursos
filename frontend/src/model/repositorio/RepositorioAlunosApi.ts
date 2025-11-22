@@ -56,11 +56,60 @@ export class RepositorioAlunosAPI implements RespositorioAlunos {
     }
     
 
-    async buscarRankingAlunos() : Promise<AlunoRel[]> {
-        return [];
+    async buscarRankingAlunos(filtro: string) : Promise<AlunoRel[]> {
+        try{
+            const response = await fetch(rotasApi.rankingPorPontuacaoGeral(filtro), 
+                { 
+                    method: 'GET', 
+                    credentials: 'include' 
+                }
+            );
+
+            if (!response.ok) {
+                throw new Error();
+            }
+            
+            const body = await response.json();
+
+            return body.map((b : any)  => 
+                            new AlunoRel(
+                            Number(b.posicao),
+                            b.nome,
+                            Number(b.pontuacaoGeral)
+                        )
+                    );
+            
+        } catch(error){
+            throw new Error('Não foi possível listar o raking de alunos.');
+        }
     } 
 
-    async buscarRankingAlunosCurso() : Promise<AlunoCursoRel[]> {
-        return [];
+    async buscarRankingAlunosCurso(filtro: string) : Promise<AlunoCursoRel[]> {
+        try{
+            const response = await fetch(rotasApi.rankingAlunosPorCurso(filtro), 
+                { 
+                    method: 'GET', 
+                    credentials: 'include' 
+                }
+            );
+
+            if (!response.ok) {
+                throw new Error();
+            }
+            
+            const body = await response.json();
+
+            return body.map((b : any)  => 
+                            new AlunoCursoRel(
+                            b.descricao,
+                            Number(b.posicao),
+                            b.nomeAluno,
+                            Number(b.pontuacao)
+                        )
+                    );
+            
+        } catch(error){
+            throw new Error('Não foi possível listar o raking de alunos por curso.');
+        }
     } 
 }

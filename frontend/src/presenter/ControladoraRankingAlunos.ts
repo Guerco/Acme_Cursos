@@ -1,4 +1,5 @@
 import { AlunoRel } from "../model/dto/relatorio/AlunoRel";
+import { RepositorioAlunosAPI } from "../model/repositorio/RepositorioAlunosApi";
 import { RepositorioAlunosJSON } from "../model/repositorio/RepositorioAlunosJSON";
 import { ServicoRankingAlunos } from "../model/servico/ServicoRankingAlunos";
 import { VisaoRankingAlunos } from "../view/VisaoRankingAlunos";
@@ -10,18 +11,18 @@ export class ControladoraRankingAlunos {
     constructor(
         private visao: VisaoRankingAlunos
     ) {
-        const repositorio = new RepositorioAlunosJSON();
+        const repositorio = new RepositorioAlunosAPI();
         this.servico = new ServicoRankingAlunos(repositorio);
     }
 
     async listarAlunosPontuacaoGeral() {
-        const ranking = await this.servico.buscarRankingAlunos();
+        const ranking = await this.servico.buscarRankingAlunos("");
 
         this.visao.preencherTabela(ranking);
     }
 
     async listarAlunosPontuacaoCurso() {
-        const ranking = await this.servico.buscarRankingAlunosCurso();
+        const ranking = await this.servico.buscarRankingAlunosCurso("");
 
         this.visao.preencherTabela(ranking);
     }
@@ -50,10 +51,10 @@ export class ControladoraRankingAlunos {
         let ranking = [] as AlunoRel[];
         switch (tipoRanking) {
             case 'pontuacao-geral':
-                ranking = await this.servico.buscarRankingFiltrado(texto);
+                ranking = await this.servico.buscarRankingAlunos(texto);
                 break;
             case 'pontuacao-curso':
-                ranking = await this.servico.buscarRankingCursoFiltrado(texto);
+                ranking = await this.servico.buscarRankingAlunosCurso(texto);
                 break;
         }
 

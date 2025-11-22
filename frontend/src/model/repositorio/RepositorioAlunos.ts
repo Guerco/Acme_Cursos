@@ -5,7 +5,7 @@ import { PontuacoesAluno } from "../dto/PontuacoesAluno";
 
 export interface RespositorioAlunos{
     enviarResposta(respostaAluno: RespostaAlunoCadastro): Promise<boolean>;
-    buscarRankingAlunos() : Promise<AlunoRel[]>;
-    buscarRankingAlunosCurso() : Promise<AlunoCursoRel[]>;
+    buscarRankingAlunos(filtro: string) : Promise<AlunoRel[]>;
+    buscarRankingAlunosCurso(filtro: string) : Promise<AlunoCursoRel[]>;
     buscarPontuacoesAluno(idAssunto: number) : Promise<PontuacoesAluno>;
 }

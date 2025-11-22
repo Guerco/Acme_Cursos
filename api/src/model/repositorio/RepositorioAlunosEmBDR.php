@@ -209,4 +209,104 @@ class RepositorioAlunosEmBDR implements RepositorioAlunos{
             throw new RepositorioException ($e->getMessage());
         }    
     }
+
+     public function rankingPorPontuacaoGeral(string $nome): array{
+        try{
+            $ps = $this->pdo->prepare(
+                'select * from
+                    (
+                    select
+                        row_number() over(order by pontuacao_geral desc, nome asc) as posicao,
+                        nome,
+                        pontuacao_geral
+                    from
+                        aluno
+                ) r
+                where
+                    r.nome like :nome
+                order by
+                    r.posicao;');
+            $ps->execute([
+                'nome' => "%$nome%"
+            ]);
+
+            $dados = $ps->fetchAll();
+  
+            return $this->criarRankingPorPontuacaoGeral($dados);
+
+        }catch (PDOException $e){
+            throw new RepositorioException($e->getMessage());
+        }
+
+    }
+
+    private function criarRankingPorPontuacaoGeral(array $dados):array {
+        $relatorio = [];
+        $rankingPontuacaoGeral = '';
+        foreach($dados as $d) {
+            $rankingPontuacaoGeral = new AlunoRelVO(
+                (int)$d['posicao'],
+                $d['nome'],
+                (float)$d['pontuacao_geral']
+            );
+            $relatorio[] = $rankingPontuacaoGeral;
+        }
+        return $relatorio;
+    }
+
+    public function rankingAlunosPorCurso(string $nome): array{
+        try{
+            $ps = $this->pdo->prepare(
+                'select * from
+                    (
+                    select
+                        c.descricao,
+                        row_number() over(
+                            partition by c.descricao 
+                            order by p.pontuacao desc, a.nome asc
+                        ) as posicao,
+                        a.nome,
+                        p.pontuacao
+                    from
+                        pontuacao p
+                    join curso c on
+                        c.id = p.id_curso
+                    join aluno a on
+                        a.id = p.id_aluno
+                ) r
+                where
+                    r.nome like :nomeAluno
+                    or r.descricao like :descricaoCurso
+                order by
+                    r.descricao asc,
+                    r.posicao asc;');
+            $ps->execute([
+                'nomeAluno' => "%$nome%",
+                'descricaoCurso' => "%$nome%"
+            ]);
+
+            $dados = $ps->fetchAll();
+            
+            return $this->criarRankingAlunosPorCurso($dados);
+
+        }catch (PDOException $e){
+            throw new RepositorioException($e->getMessage());
+        }
+    }
+
+    private function criarRankingAlunosPorCurso(array $dados):array {
+        $relatorio = [];
+        $rankingAlunoCurso = '';
+        foreach($dados as $d) {
+            $rankingAlunoCurso = new AlunoCursoRelVO(
+                $d['descricao'],
+                (int)$d['posicao'],
+                $d['nome'],
+                (float)$d['pontuacao']
+            );
+            $relatorio[] = $rankingAlunoCurso;
+        }
+       
+        return $relatorio;
+    }
 }

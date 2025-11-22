@@ -10,32 +10,14 @@ export class ServicoRankingAlunos {
         private repositorio : RespositorioAlunos
     ){}
 
-    async buscarRankingAlunos() : Promise<AlunoRel[]> {
-        return this.rankingAlunos ??= await this.repositorio.buscarRankingAlunos();
-    }
-
-    async buscarRankingAlunosCurso() : Promise<AlunoCursoRel[]> {
-        return this.rankingAlunosCurso ??= await this.repositorio.buscarRankingAlunosCurso();
-    }
-
-    async buscarRankingFiltrado(nomeAluno: string) : Promise<AlunoRel[]> {
+    async buscarRankingAlunos(nomeAluno: string) : Promise<AlunoRel[]> {
         const busca = nomeAluno.trim().toLowerCase();
-        
-        const ranking = await this.buscarRankingAlunos();
-
-        return ranking.filter(a =>
-            a.nome.toLowerCase().includes(busca)
-        );
+        return await this.repositorio.buscarRankingAlunos(busca);
     }
 
-    async buscarRankingCursoFiltrado(nomeAluno: string) : Promise<AlunoCursoRel[]> {
+    async buscarRankingAlunosCurso(nomeAluno: string) : Promise<AlunoCursoRel[]> {
         const busca = nomeAluno.trim().toLowerCase();
-        
-        const ranking = await this.buscarRankingAlunosCurso();
-
-        return ranking.filter(a =>
-            a.nome.toLowerCase().includes(busca)
-            || a.nomeCurso.toLowerCase().includes(busca)
-        );
+        return await this.repositorio.buscarRankingAlunosCurso(busca);
     }
+
 }

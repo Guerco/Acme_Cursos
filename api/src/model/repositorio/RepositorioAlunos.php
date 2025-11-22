@@ -72,4 +72,19 @@ interface RepositorioAlunos {
      * @return int
      */
     public function adicionar(Aluno $aluno): int;
+
+    /**
+     * Retorna a pontuacao geral de todos os alunos ou de alunos filtrados por determinado nome
+     * @param string $nome ou ''
+     * @return AlunoRelVO[]
+     */
+    public function rankingPorPontuacaoGeral(string $nome): array;
+
+    /**
+     * Retorna a pontuacao de todos os alunos em cada curso ou retorna eles filtrados pelo nome do aluno ou nome do curso
+     * @param string $nome ou ''
+     * @return AlunoCursoRelVO[]
+     */
+    public function rankingAlunosPorCurso(string $nome): array;
+
 }
