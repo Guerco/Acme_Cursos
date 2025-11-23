@@ -9,7 +9,12 @@ INSERT INTO credenciais (id, email, senha) VALUES
     (7, 'professor2@cefet.com', '123'),
     (8, 'professor3@cefet.com', '123'),
     (9, 'professor4@cefet.com', '123'),
-    (10, 'administrador1@cefet.com', '123');
+    (10, 'administrador1@cefet.com', '123'),
+    (11, 'bonnie.aluno@email.com', '123'),
+    (12, 'joao.aluno@cefet.com', '123'),
+    (13, 'jose.aluno@cefet.com', '123'),
+    (14, 'carlos.aluno@cefet.com', '123'),
+    (15, 'tobbie.aluno@cefet.com', '123');
 
 -- Alunos
 INSERT INTO aluno (id, id_credenciais, nome) VALUES
@@ -17,7 +22,12 @@ INSERT INTO aluno (id, id_credenciais, nome) VALUES
     (2, 2, 'Maria de Souza Alvez'),
     (3, 3, 'Bob Ernesto Pereira'),
     (4, 4, 'Ana Clara de Oliveira'),
-    (5, 5, 'Aluno 2');
+    (5, 5, 'Aluno 2'),
+    (6, 11, 'Bonnie Almeida'),
+    (7, 12, 'João de Lima'),
+    (8, 13, 'José Soares'),
+    (9, 14, 'Carlos Costa'),
+    (10, 15, 'Tobbie Rocha');
 -- Professores
 INSERT INTO professor (id, id_credenciais, nome) VALUES
     (1, 6,'Rosa Maria da Silva'),
@@ -110,6 +120,11 @@ UPDATE aluno SET pontuacao_geral = 223 WHERE id = 2;
 UPDATE aluno SET pontuacao_geral = 108 WHERE id = 3;
 UPDATE aluno SET pontuacao_geral = 179 WHERE id = 4;
 UPDATE aluno SET pontuacao_geral = 33 WHERE id = 5;
+UPDATE aluno SET pontuacao_geral = 119 WHERE id = 6;
+UPDATE aluno SET pontuacao_geral = 104 WHERE id = 7;
+UPDATE aluno SET pontuacao_geral = 112 WHERE id = 8;
+UPDATE aluno SET pontuacao_geral = 59 WHERE id = 9;
+UPDATE aluno SET pontuacao_geral = 59 WHERE id = 10;
 
 -- Tabela pontuacao
 INSERT INTO pontuacao (id_aluno, id_curso, pontuacao) VALUES
@@ -117,5 +132,9 @@ INSERT INTO pontuacao (id_aluno, id_curso, pontuacao) VALUES
 (3, 2, 30), (4, 2, 45), (5, 2, 15), (1, 3, 7), (2, 3, 18), 
 (3, 3, 22), (4, 3, 44), (5, 3, 10), (1, 4, 50), (2, 4, 99), 
 (3, 4, 10), (1, 5, 55), (2, 5, 18), (3, 5, 24), (4, 5, 45), 
-(5, 5, 7),(1, 6, 5), (2, 6, 70);
+(5, 5, 7),  (1, 6, 5), (2, 6, 70), (6, 1, 22), (7, 1, 37), 
+(8, 1, 48), (9, 1, 22), (6, 2, 11),(10, 2, 16), (7, 2, 45), 
+(9, 2, 15), (8, 3, 7), (10, 3, 18), (6, 3, 21), (7, 3, 7), 
+(10, 4, 13), (8, 4, 47), (6, 5, 30), (7, 5, 15), (9, 5, 22), 
+(10, 5, 12), (6, 6, 35), (8, 6, 10);
 

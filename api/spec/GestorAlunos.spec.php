@@ -12,6 +12,25 @@ function criarAlunoTeste($id = 0, $nome = ""): aluno
     return $aluno;
 }
 
+function criarListagemTeste($posicao = 0, $nome = "", $pontuacao = 0): AlunoRelVO {
+    return new AlunoRelVO(
+            $posicao,
+            $nome,
+            $pontuacao
+            );
+
+}
+
+function criarListagemTesteAlunoCurso($descricao = "", $posicao = 0, $nome = "", $pontuacao = 0): AlunoCursoRelVO{
+    return new AlunoCursoRelVO(
+            $descricao,
+            $posicao,
+            $nome,
+            $pontuacao
+            );
+
+}
+
 describe('GestorAlunos', function (): void {
 
     beforeEach(function (): void {
@@ -170,4 +189,37 @@ describe('GestorAlunos', function (): void {
             expect($acertou)->toBe(false);
         });
     });
+
+    
+    describe('listarRankingPorPontuacaoGeral', function():void{
+
+        it('retorna um array de value object de AlunoRelDTO', function():void{
+            allow($this->repositorioTesteAlunos)->toReceive('rankingPorPontuacaoGeral')->andReturn([
+                criarListagemTeste(1,'Aluno teste 1', 78),
+                criarListagemTeste(2,'Aluno teste 2', 55)
+            ]);
+
+
+            $resultado = $this->gestorAlunos->listarRankingPorPontuacaoGeral("");
+            expect($resultado)->toBeAn('array');
+            expect(count($resultado))->not->toBe(0);
+            expect($resultado[0]?? null)->toBeAnInstanceOf(AlunoRelDTO::class);
+        });
+    });
+
+    describe('listarRankingAlunosPorCurso', function():void{
+
+        it('retorna um array de value object de AlunoCursoRelDTO', function():void{
+            allow($this->repositorioTesteAlunos)->toReceive('rankingAlunosPorCurso')->andReturn([
+                criarListagemTesteAlunoCurso('Curso teste 1',1,'Aluno teste 1', 78),
+                criarListagemTesteAlunoCurso('CUrso teste 2',2,'Aluno teste 2', 55)
+            ]);
+
+            $resultado = $this->gestorAlunos->listarRankingAlunosPorCurso("");
+            expect($resultado)->toBeAn('array');
+            expect(count($resultado))->not->toBe(0);
+            expect($resultado[0]?? null)->toBeAnInstanceOf(AlunoCursoRelDTO::class);
+        });
+    });
+
 });

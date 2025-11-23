@@ -146,6 +146,99 @@ describe('RepositorioAlunosEmBDR', function(){
 
     });
 
+    describe('rankingPorPontuacaoGeral', function(){
+
+        it('retorna uma listagem com o ranking de alunos por pontuacao geral', function():void{
+            $resultado = $this->repoAlunos->rankingPorPontuacaoGeral("");
+            expect($resultado)->toBeAn('array');
+            expect(count($resultado))->not->toBe(0);
+            expect($resultado[0] ?? null)->toBeAnInstanceOf(AlunoRelVO::class);
+
+        });
+
+        it('retorna uma listagem com o ranking de alunos ordenada decrescentemente pela pontuacao', function():void{
+            $resultado = $this->repoAlunos->rankingPorPontuacaoGeral("");
+            expect($resultado)->toBeAn('array');
+            expect(count($resultado))->not->toBe(0);
+
+            expect($resultado[0]->getNome())->toBe('Maria de Souza Alvez');
+            expect($resultado[1]->getNome())->toBe('Aluno');
+            expect($resultado[2]->getNome())->toBe('Ana Clara de Oliveira');
+
+        });
+
+        it('retorna um array filtrado pelo o nome do aluno', function():void{
+
+            $resultado = $this->repoAlunos->rankingPorPontuacaoGeral('Bonnie');
+            expect($resultado)->toBeAn('array');
+            expect(count($resultado))->toBe(1);
+            expect($resultado[0]->getNome())->toContain('Bonnie');
+            expect($resultado[0]?? null)->toBeAnInstanceOf(AlunoRelVO::class);
+        });
+       
+    });
+
+    describe('rankingAlunosPorCurso', function(){
+
+        it('retorna uma listagem com o ranking de alunos com pontuacoes por curso', function():void{
+            $resultado = $this->repoAlunos->rankingAlunosPorCurso("");
+            expect($resultado)->toBeAn('array');
+            expect(count($resultado))->not->toBe(0);
+            expect($resultado[0] ?? null)->toBeAnInstanceOf(AlunoCursoRelVO::class);
+
+        });
+
+        it('retorna uma listagem com o ranking de pontuacoes por curso ordenada decrescentemente pela pontuacao', function():void{
+            $resultado = $this->repoAlunos->rankingAlunosPorCurso("Fundamentos");
+            expect($resultado)->toBeAn('array');
+            expect(count($resultado))->not->toBe(0);
+
+            expect($resultado[0]->getNomeAluno())->toBe('Maria de Souza Alvez');
+            expect($resultado[1]->getNomeAluno())->toBe('Bonnie Almeida');
+            expect($resultado[2]->getNomeAluno())->toBe('José Soares');
+            expect($resultado[3]->getNomeAluno())->toBe('Aluno');
+
+        });
+
+        it('retorna um array filtrado pelo o nome do aluno', function():void{
+
+            $resultado = $this->repoAlunos->rankingAlunosPorCurso("Bonnie");
+            expect($resultado)->toBeAn('array');
+            expect(count($resultado))->not->toBe(0);
+
+            foreach ($resultado as $linha) {
+                expect($linha)->toBeAnInstanceOf(AlunoCursoRelVO::class);
+                expect($linha->getNomeAluno())->toContain("Bonnie Almeida");
+            }
+
+        });
+
+        it('retorna um array filtrado pelo o nome do curso', function():void{
+
+            $resultado = $this->repoAlunos->rankingAlunosPorCurso('Fundamentos');
+            expect($resultado)->toBeAn('array');
+            expect(count($resultado))->not->toBe(0);
+            expect($resultado[0]->getDescricao())->toContain('Fundamentos');
+
+        });
+       
+    });
+
+    describe('buscarIdsAssuntosNaoRespondidos', function(){
+
+        it('retorna os IDs de assuntos que o aluno ainda não respondeu', function () {
+            $idAluno = 1;
+            $resultado = $this->repoAlunos->buscarIdsAssuntosNaoRespondidos($idAluno);
+
+            expect($resultado)->toBeAn('array');
+            expect($resultado)->toContain(3);
+            expect($resultado)->toContain(4);
+
+        });
+
+
+    });
+
     afterAll(function(){
 
         excluirBDTestes($this->pdo);
