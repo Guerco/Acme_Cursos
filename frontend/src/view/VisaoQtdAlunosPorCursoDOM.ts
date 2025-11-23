@@ -4,17 +4,32 @@ import { CursoQtdAlunoRel } from "../model/dto/relatorio/CursoQtdAlunoRel.ts";
 import { Chart, ArcElement, Tooltip, Legend, PieController } from "chart.js";
 import { ids } from "../ui/alunos-cursos-ui.ts";
 import ChartDataLabels from "chartjs-plugin-datalabels";
+import { VisaoBaseDOM } from "./VisaoBaseDOM.ts";
+import { Sessao } from "../model/sessao/Sessao.ts";
+import { TipoUsuario } from "../model/TipoUsuario.ts";
 
 Chart.register(ArcElement, Tooltip, Legend, PieController, ChartDataLabels);
 
-export class VisaoQtdAlunosPorCursoDOM implements VisaoQtdAlunosPorCurso{
+export class VisaoQtdAlunosPorCursoDOM extends VisaoBaseDOM implements VisaoQtdAlunosPorCurso{
     private controladora: ControladoraQtdAlunoPorCurso;
     
-    constructor() {
+    constructor(private sessao: Sessao) {
+        super();
         this.controladora = new ControladoraQtdAlunoPorCurso(this);
     }
 
     iniciar() {
+        if(!this.sessao.estaLogado() ||
+            !this.sessao.verificarAutorizacao([
+                TipoUsuario.ADMINISTRADOR,
+                TipoUsuario.PROFESSOR,
+                TipoUsuario.PROFESSOR_ADMINISTRADOR
+            ])
+        ){
+            super.redirecionaParaErro('Página não encontrada ❌');
+            return; 
+        }
+
         this.controladora.listarNumeroDeAlunosPorCurso();
     }
 

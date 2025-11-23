@@ -5,19 +5,34 @@ import { rotasApi } from "../rotas.ts";
 import { PerguntaListagem } from "../model/dto/PerguntaListagem.ts";
 import { RespostaPerguntaCadastro } from "../model/dto/RespostaPerguntaCadastro.ts";
 import { ControladoraListagemPerguntas } from "../presenter/ControladoraListagemPerguntas.ts";
+import { VisaoBaseDOM } from "./VisaoBaseDOM.ts";
+import { Sessao } from "../model/sessao/Sessao.ts";
+import { TipoUsuario } from "../model/TipoUsuario.ts";
 
 const DIRETORIO_IMAGENS = rotasApi.imagensPerguntas;
 
-export class VisaoListagemPerguntasDOM implements VisaoListagemPerguntas {
+export class VisaoListagemPerguntasDOM extends VisaoBaseDOM implements VisaoListagemPerguntas {
     private controladora: ControladoraListagemPerguntas;
     private outMensagem!: HTMLOutputElement;
     private secaoPerguntas!: HTMLDivElement; 
 
-    constructor() {
+    constructor( private sessao: Sessao) {
+        super();
         this.controladora = new ControladoraListagemPerguntas(this);
     }
 
     async iniciar() {
+        if(!this.sessao.estaLogado() ||
+            !this.sessao.verificarAutorizacao([
+                TipoUsuario.ADMINISTRADOR,
+                TipoUsuario.PROFESSOR,
+                TipoUsuario.PROFESSOR_ADMINISTRADOR
+            ])
+        ){
+            super.redirecionaParaErro('Página não encontrada ❌');
+            return; 
+        }
+
         this.carregarElementos();
 
         await this.controladora.listarPerguntas();

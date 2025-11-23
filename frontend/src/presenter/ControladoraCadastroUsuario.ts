@@ -3,6 +3,7 @@ import { RepositorioCredenciaisApi } from "../model/repositorio/RepositorioCrede
 import { UsuarioCadastro } from "../model/dto/UsuarioCadastro";
 import { VisaoCadastroUsuario } from "../view/VisaoCadastroUsuario";
 import { DominioException } from "../model/exception/DominioException";
+import { NaoAutorizadoException } from "../model/exception/NaoAutorizadoException";
 
 export class ControladoraCadastroUsuario{
     private servico : ServicoUsuario;
@@ -21,6 +22,9 @@ export class ControladoraCadastroUsuario{
                     await this.servico.cadastrarUsuario(usuario);
                     this.visao.exibirMensagemSucesso();
                 } catch(err : any) {
+                    if (err instanceof NaoAutorizadoException) {
+                        this.visao.redirecionaParaErro('Página não encontrada ❌');
+                    }
                     if (err instanceof DominioException) {
                         this.visao.exibirMensagem(err.getProblemas());
                     } else throw err;

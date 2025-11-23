@@ -4,8 +4,11 @@ import { VisaoRankingAlunos } from "./VisaoRankingAlunos.ts";
 import { AlunoRel } from "../model/dto/relatorio/AlunoRel.ts";
 import { UtilDOM } from "../util/UtilDOM.ts";
 import { AlunoCursoRel } from "../model/dto/relatorio/AlunoCursoRel.ts";
+import { VisaoBaseDOM } from "./VisaoBaseDOM.ts";
+import { Sessao } from "../model/sessao/Sessao.ts";
+import { TipoUsuario } from "../model/TipoUsuario.ts";
 
-export class VisaoRankingAlunosDOM implements VisaoRankingAlunos {
+export class VisaoRankingAlunosDOM extends VisaoBaseDOM implements VisaoRankingAlunos {
     private controladora: ControladoraRankingAlunos;
     private tabela! : HTMLTableElement;
     private selectRanking! : HTMLSelectElement;
@@ -13,11 +16,24 @@ export class VisaoRankingAlunosDOM implements VisaoRankingAlunos {
     private inputBusca! : HTMLInputElement;
 
     
-    constructor() {
+    constructor(private sessao: Sessao) {
+        super();
         this.controladora = new ControladoraRankingAlunos(this);
     }
     
     public iniciar() {
+        if(!this.sessao.estaLogado() ||
+            !this.sessao.verificarAutorizacao([
+                TipoUsuario.ADMINISTRADOR,
+                TipoUsuario.ALUNO,
+                TipoUsuario.PROFESSOR,
+                TipoUsuario.PROFESSOR_ADMINISTRADOR
+            ])
+        ){
+            super.redirecionaParaErro('Página não encontrada ❌');
+            return; 
+        }
+
         this.carregarElementos();
 
         this.controladora.listarAlunosPontuacaoGeral();

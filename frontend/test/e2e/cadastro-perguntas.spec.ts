@@ -1,11 +1,18 @@
 import { test } from 'playwright/test';
 import { TelaCadastroPerguntas } from './telas/TelaCadastroPerguntas';
+import { entrar } from './telas/entrar';
 
 test.describe('Cadastro de Perguntas', () => {
     let tela: TelaCadastroPerguntas;
 
     test.beforeEach(async ({ page }) => {
         tela = new TelaCadastroPerguntas(page);
+
+        await entrar(
+                            page,
+                            'adm@email.com',
+                            '123'
+                        )
         // Dado que acesso a tela de cadastro de pergunta
         await tela.acessar();
     });

@@ -1,7 +1,10 @@
 import { VisaoRankingAlunosDOM } from "../view/VisaoRankingAlunosDOM";
 import { rotasPaginas } from "../rotas";
+import { SessaoSessionStorage } from "../model/sessao/SessaoSessionStorage";
 
-const visao = new VisaoRankingAlunosDOM();
+const visao = new VisaoRankingAlunosDOM(
+    new SessaoSessionStorage()
+);
 
 try {
     await visao.iniciar();

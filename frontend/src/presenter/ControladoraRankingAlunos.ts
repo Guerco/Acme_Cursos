@@ -1,4 +1,5 @@
 import { AlunoRel } from "../model/dto/relatorio/AlunoRel";
+import { NaoAutorizadoException } from "../model/exception/NaoAutorizadoException";
 import { RepositorioAlunosAPI } from "../model/repositorio/RepositorioAlunosApi";
 import { RepositorioAlunosJSON } from "../model/repositorio/RepositorioAlunosJSON";
 import { ServicoRankingAlunos } from "../model/servico/ServicoRankingAlunos";
@@ -16,15 +17,30 @@ export class ControladoraRankingAlunos {
     }
 
     async listarAlunosPontuacaoGeral() {
-        const ranking = await this.servico.buscarRankingAlunos("");
+        try {
+            const ranking = await this.servico.buscarRankingAlunos("");
 
-        this.visao.preencherTabela(ranking);
+            this.visao.preencherTabela(ranking);
+        } catch(err : any) {
+            if (err instanceof NaoAutorizadoException) {
+                this.visao.redirecionaParaErro('Página não encontrada ❌');
+            }
+            throw err;
+        }
+   
     }
 
     async listarAlunosPontuacaoCurso() {
-        const ranking = await this.servico.buscarRankingAlunosCurso("");
+        try {
+            const ranking = await this.servico.buscarRankingAlunosCurso("");
 
-        this.visao.preencherTabela(ranking);
+            this.visao.preencherTabela(ranking);
+        } catch(err : any) {
+            if (err instanceof NaoAutorizadoException) {
+                this.visao.redirecionaParaErro('Página não encontrada ❌');
+            }
+            throw err;
+        }
     }
 
     async alternarRanking(event : Event) {
@@ -51,10 +67,24 @@ export class ControladoraRankingAlunos {
         let ranking = [] as AlunoRel[];
         switch (tipoRanking) {
             case 'pontuacao-geral':
-                ranking = await this.servico.buscarRankingAlunos(texto);
+                try {
+                    ranking = await this.servico.buscarRankingAlunos(texto);
+                } catch(err : any) {
+                    if (err instanceof NaoAutorizadoException) {
+                        this.visao.redirecionaParaErro('Página não encontrada ❌');
+                    }
+                    throw err;
+                }
                 break;
             case 'pontuacao-curso':
-                ranking = await this.servico.buscarRankingAlunosCurso(texto);
+                try {
+                    ranking = await this.servico.buscarRankingAlunosCurso(texto);
+                } catch(err : any) {
+                    if (err instanceof NaoAutorizadoException) {
+                        this.visao.redirecionaParaErro('Página não encontrada ❌');
+                    }
+                    throw err;
+                }
                 break;
         }
 

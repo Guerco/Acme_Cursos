@@ -2,6 +2,7 @@ import { VisaoListagemPerguntas } from "../view/VisaoListagemPerguntas";
 import { ServicoListagemPerguntas } from "../model/servico/ServicoListagemPerguntas";
 import { DominioException } from "../model/exception/DominioException";
 import { RepositorioPerguntasApi } from "../model/repositorio/RepositorioPerguntasApi";
+import { NaoAutorizadoException } from "../model/exception/NaoAutorizadoException";
 
 export class ControladoraListagemPerguntas {
     private servico: ServicoListagemPerguntas;
@@ -22,9 +23,13 @@ export class ControladoraListagemPerguntas {
 
             this.visao.exibirPerguntas(perguntas, assunto);
         } catch (err: any) {
+            if (err instanceof NaoAutorizadoException) {
+                this.visao.redirecionaParaErro('Página não encontrada ❌');
+            }
+            console.log('Olá');
             if (err instanceof DominioException)
                 this.visao.exibirMensagem(err.getProblemas())
-            else throw err;
+            throw err;
         }
     }
 }

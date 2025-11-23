@@ -2,8 +2,9 @@ import { CursoListagemResumo } from "../model/dto/CursoListagemResumo";
 import { ProfessorListagem } from "../model/dto/ProfessorListagem";
 import { AssuntoListagem } from "../model/dto/AssuntoListagem";
 import { PerguntaCadastro } from "../model/dto/PerguntaCadastro";
+import { VisaoBase } from "./VisaoBase";
 
-export interface VisaoCadastroPerguntas {
+export interface VisaoCadastroPerguntas extends VisaoBase{
     iniciar(): Promise<void>;
 
     // Métodos de Entrada

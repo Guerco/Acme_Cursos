@@ -4,16 +4,30 @@ import { ids, classes } from "../ui/cadastro-usuario-ui";
 import { VisaoCadastroUsuario } from "./VisaoCadastroUsuario";
 import { UtilDOM } from "../util/UtilDOM";
 import { rotasPaginas } from "../rotas";
+import { Sessao } from "../model/sessao/Sessao";
+import { TipoUsuario } from "../model/TipoUsuario";
+import { VisaoBaseDOM } from "./VisaoBaseDOM";
 
-
-export class VisaoCadastroUsuarioDOM implements VisaoCadastroUsuario{
+export class VisaoCadastroUsuarioDOM extends VisaoBaseDOM implements VisaoCadastroUsuario {
     private controladora: ControladoraCadastroUsuario;
 
-    constructor(){
+    constructor(private sessao: Sessao){
+        super();
         this.controladora = new ControladoraCadastroUsuario(this);
     }
     
     iniciar(){
+
+        if(!this.sessao.estaLogado() ||
+            !this.sessao.verificarAutorizacao([
+                TipoUsuario.ADMINISTRADOR,
+                TipoUsuario.PROFESSOR_ADMINISTRADOR
+            ])
+        ){
+            super.redirecionaParaErro('Página não encontrada ❌');
+            return; 
+        }
+
          const form = document.getElementById(ids.form);
          form!.addEventListener('submit', (event) => {
             event.preventDefault(); 

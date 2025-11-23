@@ -1,6 +1,7 @@
 import { UsuarioCadastro } from "../model/dto/UsuarioCadastro";
+import { VisaoBase } from "./VisaoBase";
 
-export interface VisaoCadastroUsuario{
+export interface VisaoCadastroUsuario extends VisaoBase{
 
     iniciar(): void;
 

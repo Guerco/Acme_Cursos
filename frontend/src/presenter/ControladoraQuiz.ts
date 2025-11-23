@@ -5,6 +5,7 @@ import { RepositorioPerguntasApi } from "../model/repositorio/RepositorioPergunt
 import { RespostaAlunoCadastro } from "../model/dto/RespostaAlunoCadastro";
 import { DominioException } from "../model/exception/DominioException";
 import { PontuacoesAluno } from "../model/dto/PontuacoesAluno";
+import { NaoAutorizadoException } from "../model/exception/NaoAutorizadoException";
 
 export class ControladoraQuiz {
     private servico: ServicoQuiz;
@@ -18,25 +19,32 @@ export class ControladoraQuiz {
     }
 
     async carregarInformacoes() {
-        const idAssunto = this.visao.buscarIdAssunto();
+        try {
+            const idAssunto = this.visao.buscarIdAssunto();
 
-        if (!idAssunto) {
-            throw new Error('ID do assunto não informado.');
-        } else if (Number.isNaN(idAssunto) || !Number.isInteger(idAssunto) ) {
-            throw new Error('ID do assunto deve ser inteiro e positivo.');
+            if (!idAssunto) {
+                throw new Error('ID do assunto não informado.');
+            } else if (Number.isNaN(idAssunto) || !Number.isInteger(idAssunto) ) {
+                throw new Error('ID do assunto deve ser inteiro e positivo.');
+            }
+
+            const pontuacoes = await this.servico.buscarPontuacoes(idAssunto);
+            const perguntas = await this.servico.buscarPerguntas(idAssunto);
+
+            if (perguntas.length === 0) {
+                this.visao.exibirMensagemFim('Não há perguntas restantes para esse assunto');
+                this.visao.preencherInformacoesQuiz(pontuacoes);
+                this.visao.exibirMenus();
+            } else {
+                this.visao.carregarPerguntas(perguntas);
+                await this.prepararQuiz(pontuacoes);
+            }
+        } catch(err : any) {
+            if (err instanceof NaoAutorizadoException) {
+                this.visao.redirecionaParaErro('Página não encontrada ❌');
+            } throw err;
         }
-
-        const pontuacoes = await this.servico.buscarPontuacoes(idAssunto);
-        const perguntas = await this.servico.buscarPerguntas(idAssunto);
-
-        if (perguntas.length === 0) {
-            this.visao.exibirMensagemFim('Não há perguntas restantes para esse assunto');
-            this.visao.preencherInformacoesQuiz(pontuacoes);
-            this.visao.exibirMenus();
-        } else {
-            this.visao.carregarPerguntas(perguntas);
-            await this.prepararQuiz(pontuacoes);
-        }
+        
     }
 
     prepararQuiz(pontuacoes: PontuacoesAluno) {
@@ -61,18 +69,25 @@ export class ControladoraQuiz {
     }
 
     async responder(tempoEsgotado: boolean = false): Promise<boolean>{
-        this.visao.limparContagem();
-        this.visao.desabilitarRespostas();
+        try {
+            this.visao.limparContagem();
+            this.visao.desabilitarRespostas();
 
-        const resposta = this.visao.buscarDadosResposta();
+            const resposta = this.visao.buscarDadosResposta();
 
-        const acertou = await this.servico.enviarResposta(resposta);
+            const acertou = await this.servico.enviarResposta(resposta);
 
-        this.visao.exibirMensagemAcertou(acertou, tempoEsgotado);
+            this.visao.exibirMensagemAcertou(acertou, tempoEsgotado);
 
-        this.visao.tornarAcaoProximaPergunta();
+            this.visao.tornarAcaoProximaPergunta();
 
-        return acertou;
+            return acertou;
+        } catch(err : any) {
+            if (err instanceof NaoAutorizadoException) {
+                this.visao.redirecionaParaErro('Página não encontrada ❌');
+            } throw err;
+        }
+        
     }
 
     async tratarSaidaQuiz() {
@@ -116,6 +131,9 @@ export class ControladoraQuiz {
         try {
             return await this.servico.enviarResposta(respostaAluno);
         } catch (err: any) {
+            if (err instanceof NaoAutorizadoException) {
+                this.visao.redirecionaParaErro('Página não encontrada ❌');
+            } 
             throw err;
         }
     }

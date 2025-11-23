@@ -5,6 +5,7 @@ import { VisaoCadastroPerguntas } from "../view/VisaoCadastroPerguntas";
 import { RepositorioPerguntasApi } from "../model/repositorio/RepositorioPerguntasApi";
 import { RepositorioAssuntosApi } from "../model/repositorio/RepositorioAssuntosApi";
 import { DominioException } from "../model/exception/DominioException";
+import { NaoAutorizadoException } from "../model/exception/NaoAutorizadoException";
 
 export class ControladoraCadastroPerguntas {
     private servico: ServicoCadastroPerguntas;
@@ -24,6 +25,9 @@ export class ControladoraCadastroPerguntas {
             const professores = await this.servico.buscarProfessores();
             this.visao.preencherListaProfessores(professores);
         } catch (err: any) {
+            if (err instanceof NaoAutorizadoException) {
+                    this.visao.redirecionaParaErro('Página não encontrada ❌');
+                }
             throw err;
         }
     };
@@ -35,6 +39,9 @@ export class ControladoraCadastroPerguntas {
             this.visao.preencherListaCursos(cursos);
             this.visao.habilitarSelecaoCursos();
         } catch (err: any) {
+            if (err instanceof NaoAutorizadoException) {
+                this.visao.redirecionaParaErro('Página não encontrada ❌');
+            }
             throw err;
         }
     }
@@ -46,6 +53,9 @@ export class ControladoraCadastroPerguntas {
             this.visao.preencherListaAssuntos(assuntos);
             this.visao.habilitarSelecaoAssuntos();
         } catch (err: any) {
+            if (err instanceof NaoAutorizadoException) {
+                this.visao.redirecionaParaErro('Página não encontrada ❌');
+            }
             throw err;
         }
     }
@@ -93,6 +103,9 @@ export class ControladoraCadastroPerguntas {
             await this.servico.cadastrarPergunta(pergunta);
             this.visao.exibirMensagemSucesso();
         } catch (err : any) {
+            if (err instanceof NaoAutorizadoException) {
+                this.visao.redirecionaParaErro('Página não encontrada ❌');
+            }
             if (err instanceof DominioException) {
                 this.visao.exibirMensagemErro(err.getProblemas());
             } else throw err;

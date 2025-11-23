@@ -1,11 +1,18 @@
 import { test, expect, Page } from 'playwright/test';
 import { TelaRankingAlunos } from './telas/TelaRankingAlunos';
+import { entrar } from './telas/entrar';
 
 test.describe('Ranking de Alunos', () => {
     let tela: TelaRankingAlunos;
 
     test.beforeEach(async ({ page }) => {
         tela = new TelaRankingAlunos(page);
+
+        await entrar(
+                            page,
+                            'adm@email.com',
+                            '123'
+                        )
 
         //     Dado que acesso a tela de ranking de alunos
         await tela.acessar();

@@ -12,8 +12,9 @@ import { rotasPaginas } from "../rotas.ts";
 import { DominioException } from "../model/exception/DominioException.ts";
 import { Sessao } from "../model/sessao/Sessao.ts";
 import { TipoUsuario } from "../model/TipoUsuario.ts";
+import { VisaoBaseDOM } from "./VisaoBaseDOM.ts";
 
-export class VisaoCadastroPerguntasDOM implements VisaoCadastroPerguntas {
+export class VisaoCadastroPerguntasDOM extends VisaoBaseDOM implements VisaoCadastroPerguntas {
     private controladora: ControladoraCadastroPerguntas;
     private selectProfessor!: HTMLSelectElement;
     private selectCurso!: HTMLSelectElement;
@@ -33,10 +34,23 @@ export class VisaoCadastroPerguntasDOM implements VisaoCadastroPerguntas {
     constructor(
         private sessao: Sessao
     ) {
+        super();
         this.controladora = new ControladoraCadastroPerguntas(this);
     }
 
     async iniciar(): Promise<void> {
+
+        if(!this.sessao.estaLogado() ||
+            !this.sessao.verificarAutorizacao([
+                TipoUsuario.ADMINISTRADOR,
+                TipoUsuario.PROFESSOR,
+                TipoUsuario.PROFESSOR_ADMINISTRADOR
+            ])
+        ){
+            super.redirecionaParaErro('Página não encontrada ❌');
+            return; 
+        }
+
         this.carregarElementos();
 
         if (

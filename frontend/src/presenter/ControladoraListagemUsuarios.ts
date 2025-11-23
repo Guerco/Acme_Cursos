@@ -1,6 +1,7 @@
 import { VisaoListagemUsuario } from "../view/VisaoListagemUsuario";
 import { ServicoUsuario } from "../model/servico/ServicoUsuario";
 import { RepositorioCredenciaisApi } from "../model/repositorio/RepositorioCredenciaisApi";
+import { NaoAutorizadoException } from "../model/exception/NaoAutorizadoException";
 
 export class ControladoraListagemUsuarios{
     private servico : ServicoUsuario;
@@ -18,6 +19,9 @@ export class ControladoraListagemUsuarios{
                     const usuarios = await this.servico.listarTodos(); 
                     this.visao.exibirUsuarios(usuarios);
                 } catch(err : any) {
+                    if (err instanceof NaoAutorizadoException) {
+                        this.visao.redirecionaParaErro('Página não encontrada ❌');
+                    }
                     throw err;
                 }
             }
@@ -33,11 +37,18 @@ export class ControladoraListagemUsuarios{
     }
     
     async buscar() {
-        const texto = this.visao.buscarTextoBusca();
+        try{
+            const texto = this.visao.buscarTextoBusca();
 
-        const usuarios = await this.servico.buscarPorNome(texto); 
+            const usuarios = await this.servico.buscarPorNome(texto); 
 
-        this.visao.exibirUsuarios(usuarios);
+            this.visao.exibirUsuarios(usuarios);
+        } catch(err : any) {
+            if (err instanceof NaoAutorizadoException) {
+                    this.visao.redirecionaParaErro('Página não encontrada ❌');
+                }
+            throw err;
+        }  
     }
 
 }

@@ -2,8 +2,9 @@ import { Credenciais } from "../model/dto/Credenciais";
 import { PerguntaListagemQuiz } from "../model/dto/PerguntaListagemQuiz";
 import { PontuacoesAluno } from "../model/dto/PontuacoesAluno";
 import { RespostaAlunoCadastro } from "../model/dto/RespostaAlunoCadastro";
+import { VisaoBase } from "./VisaoBase";
 
-export interface VisaoQuiz {
+export interface VisaoQuiz extends VisaoBase{
     iniciar(): void;
 
     //Entrada

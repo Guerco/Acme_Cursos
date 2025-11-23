@@ -1,6 +1,7 @@
 import { PerguntaListagem } from "../model/dto/PerguntaListagem.ts";
+import { VisaoBase } from "./VisaoBase.ts";
 
-export interface VisaoListagemPerguntas {
+export interface VisaoListagemPerguntas extends VisaoBase{
     
     iniciar() : void;
 

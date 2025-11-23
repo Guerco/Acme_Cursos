@@ -3,15 +3,30 @@ import { ControladoraListagemUsuarios } from "../presenter/ControladoraListagemU
 import { VisaoListagemUsuario } from "./VisaoListagemUsuario";
 import { UtilDOM } from "../util/UtilDOM";
 import { ids, classes } from "../ui/listagem-usuario.ts";
+import { Sessao } from "../model/sessao/Sessao.ts";
+import { VisaoBaseDOM } from "./VisaoBaseDOM.ts";
+import { TipoUsuario } from "../model/TipoUsuario.ts";
 
-export class VisaoListagemUsuarioDOM implements VisaoListagemUsuario{
+export class VisaoListagemUsuarioDOM extends VisaoBaseDOM implements VisaoListagemUsuario{
     private controladora: ControladoraListagemUsuarios;
     
-    constructor(){
+    constructor(private sessao: Sessao){
+        super();
         this.controladora = new ControladoraListagemUsuarios(this);
     }
 
     iniciar(): void {
+        if(!this.sessao.estaLogado() ||
+            !this.sessao.verificarAutorizacao([
+                TipoUsuario.ADMINISTRADOR,
+                TipoUsuario.PROFESSOR,
+                TipoUsuario.PROFESSOR_ADMINISTRADOR
+            ])
+        ){
+            super.redirecionaParaErro('Página não encontrada ❌');
+            return; 
+        }
+
         this.controladora.listarUsuarios();
 
         const selectCargo = document.getElementById(ids.tipoUsuario) as HTMLSelectElement;

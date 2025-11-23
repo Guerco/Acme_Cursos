@@ -1,10 +1,18 @@
 import { test } from 'playwright/test';
 import { TelaCadastroUsuario } from './telas/TelaCadastroUsuario';
+import { entrar } from './telas/entrar';
 
 test.describe('Cadastro de Usuário', () => {
     let tela: TelaCadastroUsuario;
 
     test.beforeEach(async ({ page }) => {
+
+        await entrar(
+                    page,
+                    'adm@email.com',
+                    '123'
+                );
+                
         tela = new TelaCadastroUsuario(page);
         // Dado que acesso a tela de cadastro de usuários
         await tela.acessar();

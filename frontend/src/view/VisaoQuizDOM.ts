@@ -8,11 +8,14 @@ import { UtilDOM } from "../util/UtilDOM.ts"
 import { Dificuldade, dificuldadeParaString, dificuldadeParaTextoValor, dificuldadeDeString, dificuldadeValor } from "../model/Dificuldade.ts";
 import { RespostaAlunoCadastro } from "../model/dto/RespostaAlunoCadastro.ts";
 import { PontuacoesAluno } from "../model/dto/PontuacoesAluno.ts";
+import { Sessao } from "../model/sessao/Sessao.ts";
+import { VisaoBaseDOM } from "./VisaoBaseDOM.ts";
+import { TipoUsuario } from "../model/TipoUsuario.ts";
 
 const DIRETORIO_IMAGENS = rotasApi.imagensPerguntas;
 const SRC_LOGO = '/img/logotipo.png';
 
-export class VisaoQuizDOM implements VisaoQuiz {
+export class VisaoQuizDOM extends VisaoBaseDOM implements VisaoQuiz {
     private controladora: ControladoraQuiz;
     private modal!: HTMLDialogElement;
     private perguntas: PerguntaListagemQuiz[] = [];
@@ -22,11 +25,25 @@ export class VisaoQuizDOM implements VisaoQuiz {
     private contagem!: HTMLElement;
     private dificuldadePergunta!: Dificuldade;
 
-    constructor() {
+    constructor(private sessao: Sessao) {
+        super();
         this.controladora = new ControladoraQuiz(this);
     }
 
     async iniciar() {
+
+        if(!this.sessao.estaLogado() ||
+            !this.sessao.verificarAutorizacao([
+                TipoUsuario.ADMINISTRADOR,
+                TipoUsuario.ALUNO,
+                TipoUsuario.PROFESSOR,
+                TipoUsuario.PROFESSOR_ADMINISTRADOR
+            ])
+        ){
+            super.redirecionaParaErro('Página não encontrada ❌');
+            return; 
+        }
+
         this.botaoAcao = document.getElementById(ids.botaoAcao) as HTMLButtonElement;
         this.contagem = document.getElementById(ids.botaoContagem) as HTMLElement;
 

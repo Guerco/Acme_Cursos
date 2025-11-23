@@ -1,3 +1,4 @@
+import { NaoAutorizadoException } from "../model/exception/NaoAutorizadoException";
 import { RepositorioCursosApi } from "../model/repositorio/RepositorioCursosApi";
 import { ServicoCurso } from "../model/servico/ServicoListagemCursos";
 import { VisaoQtdAlunosPorCurso } from "../view/VisaoQtdAlunosPorCurso";
@@ -14,9 +15,17 @@ export class ControladoraQtdAlunoPorCurso {
     }
 
     async listarNumeroDeAlunosPorCurso() {
-        const dados = await this.servico.buscarNumeroDeAlunosPorCurso();
+        try {
+            const dados = await this.servico.buscarNumeroDeAlunosPorCurso();
 
-        this.visao.exibirGrafico(dados);
+            this.visao.exibirGrafico(dados);
+        } catch(err : any) {
+            if (err instanceof NaoAutorizadoException) {
+                this.visao.redirecionaParaErro('Página não encontrada ❌');
+            }
+            throw err;
+        }
+        
     }
    
 }
