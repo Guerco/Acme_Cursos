@@ -8,5 +8,5 @@ export interface RespositorioAlunos{
     buscarRankingAlunos(filtro: string) : Promise<AlunoRel[]>;
     buscarRankingAlunosCurso(filtro: string) : Promise<AlunoCursoRel[]>;
     buscarPontuacoesAluno(idAssunto: number) : Promise<PontuacoesAluno>;
-    buscarQuizAleatorio() : Promise<number>;
+    buscarQuizAleatorio() : Promise<number|boolean>;
 }

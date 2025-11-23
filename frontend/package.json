@@ -8,13 +8,17 @@
     "pretest": "pnpm run db",
     "test": "vitest run --dir test/unit",
     "posttest": "pnpm run db",
+
     "pree2e": "pnpm run db",
     "e2e": "playwright test test/e2e --workers=1 --headed",
     "poste2e": "pnpm run db",
+
     "pree2e-ui": "pnpm run db",
     "e2e-ui": "playwright test test/e2e --workers=1 --ui",
     "poste2e-ui": "pnpm run db",
+
     "api": "json-server  ../api/json-server/api.json",
+    
     "db": "pnpm run db-e && pnpm run db-d",
     "db-e": "mysql --default-character-set=utf8mb4 -u root --password=\"\" < ../api/db/estrutura.sql",
     "db-d": "mysql --default-character-set=utf8mb4 -u root --password=\"\" g2 < ../api/db/dados.sql"

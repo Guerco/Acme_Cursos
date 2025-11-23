@@ -43,7 +43,7 @@ export const ELEMENTOS_MENU: ItemMenu[] = [
             TipoUsuario.PROFESSOR_ADMINISTRADOR,
         ]
     },
-    { linha: true },
+    { linha: true, logado: true },
     {
         rota: rotasPaginas.cadastroPerguntas,
         descricao: 'Cadastro de Perguntas ❓',

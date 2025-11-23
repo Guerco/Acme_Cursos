@@ -263,7 +263,7 @@ class GestorAlunos {
         return $resultado;
     }
 
-    public function buscarQuizAleatorio() : int {
+    public function buscarQuizAleatorio() : int|false {
         $this->autorizar(
             [
                 TipoUsuario::ALUNO
@@ -283,6 +283,8 @@ class GestorAlunos {
 
         $ids = $this->repositorioAlunos->buscarIdsAssuntosNaoRespondidos($idAluno);
 
+        if (empty($ids))
+            return false;
         return (int) $ids[array_rand($ids)];
     }
 

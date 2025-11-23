@@ -126,7 +126,7 @@ export class RepositorioAlunosAPI implements RespositorioAlunos {
         }
     } 
 
-    async buscarQuizAleatorio() : Promise<number> {
+    async buscarQuizAleatorio() : Promise<number|boolean> {
         try{
             const response = await fetch(rotasApi.quizAleatorio, 
                 { 
@@ -141,9 +141,9 @@ export class RepositorioAlunosAPI implements RespositorioAlunos {
                 throw new Error();
             }
             
+
             const body = await response.json();
 
-            console.log(body);
             return body.idAssunto;
         } catch(error){
             if (error instanceof NaoAutorizadoException) throw error;

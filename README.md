@@ -3,7 +3,7 @@
 **CEFET/RJ – Nova Friburgo**
 **Bacharelado em Sistemas de Informação**
 
-*Projeto ACME Quiz, desenvolvido para a disciplina de Projeto Integrador de Sistemas 2025.2.*
+_Projeto ACME Quiz, desenvolvido para a disciplina de Projeto Integrador de Sistemas 2025.2._
 
 ---
 
@@ -32,6 +32,7 @@
 - vite v6.3.6
 - vitest v3.2.4
 - execa v9.6.0
+- chart.js v4.5.1
 
 ---
 
@@ -53,23 +54,24 @@
 
 ## Primeiros Passos 🏃‍♂️
 
-Para aprender a instalar e executar o projeto, consulte o guia completo em [Instruções de Rodagem.](./doc/instrucoes.md)   
+Para aprender a instalar e executar o projeto, consulte o guia completo em [Instruções de Rodagem.](./doc/instrucoes.md)
 
 ---
 
 ## Estrutura de Diretórios 🗃
 
-| **📂**                                       | **Descrição**                                          |
-|----------------------------------------------|---------------------------------------------------------|
+| **📂**                                       | **Descrição**                                           |
+| -------------------------------------------- | ------------------------------------------------------- |
 | [/doc/](./doc/)                              | Documentação do projeto                                 |
 | [/api/](./api/)                              | Implementação da API                                    |
 | [/frontend/](./frontend/)                    | Implementação do frontend                               |
 | 🛠️**Estrutura da API**                       |                                                         |
 | [/src/](./api/src/)                          | Código-fonte da API                                     |
 | [/src/model](./api/src/model/)               | Modelos de dados, acesso a dados e lógica de negócio    |
-| [/db/](./api/db/)                            | Scripts de Banco de Dados                               |   
+| [/db/](./api/db/)                            | Scripts de Banco de Dados                               |
 | [/json-server/](./api/json-server/)          | API simulada                                            |
 | [/spec/](./api/spec)                         | Testes automatizados da API                             |
+| [/img/](./api/img/)                          | Figuras de Cursos e Perguntas                           |
 | 🎨**Estrutura do Frontend**                  |                                                         |
 | [/src/](./frontend/src/)                     | Código-fonte do frontend                                |
 | [/src/model/](./frontend/src/model/)         | Modelos de dados, interação com API e lógica de negócio |
@@ -87,7 +89,7 @@ Para aprender a instalar e executar o projeto, consulte o guia completo em [Inst
 
 ## Estrutura de Dados 🎲
 
-![Diagrama Essencial UML](./doc/diagramas/quiz-essencial.png)
+![Diagrama Essencial UML](./doc/diagramas/quiz-essencial-p2.jpg)
 
 ---
 
@@ -106,4 +108,5 @@ Todas as referências a imagens, conteúdos e estilos **externos** utilizados ne
 ![Logotipo](./frontend/img/logotipo.png)
 
 ---
+
 ---

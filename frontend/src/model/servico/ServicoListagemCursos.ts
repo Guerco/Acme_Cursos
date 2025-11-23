@@ -6,6 +6,7 @@ import { CursoQtdAlunoRel } from "../dto/relatorio/CursoQtdAlunoRel";
 const URL_API = rotasApi.cursos;
 
 export class ServicoCurso {
+    private qtdAlunosCurso?: CursoQtdAlunoRel[];
     constructor(private repositorio : RepositorioCursos){}
 
     async buscarTodos() : Promise<CursoListagem[]> {
@@ -26,7 +27,7 @@ export class ServicoCurso {
 
      async buscarNumeroDeAlunosPorCurso() : Promise<CursoQtdAlunoRel[]> {
         try{
-            return await this.repositorio.buscarNumeroDeAlunosPorCurso();
+            return this.qtdAlunosCurso ??= await this.repositorio.buscarNumeroDeAlunosPorCurso();
         }catch(err: any) {
             throw new Error(err.message);
         }

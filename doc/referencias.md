@@ -26,7 +26,7 @@ Este documento reúne as referências de **conteúdos, estilos e imagens** utili
 
 | ✨ Esilo                                   | 🔗 Baseado em                                                              |
 | :----------------------------------------- | :------------------------------------------------------------------------- |
-| [menu lateral](../frontend/style/menu.css) | [w3schools](https://www.w3schools.com/howto/howto_js_collapse_sidebar.asp) |
+| [menu lateral](../frontend/style/elementos/menu.css) | [w3schools](https://www.w3schools.com/howto/howto_js_collapse_sidebar.asp) |
 
 
 ---

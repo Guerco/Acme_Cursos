@@ -6,5 +6,5 @@ export interface VisaoQtdAlunosPorCurso  extends VisaoBase{
     iniciar() : void;
 
     // Saída
-    exibirGrafico (listagem: Array<CursoQtdAlunoRel>): void;
+    exibirGrafico (listagem: Array<CursoQtdAlunoRel>, tipo: string): void;
 }   

@@ -18,14 +18,27 @@ export class ControladoraQtdAlunoPorCurso {
         try {
             const dados = await this.servico.buscarNumeroDeAlunosPorCurso();
 
-            this.visao.exibirGrafico(dados);
+            this.visao.exibirGrafico(dados, 'pie');
         } catch(err : any) {
             if (err instanceof NaoAutorizadoException) {
                 this.visao.redirecionaParaErro('Página não encontrada ❌');
             }
             throw err;
         }
-        
     }
+
+    async alternarTipoGrafico(e: Event) {
+        const tipoSelecionado = (e.target as HTMLSelectElement).value;
+
+        const dados = await this.servico.buscarNumeroDeAlunosPorCurso();
+
+        if (tipoSelecionado == 'pizza')
+            this.visao.exibirGrafico(dados, 'pie');
+        else if (tipoSelecionado == 'barras')
+            this.visao.exibirGrafico(dados, 'bar');
+        else if (tipoSelecionado == 'rosquinha')
+            this.visao.exibirGrafico(dados, 'doughnut');
+    }
+
    
 }

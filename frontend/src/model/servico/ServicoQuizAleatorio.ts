@@ -6,7 +6,7 @@ export class ServicoQuizAleatorio {
         private repositorioAlunos: RespositorioAlunos
     ){}
 
-    async buscarQuizAleatorio(): Promise<number>{
+    async buscarQuizAleatorio(): Promise<number|boolean>{
         return await this.repositorioAlunos.buscarQuizAleatorio();
     }
 }

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quiz - Número de Alunos Por Curso</title>
+    <title>Quiz - Alunos Por Curso</title>
     <link rel="icon" href="../img/favicon.ico" />
     
     <script type="module" src="../src/scripts/elementos/menu.ts"></script>
@@ -11,13 +11,27 @@
 
     <link rel="stylesheet" href="../style/elementos/menu.css" />
     <link rel="stylesheet" href="../style/ranking-alunos.css" />
+    <link rel="stylesheet" href="../style/grafico-aluno-curso.css" />
     
 </head>
 <body>
     <div id="secao-relatorio">
-        <h1>Total de Alunos Por Curso</h1>
+        <h1>Total Alunos Cursos</h1>
 
-        <canvas id="grafico-cursos" width="300" height="300"></canvas>
+        <div class="opcoes-relatorio">
+            <div class="container-tipo-grafico">
+                <label for="tipo-grafico">📊</label>
+                <select name="tipo-grafico" id="tipo-grafico">
+                    <option value="pizza" selected>Gráfico Pizza</option>
+                    <option value="barras">Gráfico Barras</option>
+                    <option value="rosquinha">Gráfico Rosquinha</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="container-grafico">
+            <canvas id="grafico-cursos"></canvas>
+        </div>
 
     </div>
 </body>

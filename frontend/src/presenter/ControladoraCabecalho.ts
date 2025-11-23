@@ -1,6 +1,6 @@
 import { DominioException } from "../model/exception/DominioException";
 import { RepositorioLoginAPI } from "../model/repositorio/RepositorioLoginAPI";
-import { RepositorioAlunosAPI } from "../model/repositorio/RepositorioAlunosAPI";
+import { RepositorioAlunosAPI } from "../model/repositorio/RepositorioAlunosApi.ts";
 import { ServicoLogin } from "../model/servico/ServicoLogin";
 import { ServicoQuizAleatorio } from "../model/servico/ServicoQuizAleatorio";
 import { Sessao } from "../model/sessao/Sessao";
@@ -53,6 +53,9 @@ export class ControladoraCabecalho{
 
     async quizAleatorio() {
         const idAssunto = await this.servicoQuizAleatorio.buscarQuizAleatorio();
-        this.visao.redirecionarQuiz(idAssunto);
+        if (idAssunto == false)
+            this.visao.exibirAlert('Ops, não há nenhum quiz a ser iniciado!');
+        else
+            this.visao.redirecionarQuiz(idAssunto as number);
     }
 }

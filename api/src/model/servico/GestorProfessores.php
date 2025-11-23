@@ -33,7 +33,6 @@ class GestorProfessores{
     public function listarProfessoresResumido(): array{
         $this->autorizar(
             [
-                TipoUsuario::PROFESSOR,
                 TipoUsuario::ADMINISTRADOR,
                 TipoUsuario::PROFESSOR_ADMINISTRADOR,
             ]

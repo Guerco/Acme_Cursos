@@ -355,4 +355,8 @@ export class VisaoCabecalhoDOM implements VisaoCabecalho {
         location.href = rotasPaginas.quiz+'?assunto='+idAssunto.toString();
     }
 
+    exibirAlert(mensagem: string): void{
+        alert(mensagem);
+    }
+
 }

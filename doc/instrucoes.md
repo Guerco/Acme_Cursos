@@ -31,19 +31,28 @@ git clone https://gitlab.com/cefet-nf/pis-2025-2/g2.git
 
 ---
 
-### **2. Execução dos Scripts SQL**
+### **2. Configuração das Variáveis de Ambiente**
+
+No diretório da api, você encontrará o arquivo [`exemplo.env`](../api/exemplo.env), que serve como base para a configuração das variáveis de ambiente do sistema. Ele lista todos os parâmetros necessários para o funcionamento, incluindo as configurações do banco de dados e a “pimenta” utilizada no hash.
+
+```dotenv
+BD_HOST="host_bd"
+BD_USUARIO="user_bd"
+BD_SENHA="senha_bd"
+QUIZ_PEPER_INICIO="pimenta_inicio"
+QUIZ_PEPER_FIM="pimenta_fim"
+```
+
+Crie um arquivo `.env` na raiz da [`api`](../api/), ou faça uma cópia do [`exemplo.env`](../api/exemplo.env) e o renomeie para `.env`, e preencha cada variável com os valores específicos do seu ambiente para garantir que o sistema funcione corretamente.
+
+---
+
+### **3. Execução dos Scripts SQL**
 
 > ⚠️ **Atenção:** É necessário iniciar o seu servidor MySQL caso o início não seja automático (como no XAMPP) antes de executar os scripts ou iniciar a aplicação.
 
-Antes de executar os scripts, configure as informações de conexão no arquivo [`conexao.php`](../api/src/config/conexao.php), preenchendo os dados do seu banco de dados:
 
-```php
-const HOST = 'localhost';
-const USUARIO = 'root';
-const SENHA = '';
-```
-
-A partir desse ponto, você pode configurar o banco de dados de duas formas:
+É possível configurar o banco de dados de duas formas:
 
 ---
 
@@ -76,7 +85,7 @@ Os scripts de banco de dados estão localizados no diretório [`/api/db`](../api
 ---
 
 
-### **3. Instalação das Dependências**
+### **4. Instalação das Dependências**
 
 Após clonar o repositório, será necessário instalar as dependências da **API** e do **frontend**.
 
