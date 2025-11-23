@@ -3,17 +3,30 @@ import { RepositorioCredenciaisApi } from '../../src/model/repositorio/Repositor
 import { UsuarioListagem } from '../../src/model/dto/UsuarioListagem';
 import { UsuarioCadastro } from '../../src/model/dto/UsuarioCadastro';
 import { DominioException } from '../../src/model/exception/DominioException';
+import { NaoAutorizadoException } from '../../src/model/exception/NaoAutorizadoException';
 
 describe(RepositorioCredenciaisApi.name, () => {
     let repositorio: RepositorioCredenciaisApi;
+    let fetchMock: any;
 
     beforeAll(() => {
         repositorio = new RepositorioCredenciaisApi();
+        fetchMock?.mockRestore();
     });
 
     describe(RepositorioCredenciaisApi.prototype.listarTodos.name, () => {
         
         it('Retorna um array de Usuários', async () => {
+            const fakeJson = [{tipoUsuario: 'Administrador', 
+                                    nome: 'Teste', 
+                                    email: 'teste@email.com'
+                                }];
+
+            fetchMock = vi.spyOn(globalThis, 'fetch').mockResolvedValue({
+                    ok: true,
+                    json: async () => fakeJson
+                } as any);
+
             const usuarios = await repositorio.listarTodos();
 
             expect(Array.isArray(usuarios)).toBe(true);
@@ -22,7 +35,7 @@ describe(RepositorioCredenciaisApi.name, () => {
 
         it('Lança uma exceção se a API estiver fora', async () => {
 
-            const fetchMock = vi.spyOn(globalThis, 'fetch').mockResolvedValue({
+            fetchMock = vi.spyOn(globalThis, 'fetch').mockResolvedValue({
                 ok: false,
                 status: 500
             } as Response);
@@ -31,85 +44,39 @@ describe(RepositorioCredenciaisApi.name, () => {
                 await repositorio.listarTodos()
             ).rejects.toThrow('Não foi possível buscar os usuários.');
 
-            fetchMock.mockRestore();
+        });
+
+        it('Lança NaoAutorizadoException quando status é 401', async () => {
+                
+            fetchMock = vi.spyOn(globalThis, 'fetch').mockResolvedValue({
+                ok: false,
+                status: 401
+            } as any);
+
+            await expect(async () =>
+                await repositorio.listarTodos()
+            ).rejects.toThrow(NaoAutorizadoException);
         });
 
     });
 
     describe(RepositorioCredenciaisApi.prototype.adicionar.name, () => {
 
-        it('Lança uma exceção ao inserir um usuário com email já existente', async () => {
+        it('Lança uma exceção quando tentamos inserir um usuário inválido', async () => {
             const usuario = new UsuarioCadastro(
-                'aluno@email.com',
+                'aluno@ema',
                 '123456',
                 'Teste usuario',
                 'Administrador'
             );
-            
-            await expect(async () =>
-                await repositorio.adicionar(usuario)
-            ).rejects.toThrow(DominioException);
-        });
 
-        it('Lança uma exceção ao inserir um usuário com um email inválido', async () => {
-            const usuario = new UsuarioCadastro(
-                'at@',
-                '123456',
-                'Teste usuario',
-                'Administrador'
-            );
-            
-            await expect(async () =>
-                await repositorio.adicionar(usuario)
-            ).rejects.toThrow(DominioException);
-        });
-
-        it('Lança uma exceção ao inserir uma senha com menos de 6 caracteres', async () => {
-            const usuario = new UsuarioCadastro(
-                'teste@email.com',
-                '12345',
-                'Teste usuario',
-                'Administrador'
-            );
-            
-            await expect(async () =>
-                await repositorio.adicionar(usuario)
-            ).rejects.toThrow(DominioException);
-        });
-
-        it('Lança uma exceção ao inserir um nome com menos de 2 caracteres', async () => {
-            const usuario = new UsuarioCadastro(
-                'teste@email.com',
-                '123456',
-                'T',
-                'Administrador'
-            );
-            
-            await expect(async () =>
-                await repositorio.adicionar(usuario)
-            ).rejects.toThrow(DominioException);
-        });
-
-        it('Lança uma exceção ao inserir um nome com mais de 100 caracteres', async () => {
-            const usuario = new UsuarioCadastro(
-                'teste@email.com',
-                '123456',
-                'A'.repeat(101),
-                'Administrador'
-            );
-            
-            await expect(async () =>
-                await repositorio.adicionar(usuario)
-            ).rejects.toThrow(DominioException);
-        });
-
-        it('Lança uma exceção ao inserir um tipo de usuário inexistente', async () => {
-            const usuario = new UsuarioCadastro(
-                'teste@email.com',
-                '123456',
-                'Teste usuario',
-                'Teste'
-            );
+            fetchMock = vi.spyOn(globalThis, 'fetch').mockResolvedValue({
+                ok: false,
+                status: 400,
+                json: async () => ({
+                    erros: ['Email inválido']
+                })
+            } as Response);
             
             await expect(async () =>
                 await repositorio.adicionar(usuario)
@@ -118,7 +85,7 @@ describe(RepositorioCredenciaisApi.name, () => {
 
         it('Lança uma exceção se a API estiver fora', async () => {
 
-            const fetchMock = vi.spyOn(globalThis, 'fetch').mockResolvedValue({
+            fetchMock = vi.spyOn(globalThis, 'fetch').mockResolvedValue({
                 ok: false,
                 status: 500
             } as Response);
@@ -133,10 +100,26 @@ describe(RepositorioCredenciaisApi.name, () => {
             await expect(async () =>
                 await repositorio.adicionar(usuario)
             ).rejects.toThrow('Erro ao salvar o usuário');
-
-            fetchMock.mockRestore();
         });
 
+        it('Lança NaoAutorizadoException quando status é 401', async () => {
+                
+            fetchMock = vi.spyOn(globalThis, 'fetch').mockResolvedValue({
+                ok: false,
+                status: 401
+            } as any);
+
+            const usuario = new UsuarioCadastro(
+                'teste@email.com',
+                '123456',
+                'Teste usuario',
+                'Administrador'
+            );
+
+            await expect(async () =>
+                await repositorio.adicionar(usuario)
+            ).rejects.toThrow(NaoAutorizadoException);
+        });
     });
   
 });

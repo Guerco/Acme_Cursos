@@ -1,58 +1,45 @@
 import { describe, it, expect, beforeAll, vi } from 'vitest';
 import { RepositorioAlunosAPI } from '../../src/model/repositorio/RepositorioAlunosApi';
-import { Credenciais } from '../../src/model/dto/Credenciais';
-import { AlunoListagem } from '../../src/model/dto/AlunoListagem';
-import { DominioException } from '../../src/model/exception/DominioException';
+import { RespostaAlunoCadastro } from '../../src/model/dto/RespostaAlunoCadastro';
+import { NaoAutorizadoException } from '../../src/model/exception/NaoAutorizadoException';
 
 describe(RepositorioAlunosAPI.name, () => {
     let repositorio: RepositorioAlunosAPI;
+    let fetchMock: any;
 
     beforeAll(() => {
         repositorio = new RepositorioAlunosAPI();
+        fetchMock?.mockRestore();
     });
 
-    describe(RepositorioAlunosAPI.prototype.verificarCredenciais.name, () => {
-        
-        it('Retorna um Aluno Listagem', async () => {
-            const credenciais = new Credenciais(
-                'aluno@email.com',
-                '123'
-            );
-            await credenciais.aplicarHashSenha();
+    describe(RepositorioAlunosAPI.prototype.enviarResposta.name, () => {
 
-            const aluno = await repositorio.verificarCredenciais(credenciais);
+        it('Lança NaoAutorizadoException quando status é 401', async () => {
 
-            expect(aluno instanceof AlunoListagem).toBe(true);
-        });
+            fetchMock = vi.spyOn(globalThis, 'fetch').mockResolvedValue({
+                ok: false,
+                status: 401
+            } as any);
 
-        it('Lança uma exceção ao informar credenciais inválidas', async() => {
-            const credenciais = new Credenciais(
-                'emailerrado@email.com',
-                'saijkfhgnsiadtyfaejk'
-            );
-            await credenciais.aplicarHashSenha();
+            const resposta = new RespostaAlunoCadastro(1, [1 , 2]);
 
-            await expect( async() => 
-                await repositorio.verificarCredenciais(credenciais)
-            ).rejects.toThrow(DominioException);
+            await expect(async () =>
+                await repositorio.enviarResposta(resposta)
+            ).rejects.toThrow(NaoAutorizadoException);
         });
 
         it('Lança uma exceção se a API estiver fora', async () => {
 
-            const fetchMock = vi.spyOn(globalThis, 'fetch').mockResolvedValue({
+            fetchMock = vi.spyOn(globalThis, 'fetch').mockResolvedValue({
                 ok: false,
                 status: 500
-            } as Response);
-            const credenciais = new Credenciais(
-                'aluno@email.com',
-                '123'
-            );
+            } as any);
+
+            const resposta = new RespostaAlunoCadastro(1, [1 , 2]);
 
             await expect(async () =>
-                await repositorio.verificarCredenciais(credenciais)
-            ).rejects.toThrow('Não foi possível verificar as crecenciais.');
-
-            fetchMock.mockRestore();
+                await repositorio.enviarResposta(resposta)
+            ).rejects.toThrow('Não foi possível salvar a Resposta.');
         });
 
     });

@@ -5,17 +5,38 @@ import { PerguntaListagemQuiz } from '../../src/model/dto/PerguntaListagemQuiz';
 import { DominioException } from '../../src/model/exception/DominioException';
 import { PerguntaCadastro } from '../../src/model/dto/PerguntaCadastro';
 import { RespostaPerguntaCadastro } from '../../src/model/dto/RespostaPerguntaCadastro';
+import { NaoAutorizadoException } from '../../src/model/exception/NaoAutorizadoException';
 
 describe(RepositorioPerguntasApi.name, () => {
     let repositorio: RepositorioPerguntasApi;
+    let fetchMock: any;
 
     beforeAll(() => {
         repositorio = new RepositorioPerguntasApi();
+        fetchMock?.mockRestore();
     });
 
     describe(RepositorioPerguntasApi.prototype.buscarTodosOuPorAssunto.name, () => {
         
         it('Retorna um array de Pergunta Listagem', async () => {
+            const fakeJson = [{id: 1,
+                            descricao: 'Pergunta 1',
+                            caminhoImg: 'teste/caminho',
+                            tempoSeg: 30,
+                            dificuldade: 'facil',
+                            descricaoAssunto: 'Assunto Teste',
+                            respostas: [
+                                { id: 1, descricao: 'Teste 1' },
+                                { id: 2, descricao: 'Teste 2' }
+                            ]
+                        }
+                    ];
+
+            fetchMock = vi.spyOn(globalThis, 'fetch').mockResolvedValue({
+                    ok: true,
+                    json: async () => fakeJson
+                } as any);
+
             const perguntas = await repositorio.buscarTodosOuPorAssunto();
 
             expect(Array.isArray(perguntas)).toBe(true);
@@ -25,6 +46,24 @@ describe(RepositorioPerguntasApi.name, () => {
         it('Retorna um array de Pergunta Listagem filtrado pelo assunto', async () => {
             const idAssunto = 3;
             const descricaoAssunto = 'Soma';
+
+            const fakeJson = [{id: 1,
+                            descricao: 'Pergunta 1',
+                            caminhoImg: 'teste/caminho',
+                            tempoSeg: 30,
+                            dificuldade: 'facil',
+                            descricaoAssunto: descricaoAssunto,
+                            respostas: [
+                                { id: 1, descricao: 'Teste 1' },
+                                { id: 2, descricao: 'Teste 2' }
+                            ]
+                        }
+                    ];
+
+            fetchMock = vi.spyOn(globalThis, 'fetch').mockResolvedValue({
+                    ok: true,
+                    json: async () => fakeJson
+                } as any);
             
             const perguntas = await repositorio.buscarTodosOuPorAssunto(idAssunto);
 
@@ -37,6 +76,14 @@ describe(RepositorioPerguntasApi.name, () => {
         
         it('Lança uma exceção ao buscar por um id de assunto inexistente', async () => {
             const idAssunto = -1;
+
+            fetchMock = vi
+                .spyOn(globalThis, 'fetch')
+                .mockResolvedValue({
+                    ok: false,
+                    status: 404,
+                    json: async () => ({ erros: ["Erro ao buscar assunto"] })
+                } as any);
             
             await expect(async () =>
                 await repositorio.buscarTodosOuPorAssunto(idAssunto)
@@ -45,6 +92,14 @@ describe(RepositorioPerguntasApi.name, () => {
 
         it('Lança uma exceção ao buscar por um id de assunto sem perguntas', async () => {
             const idAssunto = 1;
+
+            fetchMock = vi
+                .spyOn(globalThis, 'fetch')
+                .mockResolvedValue({
+                    ok: false,
+                    status: 404,
+                    json: async () => ({ erros: ["Erro ao buscar perguntas"] })
+                } as any);
             
             await expect(async () =>
                 await repositorio.buscarTodosOuPorAssunto(idAssunto)
@@ -62,7 +117,18 @@ describe(RepositorioPerguntasApi.name, () => {
                 await repositorio.buscarTodosOuPorAssunto()
             ).rejects.toThrow('Não foi possível buscar as perguntas.');
 
-            fetchMock.mockRestore();
+        });
+
+        it('Lança NaoAutorizadoException quando status é 401', async () => {
+                
+            fetchMock = vi.spyOn(globalThis, 'fetch').mockResolvedValue({
+                ok: false,
+                status: 401
+            } as any);
+
+            await expect(async () =>
+                await repositorio.buscarTodosOuPorAssunto()
+            ).rejects.toThrow(NaoAutorizadoException);
         });
 
     });
@@ -71,9 +137,25 @@ describe(RepositorioPerguntasApi.name, () => {
 
         it('Retorna um array de Pergunta Listagem Quiz', async () => {
             const idAssunto = 3;
-            const idAluno = 1;
 
-            const perguntas = await repositorio.buscarPerguntas(idAluno, idAssunto);
+            const fakeJson = [{id: 1,
+                            descricao: 'Pergunta 1',
+                            caminhoImg: 'teste/caminho',
+                            tempoSeg: 30,
+                            dificuldade: 'facil',
+                            respostas: [
+                                { id: 1, descricao: 'Teste 1' },
+                                { id: 2, descricao: 'Teste 2' }
+                            ]
+                        }
+                    ];
+
+            fetchMock = vi.spyOn(globalThis, 'fetch').mockResolvedValue({
+                    ok: true,
+                    json: async () => fakeJson
+                } as any);
+
+            const perguntas = await repositorio.buscarPerguntas(idAssunto);
 
             expect(Array.isArray(perguntas)).toBe(true);
             expect(perguntas.every(p => p instanceof PerguntaListagemQuiz)).toBe(true);
@@ -81,37 +163,45 @@ describe(RepositorioPerguntasApi.name, () => {
 
         it('Lança uma exceção ao buscar por um id de assunto inexistente', async () => {
             const idAssunto = -1;
-            const idAluno = 1;
+
+            fetchMock = vi
+                .spyOn(globalThis, 'fetch')
+                .mockResolvedValue({
+                    ok: false,
+                    status: 404,
+                    json: async () => ({ erros: ["Erro ao buscar assunto"] })
+                } as any);
 
             await expect(async () =>
-                await repositorio.buscarPerguntas(idAluno,idAssunto)
-            ).rejects.toThrow(DominioException);
-        });
-
-        it('Lança uma exceção ao buscar por um id de aluno inexistente', async () => {
-            const idAssunto = 1;
-            const idAluno = -1;
-
-            await expect(async () =>
-                await repositorio.buscarPerguntas(idAluno,idAssunto)
+                await repositorio.buscarPerguntas(idAssunto)
             ).rejects.toThrow(DominioException);
         });
 
         it('Lança uma exceção se a API estiver fora', async () => {
         
-            const fetchMock = vi.spyOn(globalThis, 'fetch').mockResolvedValue({
+            fetchMock = vi.spyOn(globalThis, 'fetch').mockResolvedValue({
                 ok: false,
                 status: 500
             } as Response);
 
             const idAssunto = 3;
-            const idAluno = 1;
 
             await expect(async () =>
-                await repositorio.buscarPerguntas(idAluno,idAssunto)
+                await repositorio.buscarPerguntas(idAssunto)
             ).rejects.toThrow('Não foi possível buscar as perguntas.');
 
-            fetchMock.mockRestore();
+        });
+
+        it('Lança NaoAutorizadoException quando status é 401', async () => {
+                
+            fetchMock = vi.spyOn(globalThis, 'fetch').mockResolvedValue({
+                ok: false,
+                status: 401
+            } as any);
+
+            await expect(async () =>
+                await repositorio.buscarPerguntas(1)
+            ).rejects.toThrow(NaoAutorizadoException);
         });
 
     });
@@ -120,7 +210,7 @@ describe(RepositorioPerguntasApi.name, () => {
     
         it('Lança uma exceção se a API estiver fora', async () => {
         
-            const fetchMock = vi.spyOn(globalThis, 'fetch').mockResolvedValue({
+            fetchMock = vi.spyOn(globalThis, 'fetch').mockResolvedValue({
                 ok: false,
                 status: 500
             } as Response);
@@ -143,7 +233,33 @@ describe(RepositorioPerguntasApi.name, () => {
                 await repositorio.enviarPergunta(pergunta)
             ).rejects.toThrow('Não foi possível salvar a pergunta.');
 
-            fetchMock.mockRestore();
         });
+
+        it('Lança NaoAutorizadoException quando status é 401', async () => {
+
+            const respostas = [];
+            respostas.push(new RespostaPerguntaCadastro(
+                    false,
+                    'Teste Resposta')); 
+    
+            const pergunta = new PerguntaCadastro(
+                6,
+                'Teste pergunta',
+                'media',
+                60,
+                respostas,
+                'teste'
+            );
+                
+            fetchMock = vi.spyOn(globalThis, 'fetch').mockResolvedValue({
+                ok: false,
+                status: 401
+            } as any);
+
+            await expect(async () =>
+                await repositorio.enviarPergunta(pergunta)
+            ).rejects.toThrow(NaoAutorizadoException);
+        });
+
     });
 });
