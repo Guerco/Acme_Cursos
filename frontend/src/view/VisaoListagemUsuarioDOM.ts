@@ -2,7 +2,7 @@ import { UsuarioListagem } from "../model/dto/UsuarioListagem";
 import { ControladoraListagemUsuarios } from "../presenter/ControladoraListagemUsuarios";
 import { VisaoListagemUsuario } from "./VisaoListagemUsuario";
 import { UtilDOM } from "../util/UtilDOM";
-import { ids, classes } from "../ui/listagem-usuario.ts";
+import { ids, classes } from "../ui/listagem-usuario-ui.ts";
 import { Sessao } from "../model/sessao/Sessao.ts";
 import { VisaoBaseDOM } from "./VisaoBaseDOM.ts";
 import { TipoUsuario } from "../model/TipoUsuario.ts";

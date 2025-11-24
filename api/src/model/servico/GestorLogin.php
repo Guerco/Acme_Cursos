@@ -13,9 +13,6 @@ class GestorLogin {
      * @throws DominioException
      */
     public function entrar(array $dados): UsuarioSessaoDTO {
-        if ($this->autentificacao->estaLogado()) {
-            throw new DominioException('Já está logado.');
-        }
 
         $this->verificarDadosLogin($dados);
         
@@ -39,9 +36,6 @@ class GestorLogin {
      * @return void
      */
     public function sair() {
-        if (! $this->autentificacao->estaLogado()) {
-            throw new DominioException('Não está logado.');
-        }
 
         $this->autentificacao->sair();
     }
