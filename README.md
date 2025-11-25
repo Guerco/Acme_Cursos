@@ -93,6 +93,11 @@ Para aprender a instalar e executar o projeto, consulte o guia completo em [Inst
 
 ---
 
+## Documentação da API 🧩
+Para consultar os endpoints, formatos de resposta e exemplos de uso, acesse a [Documentação da API](./doc/api.md).
+
+---
+
 ## Referências de Conteúdo 📚
 
 Todas as referências a imagens, conteúdos e estilos **externos** utilizados neste projeto encontram-se na [Documentação de Referências](./doc/referencias.md).
@@ -101,7 +106,8 @@ Todas as referências a imagens, conteúdos e estilos **externos** utilizados ne
 
 ## Slides de Apresentação 🖥️
 
-[Clique para visualizar os slides de apresentação para P1](./doc/apresentacao/slides-p1.pdf)
+1. [Clique para visualizar os slides de apresentação para P1](./doc/apresentacao/slides-p1.pdf)
+2. [Clique para visualizar os slides de apresentação para P2](./doc/apresentacao/slides-p2.pdf)
 
 ---
 

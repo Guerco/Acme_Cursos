@@ -153,7 +153,17 @@ Isso irá executar todos os testes automatizados configurados para a API.
 
 ### Frontend
 
-Para executar os testes end-to-end do frontend, acesse o diretório do [frontend](../frontend/) e utilize um dos comandos abaixo:
+Para executar os testes do frontend, acesse o diretório da [frontend](../frontend/) e rode o comando:
+
+```bash
+pnmp test
+```
+
+Isso irá executar todos os testes automatizados configurados para o frontend.
+
+---
+
+Já para executar os testes end-to-end, acesse o diretório do [frontend](../frontend/) e utilize um dos comandos abaixo:
 
 **Modo HEADED**
 ```bash
