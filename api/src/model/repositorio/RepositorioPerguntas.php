@@ -42,10 +42,18 @@ interface RepositorioPerguntas {
     public function cadastrarPergunta(Pergunta $pergunta): int;
 
     /**
-     * Lista todos os cursos ou filtrado pelo assunto.
+     * Lista todas perguntas ou filtrado pelo assunto.
      * 
      * @param ?int $idAssunto
      * @return null|Pergunta[]
      */
     public function listarTodosOuPorAssunto(?int $idAssunto): ?array;
+
+    /**
+    * Verifica se já existe uma pergunta em determinado assunto.
+     * @param int|null $idAssunto
+     * @param string|null $perguntaDescricao
+     * @return bool
+     */
+    public function existePerguntaAssunto(?int $idAssunto, ?string $perguntaDescricao): bool;
 }

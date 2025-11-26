@@ -18,15 +18,16 @@ export class ControladoraListagemPerguntas {
         try {
             const idAssunto = this.visao.obterIdAssunto();
             const perguntas = await this.servico.buscarTodos(idAssunto);
-
-            const assunto = (idAssunto !== null) ? perguntas[0].descricaoAssunto : null;
-
+            
+            let assunto = null
+            if (perguntas.length > 0) 
+                assunto = (idAssunto !== null) ? perguntas[0].descricaoAssunto : null;
+            
             this.visao.exibirPerguntas(perguntas, assunto);
         } catch (err: any) {
             if (err instanceof NaoAutorizadoException) {
                 this.visao.redirecionaParaErro('Página não encontrada ❌');
             }
-            console.log('Olá');
             if (err instanceof DominioException)
                 this.visao.exibirMensagem(err.getProblemas())
             throw err;

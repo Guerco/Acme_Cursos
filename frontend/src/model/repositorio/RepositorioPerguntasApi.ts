@@ -45,7 +45,7 @@ export class RepositorioPerguntasApi implements RepositorioPerguntas {
     }
 
     async enviarPergunta(pergunta: PerguntaCadastro) {
-        try {            
+        try {     
             const response = await fetch(rotasApi.perguntas, {
                 method: 'POST',
                 headers: {
@@ -91,8 +91,7 @@ export class RepositorioPerguntasApi implements RepositorioPerguntas {
             }
 
             const resultado = await response.json();
-            if ('mensagem' in resultado)
-                throw new DominioException(resultado.mensagem);
+
             return resultado.map((p: any) => new PerguntaListagem(
                 p.descricao,
                 p.caminhoImg,

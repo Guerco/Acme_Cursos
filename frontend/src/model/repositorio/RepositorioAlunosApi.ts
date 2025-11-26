@@ -58,7 +58,7 @@ export class RepositorioAlunosAPI implements RespositorioAlunos {
             );
         } catch(error){
             if (error instanceof NaoAutorizadoException) throw error;
-            throw new Error('Não foi possível buscar as Pontuações.');
+            throw new Error('Não foi possível buscar as Pontuações para o quiz informado.');
         }
     }
     

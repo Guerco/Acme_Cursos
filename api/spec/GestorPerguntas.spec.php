@@ -44,6 +44,8 @@ describe('GestorPerguntas', function(): void{
 
     beforeEach(function(): void{
         $this->repositorioTestePerguntas = Double::instance(['implements' => RepositorioPerguntas::class]);
+        allow($this->repositorioTestePerguntas)->toReceive('existePerguntaAssunto')->andReturn(false);
+
         $this->repositorioTesteAlunos = Double::instance(['implements' => RepositorioAlunos::class]);
         $this->repositorioAssuntos = Double::instance(['implements' => RepositorioAssuntos::class]);
         $this->repositorioRespostas = Double::instance(['implements' => RepositorioRespostasPergunta::class]);

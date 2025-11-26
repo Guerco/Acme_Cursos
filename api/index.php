@@ -195,11 +195,8 @@ $app->route('/perguntas')
     
             $idAssunto = $_GET['id_assunto'] ?? null;
             $resultado = $gestorPerguntas->listarPerguntasOuPorAssunto($idAssunto);
-            if ($resultado == []) {
-                if ( $idAssunto ) $res->status(200)->json(['mensagem'=> 'Este assunto não possui perguntas.']);
-                else $res->status(200)->json(['mensagem'=> 'Não há perguntas para se listar.']);
-            } else
-                $res->status(200)->json($resultado);
+
+            $res->status(200)->json($resultado);
         }, $res);
 
     });

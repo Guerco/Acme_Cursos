@@ -24,6 +24,28 @@ class RepositorioPerguntasEmBDR implements RepositorioPerguntas {
             throw new RepositorioException('Não foi possível verificar o id.'); 
         }
     }
+    
+    public function existePerguntaAssunto(?int $idAssunto, ?string $perguntaDescricao): bool {
+        try {
+            $sql = <<<'SQL'
+                SELECT 1
+                FROM pergunta p
+                WHERE
+                    p.id_assunto = :id_assunto
+                    AND LOWER(TRIM(p.descricao)) = LOWER(TRIM(:descricao))
+            SQL;
+
+            $ps = $this->pdo->prepare($sql);
+            $ps->execute( [
+                'id_assunto' => $idAssunto,
+                'descricao' => $perguntaDescricao,
+            ] );
+
+            return (bool) $ps->fetchColumn();
+        } catch (PDOException $e) {
+            throw new RepositorioException('Não foi possível verificar a pergunta.'); 
+        }
+    }
 
     /**
      * @return null|string[] 
@@ -178,6 +200,7 @@ class RepositorioPerguntasEmBDR implements RepositorioPerguntas {
     public function listarTodosOuPorAssunto(?int $idAssunto): ?array {    
         $sql = <<<SQL
             SELECT
+                p.id as id_pergunta,
                 p.descricao as descricao_pergunta,
                 p.caminho_img,
                 p.tempo_seg,
@@ -207,12 +230,13 @@ class RepositorioPerguntasEmBDR implements RepositorioPerguntas {
             $perguntaDescricao = '';
 
             foreach($ps as $d) {
+                $perguntaId = $d['id_pergunta'];
                 $perguntaDescricao = $d['descricao_pergunta'];
 
                 /** @var Dificuldade $dificuldade  */
                 $dificuldade = Dificuldade::deString($d['dificuldade']);
                 
-                $perguntas[$perguntaDescricao] ??= new Pergunta(
+                $perguntas[$perguntaId] ??= new Pergunta(
                     0,
                     new Assunto(
                         null, 
@@ -227,7 +251,7 @@ class RepositorioPerguntasEmBDR implements RepositorioPerguntas {
                     new DateTime($d['ultima_atualizacao'])
                 );
 
-                $perguntas[$perguntaDescricao]->addResposta(
+                $perguntas[$perguntaId]->addResposta(
                     new RespostaPergunta(
                         0,
                         null,

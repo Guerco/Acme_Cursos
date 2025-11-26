@@ -190,6 +190,7 @@ class GestorPerguntas
         $idAssunto = $pergunta->idAssunto;
         $figuraBase64 = $pergunta->figuraBase64 ?: null;
         $dificuldade = $pergunta->dificuldade;
+        $descricao = $pergunta->descricao;
 
         $problemas = [];
 
@@ -202,6 +203,9 @@ class GestorPerguntas
             if ($idProfessorAssunto !== $this->autentificacao->buscaridUsuario())
                 throw new DominioException('O assunto informado não é do professor logado.');
         } 
+
+        if($this->repositorioPerguntas->existePerguntaAssunto($idAssunto, $descricao))
+            $problemas[] = 'Esta pergunta já existe para esse assunto.';
 
         $dificuldadesAceitas = ['facil', 'medio', 'dificil'];
         if (!in_array(strtolower($dificuldade), $dificuldadesAceitas))
