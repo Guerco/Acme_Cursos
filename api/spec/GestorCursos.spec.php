@@ -35,10 +35,10 @@ describe('GestorCursos', function(): void{
         $this->repositorioCursos = Double::instance(['implements' => RepositorioCursos::class]);
         $this->repositorioAssuntos = Double::instance(['implements' => RepositorioAssuntos::class]);
 
-        $this->autentificacao = Double::instance([
-            'implements' => Autentificacao::class
+        $this->autenticacao = Double::instance([
+            'implements' => Autenticacao::class
         ]);
-        allow($this->autentificacao)->toReceive('estaLogado')->andReturn(true);
+        allow($this->autenticacao)->toReceive('estaLogado')->andReturn(true);
         
         $this->autorizacao = Double::instance([
             'implements' => Autorizacao::class
@@ -49,7 +49,7 @@ describe('GestorCursos', function(): void{
             $this->repositorioCursos,
             $this->repositorioAssuntos,
             $this->autorizacao,
-            $this->autentificacao
+            $this->autenticacao
         );
     });
 

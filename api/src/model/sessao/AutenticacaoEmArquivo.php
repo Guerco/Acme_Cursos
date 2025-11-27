@@ -1,6 +1,6 @@
 <?php
 
-class AutentificacaoEmArquivo implements Autentificacao {
+class AutenticacaoEmArquivo implements Autenticacao {
     public function __construct(
         private GerenciadorDeSenha $gerenciadorDeSenha,
         private RepositorioCredenciais $repoCredenciais

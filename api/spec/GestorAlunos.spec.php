@@ -68,10 +68,10 @@ describe('GestorAlunos', function (): void {
             'assunto'
         ));
 
-        $this->autentificacao = Double::instance([
-            'implements' => Autentificacao::class
+        $this->autenticacao = Double::instance([
+            'implements' => Autenticacao::class
         ]);
-        allow($this->autentificacao)->toReceive('estaLogado')->andReturn(true);
+        allow($this->autenticacao)->toReceive('estaLogado')->andReturn(true);
         
         $this->autorizacao = Double::instance([
             'implements' => Autorizacao::class
@@ -83,7 +83,7 @@ describe('GestorAlunos', function (): void {
             $this->repositorioTestePerguntas, 
             $this->gerenciadorTransacoes,
             $this->repositorioTesteAssuntos,
-            $this->autentificacao,
+            $this->autenticacao,
             $this->autorizacao
 
         );
@@ -92,8 +92,8 @@ describe('GestorAlunos', function (): void {
     describe('buscarPontuacoes', function (): void {
 
         beforeEach(function(): void{
-            allow($this->autentificacao)->toReceive('buscarTipoUsuario')->andReturn('aluno');
-            allow($this->autentificacao)->toReceive('buscaridUsuario')->andReturn(1);
+            allow($this->autenticacao)->toReceive('buscarTipoUsuario')->andReturn('aluno');
+            allow($this->autenticacao)->toReceive('buscaridUsuario')->andReturn(1);
         });
 
         it('retorna uma pontuação', function (): void {
@@ -141,8 +141,8 @@ describe('GestorAlunos', function (): void {
 
     describe('salvarResposta', function (): void {
         beforeEach(function(): void{
-            allow($this->autentificacao)->toReceive('buscarTipoUsuario')->andReturn('aluno');
-            allow($this->autentificacao)->toReceive('buscaridUsuario')->andReturn(1);
+            allow($this->autenticacao)->toReceive('buscarTipoUsuario')->andReturn('aluno');
+            allow($this->autenticacao)->toReceive('buscaridUsuario')->andReturn(1);
         });
         
         it('retorna true se as respostas forem corretas', function (): void {

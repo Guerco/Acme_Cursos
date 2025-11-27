@@ -18,14 +18,14 @@ interface RepositorioCredenciais{
 
     /**
      * Retorna todos os usuários ou filtrados pelo nome;
-     * @return array<Professor|Aluno|Administrador|ProfessorAdministrador>
+     * @return array<Professor|Aluno|Administrador|ProfessorAdministradorVO>
      */
     public function listarTodos(string $filtro): array;
 
     /**
      * Retorna o usuário de determinadas credenciais
      * 
-     * @return Professor|Aluno|Administrador|ProfessorAdministrador|false
+     * @return Professor|Aluno|Administrador|ProfessorAdministradorVO|false
      */
-    public function verificarCredenciais(Credenciais $credenciais): Professor|Aluno|Administrador|ProfessorAdministrador|false;
+    public function verificarCredenciais(Credenciais $credenciais): Professor|Aluno|Administrador|ProfessorAdministradorVO|false;
 }

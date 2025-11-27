@@ -1,7 +1,6 @@
 import { VisaoQtdAlunosPorCurso } from "./VisaoQtdAlunosPorCurso.ts";
 import { ControladoraQtdAlunoPorCurso } from "../presenter/ControladoraQtdAlunoPorCurso.ts";
 import { CursoQtdAlunoRel } from "../model/dto/relatorio/CursoQtdAlunoRel.ts";
-// import { Chart, ArcElement, Tooltip, Legend, PieController } from "chart.js";
 import { ids } from "../ui/alunos-cursos-ui.ts";
 import ChartDataLabels from "chartjs-plugin-datalabels";
 import { VisaoBaseDOM } from "./VisaoBaseDOM.ts";
@@ -18,13 +17,11 @@ Chart.register(
     LinearScale,
     PieController,
     ArcElement,
+    ChartDataLabels,
     Tooltip,
     Legend
 );
 
-
-
-Chart.register(Tooltip, Legend, ChartDataLabels);
 
 export class VisaoQtdAlunosPorCursoDOM extends VisaoBaseDOM implements VisaoQtdAlunosPorCurso{
     private controladora: ControladoraQtdAlunoPorCurso;
@@ -97,8 +94,8 @@ export class VisaoQtdAlunosPorCursoDOM extends VisaoBaseDOM implements VisaoQtdA
 
                     const novaPosicao = retrato ? "top" : "right";
 
-                    if (chart.options.plugins.legend.position !== novaPosicao) {
-                        chart.options.plugins.legend.position = novaPosicao;
+                    if (chart.options!.plugins!.legend!.position !== novaPosicao) {
+                        chart.options!.plugins!.legend!.position = novaPosicao;
                         chart.update();
                     }
                 },
@@ -204,8 +201,8 @@ export class VisaoQtdAlunosPorCursoDOM extends VisaoBaseDOM implements VisaoQtdA
 
                     const novaPosicao = retrato ? "top" : "right";
 
-                    if (chart.options.plugins.legend.position !== novaPosicao) {
-                        chart.options.plugins.legend.position = novaPosicao;
+                    if (chart!.options!.plugins!.legend!.position !== novaPosicao) {
+                        chart.options!.plugins!.legend!.position = novaPosicao;
                         chart.update();
                     }
                 },
@@ -377,7 +374,7 @@ export class VisaoQtdAlunosPorCursoDOM extends VisaoBaseDOM implements VisaoQtdA
                             size: 13
                         },
                         formatter: (value, ctx) => {
-                            const curso = ctx.chart.data.labels[ctx.dataIndex] as string;
+                            const curso = ctx.chart!.data!.labels![ctx.dataIndex] as string;
                             return curso!.length > 20 ? curso.slice(0, 20) + '...' : curso;
                         }
                     }

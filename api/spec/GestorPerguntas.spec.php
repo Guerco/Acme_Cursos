@@ -58,7 +58,7 @@ describe('GestorPerguntas', function(): void{
         allow($this->gerenciadorTransacoes)->toReceive('reverter');
 
         $this->autentificacao = Double::instance([
-            'implements' => Autentificacao::class
+            'implements' => Autenticacao::class
         ]);
         allow($this->autentificacao)->toReceive('estaLogado')->andReturn(true);
         

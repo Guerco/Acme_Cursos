@@ -6,7 +6,7 @@ class GestorCursos{
         private RepositorioCursos $repoCursos,
         private RepositorioAssuntos $repoAssuntos,
         private Autorizacao $autorizacao,
-        private Autentificacao $autentificacao
+        private Autenticacao $autenticacao
     ) { }
 
     /**
@@ -20,7 +20,7 @@ class GestorCursos{
         );
 
         $estaAutorizado = (
-            $this->autentificacao->estaLogado() &&
+            $this->autenticacao->estaLogado() &&
             $this->autorizacao->verificarAutorizacao($usuariosAutorizados)
         );
 

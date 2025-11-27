@@ -92,7 +92,7 @@ class RepositorioCredenciaisEmBDR implements RepositorioCredenciais{
         }
     }
 
-    public function verificarCredenciais(Credenciais $credenciais): Professor|Aluno|Administrador|ProfessorAdministrador|false {
+    public function verificarCredenciais(Credenciais $credenciais): Professor|Aluno|Administrador|ProfessorAdministradorVO|false {
         try{
             $sql = <<<'SQL'
                 SELECT
@@ -150,7 +150,7 @@ class RepositorioCredenciaisEmBDR implements RepositorioCredenciais{
     /**
      * @param array{nome: string, email: string, tipo_usuario: string}[] $usuarios
      * @throws \RepositorioException
-     * @return array<Administrador|Aluno|Professor|ProfessorAdministrador>
+     * @return array<Administrador|Aluno|Professor|ProfessorAdministradorVO>
      */
     private function criarUsuarios(array $usuarios):array{
         $usuariosCriados = [];
@@ -170,9 +170,9 @@ class RepositorioCredenciaisEmBDR implements RepositorioCredenciais{
      *     id_usuario?: int
      * } $usuario
      * @throws \RepositorioException
-     * @return Administrador|Aluno|Professor|ProfessorAdministrador
+     * @return Administrador|Aluno|Professor|ProfessorAdministradorVO
      */
-    private function criarUsuario(array $usuario): Administrador|Aluno|Professor|ProfessorAdministrador {
+    private function criarUsuario(array $usuario): Administrador|Aluno|Professor|ProfessorAdministradorVO {
         $credenciais = new Credenciais();
         $credenciais->setEmail($usuario['email']);
 
@@ -187,8 +187,12 @@ class RepositorioCredenciaisEmBDR implements RepositorioCredenciais{
                 $usuarioObj = new Aluno();
                 break;
             case 'Professor-Administrador':
-                $usuarioObj = new ProfessorAdministrador();
-                break;
+                $usuarioVO = new ProfessorAdministradorVO(
+                    ($usuario['id_usuario']) ?? 0,
+                    $usuario['nome'],
+                    $credenciais
+                );
+                return $usuarioVO;
             default:
                 throw new RepositorioException('O tipo de usuário não existe.');
         }

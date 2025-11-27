@@ -10,7 +10,7 @@ class GestorCredenciais
         private RepositorioAdministradores $repositorioAdministrador,
         private GerenciadorDeTransacoes $transacao,
         private GerenciadorDeSenha $GerenciadorDeSenha,
-        private Autentificacao $autentificacao,
+        private Autenticacao $autenticacao,
         private Autorizacao $autorizacao
     ) { }
 
@@ -25,7 +25,7 @@ class GestorCredenciais
         );
 
         $estaAutorizado = (
-            $this->autentificacao->estaLogado() &&
+            $this->autenticacao->estaLogado() &&
             $this->autorizacao->verificarAutorizacao($usuariosAutorizados)
         );
 

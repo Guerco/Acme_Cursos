@@ -5,7 +5,7 @@ class GestorProfessores{
     public function __construct(
         private RepositorioProfessores $repoProfessores,
         private RepositorioCursos $repoCursos,
-        private Autentificacao $autentificacao,
+        private Autenticacao $autenticacao,
         private Autorizacao $autorizacao,
     ) { }
 
@@ -20,7 +20,7 @@ class GestorProfessores{
         );
 
         $estaAutorizado = (
-            $this->autentificacao->estaLogado() &&
+            $this->autenticacao->estaLogado() &&
             $this->autorizacao->verificarAutorizacao($usuariosAutorizados)
         );
 
@@ -56,10 +56,10 @@ class GestorProfessores{
         );
         
         if ( 
-            $this->autentificacao->estaLogado() 
-            && $this->autentificacao->buscarTipoUsuario() === TipoUsuario::PROFESSOR->value
+            $this->autenticacao->estaLogado() 
+            && $this->autenticacao->buscarTipoUsuario() === TipoUsuario::PROFESSOR->value
         ) {
-            $idProfessor = $this->autentificacao->buscaridUsuario();
+            $idProfessor = $this->autenticacao->buscaridUsuario();
         } 
         
         $this->validarBuscarCursosProfessor($idProfessor);

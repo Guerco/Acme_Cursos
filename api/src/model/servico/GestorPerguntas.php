@@ -10,7 +10,7 @@ class GestorPerguntas
         private RepositorioAssuntos $repositorioAssuntos,
         private RepositorioRespostasPergunta $repositorioRespostas,
         private GerenciadorDeTransacoes $transacao,
-        private Autentificacao $autentificacao,
+        private Autenticacao $autentificacao,
         private Autorizacao $autorizacao
     ) {
     }

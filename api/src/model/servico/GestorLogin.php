@@ -3,7 +3,7 @@
 class GestorLogin {
 
     public function __construct(
-        private Autentificacao $autentificacao,
+        private Autenticacao $autenticacao,
         private RepositorioCredenciais $repoCredenciais
     ) {}
 
@@ -28,7 +28,7 @@ class GestorLogin {
             (string) $sal
         );
 
-        return $this->autentificacao->entrar($credenciais);
+        return $this->autenticacao->entrar($credenciais);
     }
 
     /**
@@ -37,7 +37,7 @@ class GestorLogin {
      */
     public function sair() {
 
-        $this->autentificacao->sair();
+        $this->autenticacao->sair();
     }
 
     // Validação

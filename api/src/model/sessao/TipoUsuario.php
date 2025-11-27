@@ -6,7 +6,7 @@ enum TipoUsuario : string {
     case ADMINISTRADOR = 'administrador';
     case PROFESSOR_ADMINISTRADOR = 'professor-administrador';
 
-    public static function tipoObjeto(Professor|Aluno|Administrador|ProfessorAdministrador $objeto): TipoUsuario|false{
+    public static function tipoObjeto(Professor|Aluno|Administrador|ProfessorAdministradorVO $objeto): TipoUsuario|false{
         $classe = get_class($objeto);
     
         if (strpos($classe, 'Aluno') !== false) {

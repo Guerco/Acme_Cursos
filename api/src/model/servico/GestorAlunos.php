@@ -6,7 +6,7 @@ class GestorAlunos {
         private RepositorioPerguntas $repositorioPerguntas,
         private GerenciadorDeTransacoes $transacao,
         private RepositorioAssuntos $repositorioAssuntos,
-        private Autentificacao $autentificacao,
+        private Autenticacao $autenticacao,
         private Autorizacao $autorizacao
     ) { }
 
@@ -21,7 +21,7 @@ class GestorAlunos {
         );
 
         $estaAutorizado = (
-            $this->autentificacao->estaLogado() &&
+            $this->autenticacao->estaLogado() &&
             $this->autorizacao->verificarAutorizacao($usuariosAutorizados)
         );
 
@@ -48,10 +48,10 @@ class GestorAlunos {
             $idsRespostas = $resposta['idsRespostas'] ?? [];
 
             if ( 
-                $this->autentificacao->estaLogado() 
-                && $this->autentificacao->buscarTipoUsuario() === TipoUsuario::ALUNO->value
+                $this->autenticacao->estaLogado() 
+                && $this->autenticacao->buscarTipoUsuario() === TipoUsuario::ALUNO->value
             ) {
-                $idAluno = $this->autentificacao->buscaridUsuario();
+                $idAluno = $this->autenticacao->buscaridUsuario();
             } 
             
             $this->validarSalvarResposta($idPergunta, $idAluno);
@@ -163,10 +163,10 @@ class GestorAlunos {
         $idAluno = 0;
 
         if ( 
-            $this->autentificacao->estaLogado() 
-            && $this->autentificacao->buscarTipoUsuario() === TipoUsuario::ALUNO->value
+            $this->autenticacao->estaLogado() 
+            && $this->autenticacao->buscarTipoUsuario() === TipoUsuario::ALUNO->value
         ) {
-            $idAluno = $this->autentificacao->buscaridUsuario();
+            $idAluno = $this->autenticacao->buscaridUsuario();
         } 
 
         $this->validarBuscarPontuacoes($idAssunto, $idAluno);
@@ -273,10 +273,10 @@ class GestorAlunos {
         $idAluno = 0;
 
         if ( 
-            $this->autentificacao->estaLogado() 
-            && $this->autentificacao->buscarTipoUsuario() === TipoUsuario::ALUNO->value
+            $this->autenticacao->estaLogado() 
+            && $this->autenticacao->buscarTipoUsuario() === TipoUsuario::ALUNO->value
         ) {
-            $idAluno = $this->autentificacao->buscaridUsuario();
+            $idAluno = $this->autenticacao->buscaridUsuario();
         } 
 
         $this->validarQuizAleatorio( $idAluno);

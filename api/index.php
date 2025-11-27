@@ -278,7 +278,7 @@ function criarGestor(string $tipoGestor): GestorCursos|GestorAlunos|GestorCreden
                 new RepositorioCursosEmBDR($pdo),
                 new RepositorioAssuntosEmBDR($pdo),
                 new AutorizacaoEmArquivo(),
-                new AutentificacaoEmArquivo(
+                new AutenticacaoEmArquivo(
                     new GerenciadorDeSenhaEnv(),
                     new RepositorioCredenciaisEmBDR($pdo)
                 )
@@ -290,7 +290,7 @@ function criarGestor(string $tipoGestor): GestorCursos|GestorAlunos|GestorCreden
                 new RepositorioPerguntasEmBDR($pdo),
                 new GerenciadorDeTransacoesEmBDR($pdo),
                 new RepositorioAssuntosEmBDR($pdo),
-                new AutentificacaoEmArquivo(
+                new AutenticacaoEmArquivo(
                     new GerenciadorDeSenhaEnv(),
                     new RepositorioCredenciaisEmBDR($pdo)
                 ),
@@ -304,7 +304,7 @@ function criarGestor(string $tipoGestor): GestorCursos|GestorAlunos|GestorCreden
                 new RepositorioAssuntosEmBDR($pdo),
                 new RepositorioRespostasPerguntaEmBDR($pdo),
                 new GerenciadorDeTransacoesEmBDR($pdo),
-                new AutentificacaoEmArquivo(
+                new AutenticacaoEmArquivo(
                     new GerenciadorDeSenhaEnv(),
                     new RepositorioCredenciaisEmBDR($pdo)
                 ),
@@ -321,7 +321,7 @@ function criarGestor(string $tipoGestor): GestorCursos|GestorAlunos|GestorCreden
                 new RepositorioAdministradoresEmBDR($pdo),
                 new GerenciadorDeTransacoesEmBDR($pdo),
                 $senhaEnv,
-                new AutentificacaoEmArquivo(
+                new AutenticacaoEmArquivo(
                     $senhaEnv,
                     $repoCredenciais
                 ),
@@ -332,7 +332,7 @@ function criarGestor(string $tipoGestor): GestorCursos|GestorAlunos|GestorCreden
             return new GestorProfessores(
                 new RepositorioProfessoresEmBDR($pdo),
                 new RepositorioCursosEmBDR($pdo),
-                new AutentificacaoEmArquivo(
+                new AutenticacaoEmArquivo(
                     new GerenciadorDeSenhaEnv(),
                     new RepositorioCredenciaisEmBDR($pdo)
                 ),
@@ -343,7 +343,7 @@ function criarGestor(string $tipoGestor): GestorCursos|GestorAlunos|GestorCreden
             $repoCredenciais = new RepositorioCredenciaisEmBDR($pdo);
 
             return new GestorLogin(
-                new AutentificacaoEmArquivo(
+                new AutenticacaoEmArquivo(
                     new GerenciadorDeSenhaEnv(),
                     $repoCredenciais
                 ),

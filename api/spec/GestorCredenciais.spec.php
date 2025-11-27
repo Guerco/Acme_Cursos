@@ -64,10 +64,10 @@ describe('GestorCredenciais', function(): void{
         allow($this->gerenciadorSenha)->toReceive('verificarSenha')
             ->andReturn(true);
 
-        $this->autentificacao = Double::instance([
-            'implements' => Autentificacao::class
+        $this->autenticacao = Double::instance([
+            'implements' => Autenticacao::class
         ]);
-        allow($this->autentificacao)->toReceive('estaLogado')->andReturn(true);
+        allow($this->autenticacao)->toReceive('estaLogado')->andReturn(true);
         
         $this->autorizacao = Double::instance([
             'implements' => Autorizacao::class
@@ -81,7 +81,7 @@ describe('GestorCredenciais', function(): void{
             $this->repositorioTesteAdministradores,
             $this->gerenciadorTransacoes,
             $this->gerenciadorSenha,
-            $this->autentificacao,
+            $this->autenticacao,
             $this->autorizacao,
         );
     });
