@@ -5,6 +5,8 @@
 
 _Projeto ACME Quiz, desenvolvido para a disciplina de Projeto Integrador de Sistemas 2025.2._
 
+![Demonstração do Quiz](./doc/gif/quiz.gif)
+
 ---
 
 ## 👨‍💻 Desenvolvedores
@@ -111,6 +113,7 @@ Todas as referências a imagens, conteúdos e estilos **externos** utilizados ne
 
 ---
 
+![Demonstração do Cadastro](./doc/gif/cadastro_usuario.gif)
 ![Logotipo](./frontend/img/logotipo.png)
 
 ---
